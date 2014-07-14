@@ -1,5 +1,6 @@
 .mediawiki-bot-*
 alltwinkle.js
+dep-alltwinkle.js
 /.settings
 /.project
 jsl.conf

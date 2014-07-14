@@ -70,13 +70,13 @@ Twinkle.defaultConfig.twinkle = {
 	prodLogPageName: "PROD log",
 	 // CSD
 	speedySelectionStyle: "buttonClick",
-	watchSpeedyPages: [ "g3", "g5", "g10", "g11", "g12" ],
+	watchSpeedyPages: [ "u3", "u5", "u10", "u11", "u12" ],
 	markSpeedyPagesAsPatrolled: true,
 	// these next two should probably be identical by default
-	notifyUserOnSpeedyDeletionNomination:    [ "db", "g1", "g2", "g3", "g4", "g6", "g10", "g11", "g12", "g13", "a1", "a2", "a3", "a5", "a7", "a9", "a10", "a11", "f1", "f2", "f3", "f7", "f9", "f10", "u3", "u5", "t2", "t3", "p1", "p2" ],
-	welcomeUserOnSpeedyDeletionNotification: [ "db", "g1", "g2", "g3", "g4", "g6", "g10", "g11", "g12", "g13", "a1", "a2", "a3", "a5", "a7", "a9", "a10", "a11", "f1", "f2", "f3", "f7", "f9", "f10", "u3", "u5", "t2", "t3", "p1", "p2" ],
-	promptForSpeedyDeletionSummary: [ "db", "g1", "g2", "g3", "g4", "g6", "g7", "g8", "g10", "g11", "g12", "a1", "a2", "a3", "a5", "a7", "a9", "a10", "a11", "f2", "f4", "f7", "f8", "f10", "u5", "t2", "t3", "p1", "p2" ],
-	openUserTalkPageOnSpeedyDelete: [ "db", "g1", "g2", "g3", "g4", "g5", "g10", "g11", "g12", "a1", "a3", "a7", "a9", "a10", "a11", "f3", "f7", "f9", "u3", "u5", "t2", "p1" ],
+	notifyUserOnSpeedyDeletionNomination:    	[ "db", "u1", "u2", "u3", "u4", "u6", "u10", "u11", "u12", "a1", "a2", "a3", "a5", "a7", "a9", "a10", "b1", "b2", "b3", "b7", "b9", "b10", "h3", "t2", "t3", "p1", "p2" ],
+	welcomeUserOnSpeedyDeletionNotification: 	[ "db", "u1", "u2", "u3", "u4", "u6", "u10", "u11", "u12", "a1", "a2", "a3", "a5", "a7", "a9", "a10", "b1", "b2", "b3", "b7", "b9", "b10", "h3", "t2", "t3", "p1", "p2" ],
+	promptForSpeedyDeletionSummary: 			[ "db", "u1", "u2", "u3", "u4", "u6", "u7", "u8", "u10", "u11", "u12", "a1", "a2", "a3", "a5", "a7", "a9", "a10", "b2", "b4", "b7", "b8", "b10", "t2", "t3", "p1", "p2" ],
+	openUserTalkPageOnSpeedyDelete: 			[ "db", "u1", "u2", "u3", "u4", "u5", "u10", "u11", "u12", "a1", "a3", "a7", "a9", "a10", "b3", "b7", "b9", "h3", "t2", "p1" ],
 	deleteTalkPageOnDelete: false,
 	deleteRedirectsOnDelete: true,
 	deleteSysopDefaultToTag: false,
@@ -84,7 +84,7 @@ Twinkle.defaultConfig.twinkle = {
 	speedyWindowWidth: 800,
 	logSpeedyNominations: false,
 	speedyLogPageName: "CSD log",
-	noLogOnSpeedyNomination: [ "u1" ],
+	noLogOnSpeedyNomination: [ "h1" ],
 	 // Unlink
 	unlinkNamespaces: [ "0", "10", "100", "118" ],
 	 // Warn
@@ -291,7 +291,7 @@ Twinkle.addPortlet = function( navigation, id, text, type, nextnodeid )
 			e.preventDefault();
 
 			if ( !Twinkle.userAuthorized ) {
-				alert("Sorry, your account is too new to use Twinkle.");
+				alert("Maaf, akun Anda terlalu baru untuk menggunakan Twinkle.");
 			}
 		});
 
