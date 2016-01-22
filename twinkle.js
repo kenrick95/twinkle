@@ -47,10 +47,12 @@ Twinkle.defaultConfig.twinkle = {
 	summaryAd: " ([[WP:TW|TW]])",
 	deletionSummaryAd: " ([[WP:TW|TW]])",
 	protectionSummaryAd: " ([[WP:TW|TW]])",
-	userTalkPageMode: "window",
+	userTalkPageMode: "tab",
 	dialogLargeFont: false,
 	 // ARV
 	spiWatchReport: "yes",
+	 // Block
+	blankTalkpageOnIndefBlock: false,
 	 // Fluff (revert and rollback)
 	openTalkPage: [ "agf", "norm", "vand" ],
 	openTalkPageOnAutoRevert: false,
@@ -91,24 +93,19 @@ Twinkle.defaultConfig.twinkle = {
 	defaultWarningGroup: "1",
 	showSharedIPNotice: true,
 	watchWarnings: true,
-	blankTalkpageOnIndefBlock: false,
 	customWarningList: [],
 	 // XfD
 	xfdWatchDiscussion: "default",
 	xfdWatchList: "no",
 	xfdWatchPage: "default",
 	xfdWatchUser: "default",
+	markXfdPagesAsPatrolled: true,
 	 // Hidden preferences
 	revertMaxRevisions: 50,
 	batchdeleteChunks: 50,
-	batchDeleteMinCutOff: 5,
 	batchMax: 5000,
 	batchProtectChunks: 50,
-	batchProtectMinCutOff: 5,
 	batchundeleteChunks: 50,
-	batchUndeleteMinCutOff: 5,
-	deliChunks: 500,
-	deliMax: 5000,
 	proddeleteChunks: 50
 };
 
@@ -301,8 +298,9 @@ Twinkle.addPortlet = function( navigation, id, text, type, nextnodeid )
 	}
 	outerDiv.appendChild( h5 );
 
+	var innerDiv = null;
 	if ( type === "menu" ) {
-		var innerDiv = document.createElement( "div" );
+		innerDiv = document.createElement( "div" );
 		innerDiv.className = innerDivClass;
 		outerDiv.appendChild(innerDiv);
 	}
@@ -396,30 +394,36 @@ $.ajax({
 // For example, mw.loader.load(scriptpathbefore + "User:UncleDouggie/morebits-test.js" + scriptpathafter);
 
 Twinkle.load = function () {
-	    // Don't activate on special pages other than "Contributions" so that they load faster, especially the watchlist.
-	var isSpecialPage = ( mw.config.get('wgNamespaceNumber') === -1
-	    	&& mw.config.get('wgCanonicalSpecialPageName') !== "Contributions"
-	    	&& mw.config.get('wgCanonicalSpecialPageName') !== "Prefixindex" ),
+	// Don't activate on special pages other than "Contributions" so that they load faster, especially the watchlist.
+	var isSpecialPage = ( mw.config.get('wgNamespaceNumber') === -1 &&
+		mw.config.get('wgCanonicalSpecialPageName') !== "Contributions" &&
+		mw.config.get('wgCanonicalSpecialPageName') !== "Prefixindex" ),
 
-	    // Also, Twinkle is incompatible with Internet Explorer versions 8 or lower, so don't load there either.
-	    isOldIE = ( $.client.profile().name === 'msie' && $.client.profile().versionNumber < 9 );
+		// Also, Twinkle is incompatible with Internet Explorer versions 8 or lower, so don't load there either.
+		isOldIE = ( $.client.profile().name === 'msie' && $.client.profile().versionNumber < 9 );
 
-    // Prevent users that are not autoconfirmed from loading Twinkle as well.
+	// Prevent users that are not autoconfirmed from loading Twinkle as well.
 	if ( isSpecialPage || isOldIE || !Twinkle.userAuthorized ) {
 		return;
 	}
+
+	// Set custom Api-User-Agent header, for server-side logging purposes
+	Morebits.wiki.api.setApiUserAgent( 'Twinkle/2.0 (' + mw.config.get( 'wgDBname' ) + ')' );
 
 	// Load the modules in the order that the tabs should appears
 	// User/user talk-related
 	Twinkle.arv();
 	Twinkle.warn();
+	if ( Morebits.userIsInGroup('sysop') ) {
+		Twinkle.block();
+	}
 	Twinkle.welcome();
 	Twinkle.shared();
 	Twinkle.talkback();
 	// Deletion
 	Twinkle.speedy();
 	Twinkle.prod();
-	Twinkle.xfd();
+	//Twinkle.xfd();
 	Twinkle.image();
 	// Maintenance
 	Twinkle.protect();
@@ -430,7 +434,6 @@ Twinkle.load = function () {
 	Twinkle.config.init();
 	Twinkle.fluff.init();
 	if ( Morebits.userIsInGroup('sysop') ) {
-		Twinkle.delimages();
 		Twinkle.deprod();
 		Twinkle.batchdelete();
 		Twinkle.batchprotect();
