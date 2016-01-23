@@ -136,20 +136,20 @@ Twinkle.defaultConfig.friendly = {
 	 // Welcome
 	topWelcomes: false,
 	watchWelcomes: true,
-	welcomeHeading: "Welcome",
+	welcomeHeading: "Selamat datang!",
 	insertHeadings: true,
 	insertUsername: true,
 	insertSignature: true,  // sign welcome templates, where appropriate
 	quickWelcomeMode: "norm",
-	quickWelcomeTemplate: "welcome",
+	quickWelcomeTemplate: "sd2",
 	customWelcomeList: [],
 	customWelcomeSignature: true,
 	 // Talkback
 	markTalkbackAsMinor: true,
 	insertTalkbackSignature: true,  // always sign talkback templates
 	talkbackHeading: "Talkback",
-	adminNoticeHeading: "Notice",
-	mailHeading: "You've got mail!",
+	adminNoticeHeading: "Perhatian",
+	mailHeading: "Anda memiliki pesan baru!",
 	 // Shared
 	markSharedIPAsMinor: true
 };

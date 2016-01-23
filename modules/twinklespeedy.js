@@ -27,7 +27,7 @@ Twinkle.speedy = function twinklespeedy() {
 		return;
 	}
 
-	Twinkle.addPortletLink( Twinkle.speedy.callback, "CSD", "tw-csd", Morebits.userIsInGroup('sysop') ? "Hapus halaman berdasarkan WP:KPC" : "Meminta penghapusan cepat menurut WP:KPC" );
+	Twinkle.addPortletLink( Twinkle.speedy.callback, "KPC", "tw-csd", Morebits.userIsInGroup('sysop') ? "Hapus halaman berdasarkan WP:KPC" : "Meminta penghapusan cepat menurut WP:KPC" );
 };
 
 // This function is run when the CSD tab/header link is clicked
@@ -668,7 +668,7 @@ Twinkle.speedy.articleList = [
 		tooltip: 'Yang termasuk di dalamnya: Artikel yang telah dipindahkan ke wiki lain dan ada catatan pemindahannya (termasuk informasi tentang pembuat artikel) yang jelas. Artikel yang dipindahkan dapat berupa sebuah definisi kata yang telah dipindahkan ke KamusWiki, sumber bahan yang telah dipindahkan ke WikiSource, atau artikel lainnya yang telah didiskusikan dan disetujui untuk dipindahkan ke wiki lain.'
 	},
 	{
-		label: 'A7: A7: Tidak mengindikasikan kepentingan (tokoh, organisasi, isi situs)',
+		label: 'A7: Tidak mengindikasikan kepentingan (tokoh, organisasi, isi situs)',
 		value: 'a7',
 		tooltip: 'Artikel tentang tokoh, organisasi (termasuk di dalamnya band, klub, perusahaan, dll., kecuali sekolah), atau isi situs yang tidak menunjukkan alasan mengapa subyek itu dianggap penting. Jika yang kontroversial, maka Anda dapat mengusulkan penghapusan dengan templat {{hapus}} atau membawanya ke halaman Wikipedia:Usulan penghapusan',
 		//hideWhenSingle: true
@@ -744,7 +744,7 @@ Twinkle.speedy.categoryList = [
 		tooltip: 'Kategori tanpa isi yang selama paling tidak empat hari masih tidak memiliki isi. Yang tidak termasuk di dalamnya: kategori disambiguasi, pengalihan kategori, kategori topik pilihan, atau kategori yang menurut naturnya dapat menjadi kosong sewaktu-waktu (mis. kategori yang ditransklusikan oleh kotak pengguna.)'
 	},
 	{
-		label: 'K2: Pergantian nama.',
+		label: 'K2: Kategori yang sudah diganti namanya',
 		value: 'k2',
 		tooltip: 'Koreksi tipografi; Koreksi kapitalisasi; Perubahan dari bentuk tunggal ke jamak, atau sebaliknya; Ketidaksesuaian dengan pedoman pemerian nama kategori "x di y", "x oleh y", "x dari y" seperti yang tertera di Wikipedia:pedoman pemberian nama kategori.; Pemanjangan nama negara; Koreksi disambiguasi dari nama yang tak unik.'
 	},
@@ -886,7 +886,7 @@ Twinkle.speedy.generalList = [
 		hideSubgroupWhenMultiple: true
 	},
 	{
-		label: 'U6: History merge',
+		label: 'U6: Penggabungan riwayat halaman',
 		value: 'histmerge',
 		tooltip: 'Temporarily deleting a page in order to merge page histories',
 		subgroup: {
@@ -928,7 +928,7 @@ Twinkle.speedy.generalList = [
 	// 	hideWhenMultiple: true
 	// },
 	{
-		label: 'U6: Halaman disambiguasi tak perlu',
+		label: 'U6: Halaman disambiguasi yang tak perlu',
 		value: 'disambig',
 		tooltip: 'Untuk halaman disambiguasi yatim yang: (1) mendisambiguasi kurang dari dua halaman Wikipedia untuk yang judulnya berakhiran "(disambiguasi)"; atau (2) mendisambiguasi tidak ada halaman.',
 		hideWhenMultiple: true,
@@ -1000,13 +1000,13 @@ Twinkle.speedy.generalList = [
 		hideWhenMultiple: true
 	},
 	{
-		label: 'U11: Iklan atau promosi murni/terang-terangan.',
+		label: 'U11: Iklan atau promosi terang-terangan.',
 		value: 'spam',
 		tooltip: 'Yang termasuk di dalamnya: Halaman yang dibuat dengan tujuan utama untuk mempromosikan suatu entitas, dan yang tidak ensiklopedis (yang perlu ditulis ulang agar bersifat ensiklopedis). Yang tidak termasuk di dalamnya: artikel yang memiliki judul suatu nama perusahaan atau produk tidak secara otomatis masuk ke kategori ini.',
 		hideWhenRedirect: true
 	},
 	{
-		label: 'U12: Pelanggaran hak cipta murni/terang-terangan',
+		label: 'U12: Pelanggaran hak cipta terang-terangan',
 		value: 'copyvio',
 		tooltip: 'Yang termasuk di dalamnya: Halaman dengan teks yang berhak cipta tanpa adanya suatu pemberitahuan yang jelas bahwa teks tersebut diberi lisensi domain publik, penggunaan bebas, atau penggunaan gratis, dan tidak ada bagian dari teks yang tidak melanggar hak cipta yang patut diselamatkan. Kecuali jika ditinjau dari riwayat halamannya tidak ada versi yang bisa digunakan untuk menggantikan versi yang melanggar hak cipta, maka halaman tersebut akan dihapus seluruh isinya.',
 		subgroup: [
@@ -1142,7 +1142,7 @@ Twinkle.speedy.callbacks = {
 	getTemplateCodeAndParams: function(params) {
 		var code, parameters, i;
 		if (params.normalizeds.length > 1) {
-			code = "{{db-multiple";
+			code = "{{db-multiple"; // TODO in id.wikipedia, import this template!
 			params.utparams = {};
 			$.each(params.normalizeds, function(index, norm) {
 				code += "|" + norm.toUpperCase();
@@ -1157,14 +1157,11 @@ Twinkle.speedy.callbacks = {
 			code += "}}";
 		} else {
 			parameters = params.templateParams[0] || [];
-			code = "{{db-" + params.values[0];
+			code = "{{hapus|" + params.values[0];
 			for (i in parameters) {
 				if (typeof parameters[i] === 'string') {
 					code += "|" + i + "=" + parameters[i];
 				}
-			}
-			if (params.usertalk) {
-				code += "|help=off";
 			}
 			code += "}}";
 			params.utparams = Twinkle.speedy.getUserTalkParameters(params.normalizeds[0], parameters);
