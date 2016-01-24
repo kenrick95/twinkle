@@ -14,10 +14,10 @@
  */
 
 Twinkle.unlink = function twinkleunlink() {
-	if( mw.config.get('wgNamespaceNumber') < 0 || mw.config.get('wgPageName') === 'Wikipedia:Sandbox' ) {
+	if( mw.config.get('wgNamespaceNumber') < 0 || mw.config.get('wgPageName') === 'Wikipedia:Bak pasir' ) {
 		return;
 	}
-	Twinkle.addPortletLink( Twinkle.unlink.callback, "Unlink", "tw-unlink", "Unlink backlinks" );
+	Twinkle.addPortletLink( Twinkle.unlink.callback, "Unlink", "tw-unlink", "Hapus pranala balik" );
 };
 
 Twinkle.unlink.getChecked2 = function twinkleunlinkGetChecked2( nodelist ) {
@@ -36,28 +36,28 @@ Twinkle.unlink.getChecked2 = function twinkleunlinkGetChecked2( nodelist ) {
 // the parameter is used when invoking unlink from admin speedy
 Twinkle.unlink.callback = function(presetReason) {
 	var Window = new Morebits.simpleWindow( 600, 440 );
-	Window.setTitle( "Unlink backlinks" + (mw.config.get('wgNamespaceNumber') === 6 ? " and file usages" : "") );
+	Window.setTitle( "Hapus pranala balik" + (mw.config.get('wgNamespaceNumber') === 6 ? " dan penggunaan berkas" : "") );
 	Window.setScriptName( "Twinkle" );
-	Window.addFooterLink( "Twinkle help", "WP:TW/DOC#unlink" );
+	Window.addFooterLink( "Bantuan Twinkle", "WP:TW/DOC#unlink" );
 
 	var form = new Morebits.quickForm( Twinkle.unlink.callback.evaluate );
 
 	// prepend some basic documentation
-	var node1 = Morebits.htmlNode("code", "[[" + Morebits.pageNameNorm + "|link text]]");
-	var node2 = Morebits.htmlNode("code", "link text");
+	var node1 = Morebits.htmlNode("code", "[[" + Morebits.pageNameNorm + "|teks pranala]]");
+	var node2 = Morebits.htmlNode("code", "teks pranala");
 	node1.style.fontFamily = node2.style.fontFamily = "monospace";
 	node1.style.fontStyle = node2.style.fontStyle = "normal";
 	form.append( {
 		type: 'div',
 		style: 'margin-bottom: 0.5em',
 		label: [
-			'This tool allows you to unlink all incoming links ("backlinks") that point to this page' +
-				(mw.config.get('wgNamespaceNumber') === 6 ? ", and/or hide all inclusions of this file by wrapping them in <!-- --> comment markup" : "") +
-				". For instance, ",
+			'Alat ini membantu Anda menghapus semua pranala balik ke halaman ini' +
+				(mw.config.get('wgNamespaceNumber') === 6 ? ", dan/atau menyembunyikan penggunaan berkas ini dengan markah komentar <!-- -->" : "") +
+				". Misalnya, ",
 			node1,
-			" would become ",
+			" akan menjadi ",
 			node2,
-			". Use it with caution."
+			". Berhati-hatilah saat menggunakan."
 		]
 	} );
 
@@ -93,14 +93,14 @@ Twinkle.unlink.callback = function(presetReason) {
 			'rawcontinue': true
 		};
 	}
-	var wikipedia_api = new Morebits.wiki.api( 'Grabbing backlinks', query, Twinkle.unlink.callbacks.display.backlinks );
+	var wikipedia_api = new Morebits.wiki.api( 'Mengambil pranala balik', query, Twinkle.unlink.callbacks.display.backlinks );
 	wikipedia_api.params = { form: form, Window: Window, image: mw.config.get('wgNamespaceNumber') === 6 };
 	wikipedia_api.post();
 
 	var root = document.createElement( 'div' );
 	root.style.padding = '15px';  // just so it doesn't look broken
 	Morebits.status.init( root );
-	wikipedia_api.statelem.status( "loading..." );
+	wikipedia_api.statelem.status( "memuat..." );
 	Window.setContent( root );
 	Window.display();
 };
@@ -108,7 +108,7 @@ Twinkle.unlink.callback = function(presetReason) {
 Twinkle.unlink.callback.evaluate = function twinkleunlinkCallbackEvaluate(event) {
 	var reason = event.target.reason.value;
 	if (!reason) {
-		alert("You must specify a reason for unlinking.");
+		alert("Anda harus memberikan alasan untuk menghapus pranala.");
 		return;
 	}
 
@@ -125,12 +125,12 @@ Twinkle.unlink.callback.evaluate = function twinkleunlinkCallbackEvaluate(event)
 
 	var pages = Morebits.array.uniq(backlinks.concat(imageusage));
 
-	var unlinker = new Morebits.batchOperation("Unlinking backlinks" + (imageusage ? " and instances of file usage" : ""));
+	var unlinker = new Morebits.batchOperation("Menghapus pranala balik" + (imageusage ? " dan penggunaan berkas" : ""));
 	unlinker.setOption("preserveIndividualStatusLines", true);
 	unlinker.setPageList(pages);
 	var params = { reason: reason, unlinker: unlinker };
 	unlinker.run(function(pageName) {
-		var wikipedia_page = new Morebits.wiki.page(pageName, "Unlinking in article \"" + pageName + "\"");
+		var wikipedia_page = new Morebits.wiki.page(pageName, "Menghapus di artikel \"" + pageName + "\"");
 		wikipedia_page.setBotEdit(true);  // unlink considered a floody operation
 		var innerParams = $.extend({}, params);
 		innerParams.doBacklinks = backlinks && backlinks.indexOf(pageName) !== -1;
@@ -156,7 +156,7 @@ Twinkle.unlink.callbacks = {
 				}
 				if (!list.length)
 				{
-					apiobj.params.form.append( { type: 'div', label: 'No instances of file usage found.' } );
+					apiobj.params.form.append( { type: 'div', label: 'Tidak ditemukan penggunaan gambar.' } );
 				}
 				else
 				{
@@ -167,25 +167,25 @@ Twinkle.unlink.callbacks = {
 					});
 					apiobj.params.form.append( {
 						type: 'div',
-						label: "Selected namespaces: " + namespaces.join(', '),
-						tooltip: "You can change this with your Twinkle preferences, at [[WP:TWPREFS]]"
+						label: "Ruang nama terpilih: " + namespaces.join(', '),
+						tooltip: "Anda dapat mengubah setelan ini di preferensi Twinkle Anda: [[WP:TWPREFS]]"
 					});
 					if ($(xmlDoc).find('query-continue').length) {
 						apiobj.params.form.append( {
 							type: 'div',
-							label: "First " + list.length.toString() + " file usages shown."
+							label: "Ditampilkan " + list.length.toString() + " instansi penggunaan berkas."
 						});
 					}
 					apiobj.params.form.append({
 						type: 'button',
-						label: "Select All",
+						label: "Pilih semua",
 						event: function(e) {
 							$(Morebits.quickForm.getElements(e.target.form, "imageusage")).prop('checked', true);
 						}
 					});
 					apiobj.params.form.append({
 						type: 'button',
-						label: "Deselect All",
+						label: "Hapus semua pilihan",
 						event: function(e) {
 							$(Morebits.quickForm.getElements(e.target.form, "imageusage")).prop('checked', false);
 						}
@@ -213,25 +213,25 @@ Twinkle.unlink.callbacks = {
 				});
 				apiobj.params.form.append( {
 					type: 'div',
-					label: "Selected namespaces: " + namespaces.join(', '),
-					tooltip: "You can change this with your Twinkle preferences, at [[WP:TWPREFS]]"
+					label: "Ruang nama terpilih: " + namespaces.join(', '),
+					tooltip: "Anda dapat mengubah setelan ini di preferensi Twinkle Anda: [[WP:TWPREFS]]"
 				});
 				if ($(xmlDoc).find('query-continue').length) {
 					apiobj.params.form.append( {
 						type: 'div',
-						label: "First " + list.length.toString() + " backlinks shown."
+						label: "Ditampilkan " + list.length.toString() + " pranala balik."
 					});
 				}
 				apiobj.params.form.append({
 					type: 'button',
-					label: "Select All",
+					label: "Pilih semua",
 						event: function(e) {
 							$(Morebits.quickForm.getElements(e.target.form, "backlinks")).prop('checked', true);
 						}
 				});
 				apiobj.params.form.append({
 					type: 'button',
-					label: "Deselect All",
+					label: "Hapus semua pilihan",
 						event: function(e) {
 							$(Morebits.quickForm.getElements(e.target.form, "backlinks")).prop('checked', false);
 						}
@@ -245,7 +245,7 @@ Twinkle.unlink.callbacks = {
 			}
 			else
 			{
-				apiobj.params.form.append( { type: 'div', label: 'No backlinks found.' } );
+				apiobj.params.form.append( { type: 'div', label: 'Tidak ditemukan pranala balik.' } );
 			}
 
 			if (havecontent) {
@@ -270,13 +270,13 @@ Twinkle.unlink.callbacks = {
 
 		// remove image usages
 		if (params.doImageusage) {
-			wikiPage.commentOutImage(mw.config.get('wgTitle'), 'Commented out');
+			wikiPage.commentOutImage(mw.config.get('wgTitle'), 'Disembunyikan sebagai komentar');
 			text = wikiPage.getText();
 			// did we actually make any changes?
 			if (text === oldtext) {
-				warningString = "file usages";
+				warningString = "penggunaan berkas";
 			} else {
-				summaryText = "Commenting out use(s) of file";
+				summaryText = "Membuat penggunaan berkas jadi komentar";
 				oldtext = text;
 			}
 		}
@@ -287,16 +287,16 @@ Twinkle.unlink.callbacks = {
 			text = wikiPage.getText();
 			// did we actually make any changes?
 			if (text === oldtext) {
-				warningString = (warningString ? "backlinks or file usages" : "backlinks");
+				warningString = (warningString ? "pranala balik atau penggunaan berkas" : "pranala balik");
 			} else {
-				summaryText = (summaryText ? (summaryText + " / ") : "") + "Removing link(s) to";
+				summaryText = (summaryText ? (summaryText + " / ") : "") + "Hapus pranala ke";
 				oldtext = text;
 			}
 		}
 
 		if (warningString) {
 			// nothing to do!
-			pageobj.getStatusElement().error("Didn't find any " + warningString + " on the page.");
+			pageobj.getStatusElement().error("Tidak ditemukan adanya " + warningString + " di halaman ini.");
 			params.unlinker.workerFailure(pageobj);
 			return;
 		}

@@ -173,15 +173,15 @@ Twinkle.fluff = {
 				});
 
 				agfLink.appendChild( spanTag( 'Black', '[' ) );
-				agfLink.appendChild( spanTag( 'DarkOliveGreen', 'rollback (AGF)' ) );
+				agfLink.appendChild( spanTag( 'DarkOliveGreen', 'kembalikan (ANB)' ) );
 				agfLink.appendChild( spanTag( 'Black', ']' ) );
 
 				vandLink.appendChild( spanTag( 'Black', '[' ) );
-				vandLink.appendChild( spanTag( 'Red', 'rollback (VANDAL)' ) );
+				vandLink.appendChild( spanTag( 'Red', 'kembalikan (VANDAL)' ) );
 				vandLink.appendChild( spanTag( 'Black', ']' ) );
 
 				normLink.appendChild( spanTag( 'Black', '[' ) );
-				normLink.appendChild( spanTag( 'SteelBlue', 'rollback' ) );
+				normLink.appendChild( spanTag( 'SteelBlue', 'kembalikan' ) );
 				normLink.appendChild( spanTag( 'Black', ']' ) );
 
 				agfNode.appendChild(agfLink);
@@ -226,7 +226,7 @@ Twinkle.fluff.revert = function revertPage( type, vandal, autoRevert, rev, page 
 		'rvprop': [ 'ids', 'timestamp', 'user', 'comment' ],
 		'intoken': 'edit'
 	};
-	var wikipedia_api = new Morebits.wiki.api( 'Grabbing data of earlier revisions', query, Twinkle.fluff.callbacks.main );
+	var wikipedia_api = new Morebits.wiki.api( 'Mengambil data revisi yang lebih awal', query, Twinkle.fluff.callbacks.main );
 	wikipedia_api.params = params;
 	wikipedia_api.post();
 };
@@ -245,7 +245,7 @@ Twinkle.fluff.revertToRevision = function revertToRevision( oldrev ) {
 		'intoken': 'edit',
 		'format': 'xml'
 	};
-	var wikipedia_api = new Morebits.wiki.api( 'Grabbing data of the earlier revision', query, Twinkle.fluff.callbacks.toRevision.main );
+	var wikipedia_api = new Morebits.wiki.api( 'Mengambil data revisi yang lebih awal', query, Twinkle.fluff.callbacks.toRevision.main );
 	wikipedia_api.params = { rev: oldrev };
 	wikipedia_api.post();
 };
@@ -271,13 +271,13 @@ Twinkle.fluff.callbacks = {
 				return;
 			}
 
-			var optional_summary = prompt( "Please specify a reason for the revert:                                ", "" );  // padded out to widen prompt in Firefox
+			var optional_summary = prompt( "Mohon berikan alasan pengembalian:                                ", "" );  // padded out to widen prompt in Firefox
 			if (optional_summary === null)
 			{
-				self.statelem.error( 'Aborted by user.' );
+				self.statelem.error( 'Dibatalkan pengguna.' );
 				return;
 			}
-			var summary = Twinkle.fluff.formatSummary("Reverted to revision " + revertToRevID + " by $USER", revertToUser, optional_summary);
+			var summary = Twinkle.fluff.formatSummary("Dikembalikan ke revisi " + revertToRevID + " oleh $USER", revertToUser, optional_summary);
 
 			var query = {
 				'action': 'edit',
@@ -293,9 +293,9 @@ Twinkle.fluff.callbacks = {
 			};
 
 			Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
-			Morebits.wiki.actionCompleted.notice = "Reversion completed";
+			Morebits.wiki.actionCompleted.notice = "Pengembalian selesai";
 
-			var wikipedia_api = new Morebits.wiki.api( 'Saving reverted contents', query, Twinkle.fluff.callbacks.complete, self.statelem);
+			var wikipedia_api = new Morebits.wiki.api( 'Menyimpan isi yang terkembalikan', query, Twinkle.fluff.callbacks.complete, self.statelem);
 			wikipedia_api.params = self.params;
 			wikipedia_api.post();
 
@@ -572,7 +572,7 @@ Twinkle.fluff.formatSummary = function(builtInString, userName, userString) {
 	var contribsLink = "[[Special:Contributions/" + userName + "|" + userName + "]]";
 	var contribsLen = unescape(encodeURIComponent(contribsLink)).length;
 	if (resultLen + contribsLen <= 255) {
-		var talkLink = " ([[User talk:" + userName + "|talk]])";
+		var talkLink = " ([[User talk:" + userName + "|bicara]])";
 		if (resultLen + contribsLen + unescape(encodeURIComponent(talkLink)).length <= 255) {
 			result = result.replace("$USER", contribsLink + talkLink);
 		} else {

@@ -24,12 +24,12 @@ Twinkle.diff = function twinklediff() {
 		'oldid': 'prev'
 	};
 
-	Twinkle.addPortletLink( mw.util.wikiScript("index")+ "?" + $.param( query ), 'Last', 'tw-lastdiff', 'Show most recent diff' );
+	Twinkle.addPortletLink( mw.util.wikiScript("index")+ "?" + $.param( query ), 'Terakhir', 'tw-lastdiff', 'Tampilkan beda terbaru' );
 
 	// Show additional tabs only on diff pages
 	if (Morebits.queryString.exists('diff')) {
-		Twinkle.addPortletLink(function(){ Twinkle.diff.evaluate(false); }, 'Since', 'tw-since', 'Show difference between last diff and the revision made by previous user' );
-		Twinkle.addPortletLink( function(){ Twinkle.diff.evaluate(true); }, 'Since mine', 'tw-sincemine', 'Show difference between last diff and my last revision' );
+		Twinkle.addPortletLink(function(){ Twinkle.diff.evaluate(false); }, 'Sejak', 'tw-since', 'Perlihatkan beda antara revisi terakhir dan revisi oleh pengguna sebelumnya' );
+		Twinkle.addPortletLink( function(){ Twinkle.diff.evaluate(true); }, 'Sejak saya', 'tw-sincemine', 'Perlihatkan beda antara revisi terakhir dan revisi terakhir saya' );
 
 		var oldid = /oldid=(.+)/.exec($('#mw-diff-ntitle1').find('strong a').first().attr("href"))[1];
 		query = {
@@ -37,7 +37,7 @@ Twinkle.diff = function twinklediff() {
 			'diff': 'cur',
 			'oldid' : oldid
 		};
-		Twinkle.addPortletLink( mw.util.wikiScript("index")+ "?" + $.param( query ), 'Current', 'tw-curdiff', 'Show difference to current revision' );
+		Twinkle.addPortletLink( mw.util.wikiScript("index")+ "?" + $.param( query ), 'Saat ini', 'tw-curdiff', 'Perlihatkan beda ke revisi terbaru' );
 	}
 };
 
@@ -64,7 +64,7 @@ Twinkle.diff.evaluate = function twinklediffEvaluate(me) {
 		'rvuser': user
 	};
 	Morebits.status.init( document.getElementById('mw-content-text') );
-	var wikipedia_api = new Morebits.wiki.api( 'Grabbing data of initial contributor', query, Twinkle.diff.callbacks.main );
+	var wikipedia_api = new Morebits.wiki.api( 'Mengambil data kontributor awal', query, Twinkle.diff.callbacks.main );
 	wikipedia_api.params = { user: user };
 	wikipedia_api.post();
 };
@@ -75,7 +75,7 @@ Twinkle.diff.callbacks = {
 		var revid = $(xmlDoc).find('rev').attr('revid');
 
 		if( ! revid ) {
-			self.statelem.error( 'no suitable earlier revision found, or ' + self.params.user + ' is the only contributor. Aborting.' );
+			self.statelem.error( 'tidak ditemukan adanya revisi yang lebih baru, atau ' + self.params.user + ' merupakan satu-satunya kontributor. Membatalkan.' );
 			return;
 		}
 		var query = {
