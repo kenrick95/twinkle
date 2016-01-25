@@ -161,8 +161,8 @@ Twinkle.config.sections = [
 		// Text to be appended to the edit summary of edits made using Twinkle
 		{
 			name: "summaryAd",
-			label: "\"Ad\" to be appended to Twinkle's edit summaries",
-			helptip: "The summary ad should start with a space, and be kept short.",
+			label: "\"Iklan\" yang akan ditambahkan ke dalam ringkasan suntingan Twinkle",
+			helptip: "Iklan ringkasan harus diawali dengan sebuah spasi, dan singkat.",
 			type: "string"
 		},
 
@@ -170,8 +170,8 @@ Twinkle.config.sections = [
 		// Text to be appended to the edit summary of deletions made using Twinkle
 		{
 			name: "deletionSummaryAd",
-			label: "Summary ad to use for deletion summaries",
-			helptip: "Normally the same as the edit summary ad above.",
+			label: "Iklan ringkasan yang digunakan untuk ringkasan penghapusan",
+			helptip: "Biasanya sama deengan iklan ringkasan suntingan di atas.",
 			adminOnly: true,
 			type: "string"
 		},
@@ -180,8 +180,8 @@ Twinkle.config.sections = [
 		// Text to be appended to the edit summary of page protections made using Twinkle
 		{
 			name: "protectionSummaryAd",
-			label: "Summary ad to use for page protections",
-			helptip: "Normally the same as the edit summary ad above.",
+			label: "Iklan ringkasan yang digunakan untuk perlindungan halaman",
+			helptip: "Biasanya sama deengan iklan ringkasan suntingan di atas.",
 			adminOnly: true,
 			type: "string"
 		},
@@ -192,7 +192,7 @@ Twinkle.config.sections = [
 		// 'blank': force open in a new window, even if such a window exists
 		{
 			name: "userTalkPageMode",
-			label: "When opening a user talk page, open it",
+			label: "Ketika membuka halaman pembicaraan pengguna, buka",
 			type: "enum",
 			enumValues: Twinkle.config.commonEnums.talkPageMode
 		},
@@ -200,7 +200,7 @@ Twinkle.config.sections = [
 		// TwinkleConfig.dialogLargeFont (boolean)
 		{
 			name: "dialogLargeFont",
-			label: "Use larger text in Twinkle dialogs",
+			label: "Gunakan teks yang lebih besar dalam dialog Twinkle",
 			type: "boolean"
 		}
 	]
@@ -211,7 +211,7 @@ Twinkle.config.sections = [
 	preferences: [
 		{
 			name: "spiWatchReport",
-			label: "Add sockpuppet report pages to watchlist",
+			label: "Menambahkan halaman laporan sockpuppet ke daftar pantauan",
 			type: "enum",
 			enumValues: Twinkle.config.commonEnums.watchlist
 		}
@@ -226,8 +226,8 @@ Twinkle.config.sections = [
 		// if true, blank the talk page when issuing an indef block notice (per [[WP:UW#Indefinitely blocked users]])
 		{
 			name: "blankTalkpageOnIndefBlock",
-			label: "Blank the talk page when indefinitely blocking users",
-			helptip: "See <a href=\"" + mw.util.getUrl("WP:UW#Indefinitely blocked users") + "\">WP:UW</a> for more information.",
+			label: "Kosongkan halaman pembicaraan saat memblokir pengguna untuk selamanya",
+			helptip: "Lihat <a href=\"" + mw.util.getUrl("WP:UW#Indefinitely blocked users") + "\">WP:UW</a> untuk informasi lebih lanjut.",
 			type: "boolean"
 		}
 	]
