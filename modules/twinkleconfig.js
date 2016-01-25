@@ -211,7 +211,7 @@ Twinkle.config.sections = [
 	preferences: [
 		{
 			name: "spiWatchReport",
-			label: "Menambahkan halaman laporan sockpuppet ke daftar pantauan",
+			label: "Menambahkan halaman laporan pengguna siluman ke daftar pantauan",
 			type: "enum",
 			enumValues: Twinkle.config.commonEnums.watchlist
 		}
@@ -240,7 +240,7 @@ Twinkle.config.sections = [
 		// If the user should be notified after placing a file deletion tag
 		{
 			name: "notifyUserOnDeli",
-			label: "Check the \"notify initial uploader\" box by default",
+			label: "Pilih \"beritahu pengunggah berkas\" sebagai pengaturan standar",
 			type: "boolean"
 		},
 
@@ -248,7 +248,7 @@ Twinkle.config.sections = [
 		// The watchlist setting of the page tagged for deletion. Either "yes", "no", or "default". Default is "default" (Duh).
 		{
 			name: "deliWatchPage",
-			label: "Add image page to watchlist when tagging",
+			label: "Menambahkan halaman berkas ke daftar pantauan setelah ditandai",
 			type: "enum",
 			enumValues: Twinkle.config.commonEnums.watchlist
 		},
@@ -257,7 +257,7 @@ Twinkle.config.sections = [
 		// The watchlist setting of the user talk page if a notification is placed. Either "yes", "no", or "default". Default is "default" (Duh).
 		{
 			name: "deliWatchUser",
-			label: "Add user talk page of initial uploader to watchlist when notifying",
+			label: "Menambahkan halaman pembicaraan pengunggah berkas ke daftar pantauan setelah diberitahu",
 			type: "enum",
 			enumValues: Twinkle.config.commonEnums.watchlist
 		}
@@ -271,7 +271,7 @@ Twinkle.config.sections = [
 		// If, when applying prod template to page, to watch the page
 		{
 			name: "watchProdPages",
-			label: "Add article to watchlist when tagging",
+			label: "Menambahkan artikel ke daftar pantauan setelah ditandai",
 			type: "boolean"
 		},
 
