@@ -219,7 +219,7 @@ Twinkle.config.sections = [
 },
 
 {
-	title: "Block user",
+	title: "Blokir pengguna",
 	adminOnly: true,
 	preferences: [
 		// TwinkleConfig.blankTalkpageOnIndefBlock (boolean)
@@ -431,7 +431,7 @@ Twinkle.config.sections = [
 		// TwinkleConfig.promptForSpeedyDeletionSummary (array of strings)
 		{
 			name: "promptForSpeedyDeletionSummary",
-			label: "Allow editing of deletion summary when deleting under these criteria",
+			label: "Izinkan penyuntingan ringkasan penghapusan setelah menghapus dengan kriteria ini",
 			adminOnly: true,
 			type: "set",
 			setValues: Twinkle.config.commonSets.csdAndDICriteria,
@@ -442,7 +442,7 @@ Twinkle.config.sections = [
 		// What types of actions that should result user talk page to be opened when speedily deleting (admin only)
 		{
 			name: "openUserTalkPageOnSpeedyDelete",
-			label: "Open user talk page when deleting under these criteria",
+			label: "Buka halaman pembicaraan pengguna setelah menghapus dengan kriteria ini",
 			adminOnly: true,
 			type: "set",
 			setValues: Twinkle.config.commonSets.csdAndDICriteria,
@@ -453,14 +453,14 @@ Twinkle.config.sections = [
 		// If talk page if exists should also be deleted (CSD G8) when spedying a page (admin only)
 		{
 			name: "deleteTalkPageOnDelete",
-			label: "Check the \"also delete talk page\" box by default",
+			label: "Pilih \"juga hapus halaman pembicaraan\" secara bawaan",
 			adminOnly: true,
 			type: "boolean"
 		},
 
 		{
 			name: "deleteRedirectsOnDelete",
-			label: "Check the \"also delete redirects\" box by default",
+			label: "Pilih \"juga hapus pengalihan\" secara bawaan",
 			adminOnly: true,
 			type: "boolean"
 		},
@@ -469,7 +469,7 @@ Twinkle.config.sections = [
 		// Make the CSD screen default to "tag" instead of "delete" (admin only)
 		{
 			name: "deleteSysopDefaultToTag",
-			label: "Default to speedy tagging instead of outright deletion",
+			label: "Setel penandaan cepat sebagai bawaan bukannya penghapusan langsung",
 			adminOnly: true,
 			type: "boolean"
 		},
@@ -478,7 +478,7 @@ Twinkle.config.sections = [
 		// Defines the width of the Twinkle SD window in pixels
 		{
 			name: "speedyWindowWidth",
-			label: "Width of speedy deletion window (pixels)",
+			label: "Lebar jendela penghapusan cepat (piksel)",
 			type: "integer"
 		},
 
@@ -486,26 +486,26 @@ Twinkle.config.sections = [
 		// Defines the width of the Twinkle SD window in pixels
 		{
 			name: "speedyWindowHeight",
-			label: "Height of speedy deletion window (pixels)",
-			helptip: "If you have a big monitor, you might like to increase this.",
+			label: "Tinggi jendela penghapusan cepat (piksel)",
+			helptip: "Jika memiliki monitor besar, mungkin Anda ingin memperbesar jendela ini.",
 			type: "integer"
 		},
 
 		{
 			name: "logSpeedyNominations",
-			label: "Keep a log in userspace of all CSD nominations",
-			helptip: "Since non-admins do not have access to their deleted contributions, the userspace log offers a good way to keep track of all pages you nominate for CSD using Twinkle. Files tagged using DI are also added to this log.",
+			label: "Simpan log dalam ruang pengguna nominasi KPC",
+			helptip: "Karena selain pengurus tidak memiliki akses ke kontribusi mereka yang dihapus, log ruang pengguna menawarkan cara yang baik untuk melacak semua halaman yang Anda nominasikan KPC menggunakan Twinkle. Berkas yang ditandai menggunakan PB juga ditambahkan ke log ini.",
 			type: "boolean"
 		},
 		{
 			name: "speedyLogPageName",
-			label: "Keep the CSD userspace log at this user subpage",
-			helptip: "Enter a subpage name in this box. You will find your CSD log at User:<i>username</i>/<i>subpage name</i>. Only works if you turn on the CSD userspace log.",
+			label: "Simpan log ruang pengguna KPC di subhalaman pengguna ini",
+			helptip: "Masukkan nama subhalaman dalam kotak ini. Log KPC Anda akan tersimpan di Pengguna:<i>nama pengguna</i>/<i>nama subhalaman</i>. Aktifkan log ruang pengguna KPC untuk memanfaatkan fungsi ini.",
 			type: "string"
 		},
 		{
 			name: "noLogOnSpeedyNomination",
-			label: "Do not create a userspace log entry when tagging with these criteria",
+			label: "Jangan buat entri log ruang pengguna setelah menandai dengan kriteria ini",
 			type: "set",
 			setValues: Twinkle.config.commonSets.csdAndDICriteria,
 			setDisplayOrder: Twinkle.config.commonSets.csdAndDICriteriaDisplayOrder
@@ -519,39 +519,39 @@ Twinkle.config.sections = [
 	preferences: [
 		{
 			name: "watchTaggedPages",
-			label: "Add page to watchlist when tagging",
+			label: "Tambahkan halaman ke daftar pantauan setelah penandaan",
 			type: "boolean"
 		},
 		{
 			name: "watchMergeDiscussions",
-			label: "Add talk pages to watchlist when starting merge discussions",
+			label: "Tambahkan halaman pembicaraan ke daftar pantauan setelah memulai diskusi penggabungan",
 			type: "boolean"
 		},
 		{
 			name: "markTaggedPagesAsMinor",
-			label: "Mark addition of tags as a minor edit",
+			label: "Tandai penambahan tag sebagai suntingan kecil",
 			type: "boolean"
 		},
 		{
 			name: "markTaggedPagesAsPatrolled",
-			label: "Check the \"mark page as patrolled\" box by default",
+			label: "Pilih \"tandai halaman sebagai sudah dipatroli\" secara bawaan",
 			type: "boolean"
 		},
 		{
 			name: "groupByDefault",
-			label: "Check the \"group into {{multiple issues}}\" box by default",
+			label: "Pilih \"kelompokkan dalam {{artikel bermasalah}}\" secara bawaan",
 			type: "boolean"
 		},
 		{
 			name: "tagArticleSortOrder",
-			label: "Default view order for article tags",
+			label: "Urutan tampilan bawaan untuk tag artikel",
 			type: "enum",
 			enumValues: { "cat": "By categories", "alpha": "In alphabetical order" }
 		},
 		{
 			name: "customTagList",
-			label: "Custom article maintenance tags to display",
-			helptip: "These appear as additional options at the bottom of the list of tags. For example, you could add new maintenance tags which have not yet been added to Twinkle's defaults.",
+			label: "Tampilan tag pemeliharaan artikel kustom",
+			helptip: "Ini tampil sebagai opsi tambahan di bawah daftar tag. Misalnya, Anda dapat menambahkan tag pemeliharaan baru yang belum pernah ditambahkan ke bawaan Twinkle.",
 			type: "customList",
 			customListValueTitle: "Template name (no curly brackets)",
 			customListLabelTitle: "Text to show in Tag dialog"
@@ -565,28 +565,28 @@ Twinkle.config.sections = [
 	preferences: [
 		{
 			name: "markTalkbackAsMinor",
-			label: "Mark talkbacks as minor edits",
+			label: "Tandai talkback sebagai suntingan kecil",
 			type: "boolean"
 		},
 		{
 			name: "insertTalkbackSignature",
-			label: "Insert signature within talkbacks",
+			label: "Tambahkan tanda tangan di dalam talkback",
 			type: "boolean"
 		},
 		{
 			name: "talkbackHeading",
-			label: "Section heading to use for talkbacks",
+			label: "Judul bagian yang digunakan untuk talkback",
 			type: "string"
 		},
 		{
 			name: "adminNoticeHeading",
-			label: "Section heading to use for administrators' noticeboard notices",
-			helptip: "Only relevant for AN and ANI.",
+			label: "Judul bagian yang digunakan untuk pemberitahuan papan pengumuman pengurus",
+			helptip: "Hanya relevan untuk AN dan ANI.",
 			type: "string"
 		},
 		{
 			name: "mailHeading",
-			label: "Section heading to use for \"you've got mail\" notices",
+			label: "Judul bagian yang digunakan untuk pemberitahuan \"Anda mendapatkan pesan\"",
 			type: "string"
 		}
 	]
@@ -599,8 +599,8 @@ Twinkle.config.sections = [
 		// In what namespaces unlink should happen, default in 0 (article) and 100 (portal)
 		{
 			name: "unlinkNamespaces",
-			label: "Remove links from pages in these namespaces",
-			helptip: "Avoid selecting any talk namespaces, as Twinkle might end up unlinking on talk archives (a big no-no).",
+			label: "Hapus tautan dari halaman dalam ruang nama ini",
+			helptip: "Hindari memilih ruang nama pembicaraan apapun, karena Twinkle mungkin akan menghapus tautan dalam arsip pembicaraan.",
 			type: "set",
 			setValues: Twinkle.config.commonSets.namespacesNoSpecial
 		}
@@ -608,13 +608,13 @@ Twinkle.config.sections = [
 },
 
 {
-	title: "Warn user",
+	title: "Memperingatkan pengguna",
 	preferences: [
 		// TwinkleConfig.defaultWarningGroup (int)
 		// if true, watch the page which has been dispatched an warning or notice, if false, default applies
 		{
 			name: "defaultWarningGroup",
-			label: "Default warning level",
+			label: "Tingkatan peringatan bawaan",
 			type: "enum",
 			enumValues: {
 				"1": "Level 1",
@@ -633,8 +633,8 @@ Twinkle.config.sections = [
 		// false: to not print the notice
 		{
 			name: "showSharedIPNotice",
-			label: "Add extra notice on shared IP talk pages",
-			helptip: "Notice used is {{Shared IP advice}}",
+			label: "Tambahkan pemberitahuan tambahan di halaman pembicaraan IP bersama",
+			helptip: "Pemberitahuan yang digunakan adalah {{Shared IP advice}}",
 			type: "boolean"
 		},
 
@@ -642,14 +642,14 @@ Twinkle.config.sections = [
 		// if true, watch the page which has been dispatched an warning or notice, if false, default applies
 		{
 			name: "watchWarnings",
-			label: "Add user talk page to watchlist when notifying",
+			label: "Tambahkan halaman pembicaraan pengguna ke daftar pantauan setelah pemberitahuan",
 			type: "boolean"
 		},
 
 		{
 			name: "customWarningList",
-			label: "Custom warning templates to display",
-			helptip: "You can add individual templates or user subpages. Custom warnings appear in the \"Custom warnings\" category within the warning dialog box.",
+			label: "Tampilan templat peringatan kustom",
+			helptip: "Anda dapat menambahkan subhalaman pengguna atau templat pribadi. Peringatan kustom ditampilkan dalam kategori \"Peringatan kustom\" di dalam kotak dialog peringatan.",
 			type: "customList",
 			customListValueTitle: "Template name (no curly brackets)",
 			customListLabelTitle: "Text to show in warning list (also used as edit summary)"
@@ -657,7 +657,7 @@ Twinkle.config.sections = [
 
 		{
 			name: "markXfdPagesAsPatrolled",
-			label: "Mark page as patrolled when nominating for AFD (if possible)",
+			label: "Tandai halaman sebagai sudah dipatroli setelah nominasi AFD (jika mungkin)",
 			type: "boolean"
 		}
 	]
