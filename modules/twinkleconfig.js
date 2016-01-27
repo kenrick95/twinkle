@@ -50,7 +50,7 @@ Twinkle.config.commonSets = {
 		"r2", "r3",
 		"p1", "p2"
 	],
-	csdCriteriaNotibication: {
+	csdCriteriaNotification: {
 		db: "Alasan khusus ({{db}})",
 		u1: "U1", u2: "U2", u3: "U3", u4: "U4", u6: 'U6 (hanya untuk "Disambiguasi tak berguna" dan "pemindahan salin-tempel")',
 		u10: "U10", u11: "U11", u12: "U12", u13: "U13",
@@ -62,7 +62,7 @@ Twinkle.config.commonSets = {
 		r2: "R2", r3: "R3",
 		p1: "P1", p2: "P2"
 	},
-	csdCriteriaNotibicationDisplayOrder: [
+	csdCriteriaNotificationDisplayOrder: [
 		"db",
 		"u1", "u2", "u3", "u4", "u6", "u10", "u11", "u12", "u13",
 		"a1", "a2", "a3", "a5", "a7", "a9", "a10", "a11",
