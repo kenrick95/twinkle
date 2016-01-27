@@ -664,51 +664,51 @@ Twinkle.config.sections = [
 },
 
 {
-	title: "Welcome user",
+	title: "Menyambut pengguna (selamat datang)",
 	inFriendlyConfig: true,
 	preferences: [
 		{
 			name: "topWelcomes",
-			label: "Place welcomes above existing content on user talk pages",
+			label: "Tempatkan sambutan di atas semua konten yang ada di halaman pembicaraan pengguna",
 			type: "boolean"
 		},
 		{
 			name: "watchWelcomes",
-			label: "Add user talk pages to watchlist when welcoming",
-			helptip: "Doing so adds to the personal element of welcoming a user - you will be able to see how they are coping as a newbie, and possibly help them.",
+			label: "Tambahkan halaman pembicaraan pengguna ke daftar pantauan setelah menyambutnya",
+			helptip: "Melakukan hal ini merupakan penanganan pribadi dalam menyambut pengguna; Anda akan dapat memantau perkembangan mereka sebagai pemula, dan mungkin membantunya.",
 			type: "boolean"
 		},
 		{
 			name: "insertUsername",
-			label: "Add your username to the template (where applicable)",
-			helptip: "Some welcome templates have an opening sentence like \"Hi, I'm &lt;username&gt;. Welcome\" etc. If you turn off this option, these templates will not display your username in that way.",
+			label: "Tambahkan nama pengguna Anda ke templat (bila memungkinkan)",
+			helptip: "Beberapa templat selamat datang memiliki kalimat pembuka seperti \"Halo, saya &lt;nama pengguna&gt;. Selamat datang\" dll. Jika Anda menonaktifkan opsi ini, templat tersebut tidak akan tampil seperti demikian.",
 			type: "boolean"
 		},
 		{
 			name: "quickWelcomeMode",
-			label: "Clicking the \"welcome\" link on a diff page will",
-			helptip: "If you choose to welcome automatically, the template you specify below will be used.",
+			label: "Mengeklik tautan \"selamat datang\" pada halaman perbedaan revisi akan",
+			helptip: "Jika Anda memilih penyambutan otomatis, templat yang Anda pilih di bawah akan digunakan.",
 			type: "enum",
 			enumValues: { auto: "welcome automatically", norm: "prompt you to select a template" }
 		},
 		{
 			name: "quickWelcomeTemplate",
-			label: "Template to use when welcoming automatically",
-			helptip: "Enter the name of a welcome template, without the curly brackets. A link to the given article will be added.",
+			label: "Templat yang digunakan untuk penyambutan otomatis",
+			helptip: "Masukkan nama templat selamat datang, tanpa kurung kurawal. Tautan ke artikel yang disuntingnya itu akan disertakan.",
 			type: "string"
 		},
 		{
 			name: "customWelcomeList",
-			label: "Custom welcome templates to display",
-			helptip: "You can add other welcome templates, or user subpages that are welcome templates (prefixed with \"User:\"). Don't forget that these templates are substituted onto user talk pages.",
+			label: "Tampilan templat selamat datang kustom",
+			helptip: "Anda dapat menambahkan templat selamat datang lainnya, atau subhalaman pengguna yang merupakan templat selamat datang (diawali dengan \"User:\"). Harap diingat bahwa templat ini disubstitusi ke halaman pembicaraan pengguna.",
 			type: "customList",
 			customListValueTitle: "Template name (no curly brackets)",
 			customListLabelTitle: "Text to show in Welcome dialog"
 		},
 		{
 			name: "customWelcomeSignature",
-			label: "Automatically sign custom welcome templates",
-			helptip: "If your custom welcome templates contain a built-in signature within the template, turn off this option.",
+			label: "Tandatangani templat selamat datang secara otomatis",
+			helptip: "Jika templat selamat datang kustom Anda telah memuat tanda tangan di dalam templatnya, nonaktifkan opsi ini.",
 			type: "boolean"
 		}
 	]
