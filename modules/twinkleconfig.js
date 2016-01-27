@@ -23,8 +23,8 @@
 Twinkle.config = {};
 
 Twinkle.config.commonEnums = {
-	watchlist: { yes: "Add to watchlist", no: "Don't add to watchlist", "default": "Follow your site preferences" },
-	talkPageMode: { window: "In a window, replacing other user talks", tab: "In a new tab", blank: "In a totally new window" }
+	watchlist: { yes: "Tambahkan ke daftar pantauan", no: "Jangan tambahkan ke daftar pantauan", "default": "Ikuti preferensi baku di situs ini" },
+	talkPageMode: { window: "Dalam sebuah jendela, menggantikan pembicaraan pengguna lain", tab: "Di tab baru", blank: "Di sebuah jendela baru" }
 };
 
 Twinkle.config.commonSets = {
@@ -546,15 +546,15 @@ Twinkle.config.sections = [
 			name: "tagArticleSortOrder",
 			label: "Urutan tampilan bawaan untuk tag artikel",
 			type: "enum",
-			enumValues: { "cat": "By categories", "alpha": "In alphabetical order" }
+			enumValues: { "cat": "Berdasarkan kategori", "alpha": "Alfabetis" }
 		},
 		{
 			name: "customTagList",
 			label: "Tampilan tag pemeliharaan artikel kustom",
 			helptip: "Ini tampil sebagai opsi tambahan di bawah daftar tag. Misalnya, Anda dapat menambahkan tag pemeliharaan baru yang belum pernah ditambahkan ke bawaan Twinkle.",
 			type: "customList",
-			customListValueTitle: "Template name (no curly brackets)",
-			customListLabelTitle: "Text to show in Tag dialog"
+			customListValueTitle: "Nama templat (tanpa tanda kurung kurawal)",
+			customListLabelTitle: "Teks yang ditampilkan di dialog Tag "
 		}
 	]
 },
@@ -617,14 +617,14 @@ Twinkle.config.sections = [
 			label: "Tingkatan peringatan bawaan",
 			type: "enum",
 			enumValues: {
-				"1": "Level 1",
-				"2": "Level 2",
-				"3": "Level 3",
-				"4": "Level 4",
-				"5": "Level 4im",
-				"6": "Single-issue notices",
-				"7": "Single-issue warnings",
-				"9": "Custom warnings"
+				"1": "Tingkat 1",
+				"2": "Tingkat 2",
+				"3": "Tingkat 3",
+				"4": "Tingkat 4",
+				"5": "Tingkat 4im",
+				"6": "Pemberitahuan masalah tunggal",
+				"7": "Peringatan masalah tunggal",
+				"9": "Peringatan khusus"
 			}
 		},
 
@@ -651,8 +651,8 @@ Twinkle.config.sections = [
 			label: "Tampilan templat peringatan kustom",
 			helptip: "Anda dapat menambahkan subhalaman pengguna atau templat pribadi. Peringatan kustom ditampilkan dalam kategori \"Peringatan kustom\" di dalam kotak dialog peringatan.",
 			type: "customList",
-			customListValueTitle: "Template name (no curly brackets)",
-			customListLabelTitle: "Text to show in warning list (also used as edit summary)"
+			customListValueTitle: "Nama templat (tanpa tanda kurung kurawal)",
+			customListLabelTitle: "Teks yang ditampilkan di daftar peringatan (juga di ringkasan suntingan)"
 		},
 
 		{
@@ -689,7 +689,7 @@ Twinkle.config.sections = [
 			label: "Mengeklik tautan \"selamat datang\" pada halaman perbedaan revisi akan",
 			helptip: "Jika Anda memilih penyambutan otomatis, templat yang Anda pilih di bawah akan digunakan.",
 			type: "enum",
-			enumValues: { auto: "welcome automatically", norm: "prompt you to select a template" }
+			enumValues: { auto: "sambut secara otomatis", norm: "tanya Anda untuk memilih sebuah templat" }
 		},
 		{
 			name: "quickWelcomeTemplate",
@@ -1113,12 +1113,12 @@ Twinkle.config.init = function twinkleconfigInit() {
 							pref: pref,
 							inFriendlyConfig: section.inFriendlyConfig
 						});
-						button.appendChild(document.createTextNode("Edit items"));
+						button.appendChild(document.createTextNode("Sunting item"));
 						cell.appendChild(button);
 						break;
 
 					default:
-						alert("twinkleconfig: unknown data type for preference " + pref.name);
+						alert("twinkleconfig: tipe data tak diketahui untuk preferensi " + pref.name);
 						break;
 				}
 				row.appendChild(cell);
@@ -1145,7 +1145,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 						resetlink.style.cssFloat = "right";
 					}
 					resetlink.style.margin = "0 0.6em";
-					resetlink.appendChild(document.createTextNode("Reset"));
+					resetlink.appendChild(document.createTextNode("Setel ulang"));
 					cell.appendChild(resetlink);
 				}
 				row.appendChild(cell);
@@ -1163,7 +1163,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 		var button = document.createElement("button");
 		button.setAttribute("id", "twinkle-config-submit");
 		button.setAttribute("type", "submit");
-		button.appendChild(document.createTextNode("Save changes"));
+		button.appendChild(document.createTextNode("Simpan perubahan"));
 		footerbox.appendChild(button);
 		var footerspan = document.createElement("span");
 		footerspan.className = "plainlinks";
@@ -1173,7 +1173,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 		footera.setAttribute("href", "#tw-reset-all");
 		footera.setAttribute("id", "twinkle-config-resetall");
 		footera.addEventListener("click", Twinkle.config.resetAllPrefs, false);
-		footera.appendChild(document.createTextNode("Restore defaults"));
+		footera.appendChild(document.createTextNode("Kembalikan ke setelan baku"));
 		footerspan.appendChild(footera);
 		footerbox.appendChild(footerspan);
 		contentform.appendChild(footerbox);
@@ -1362,21 +1362,21 @@ Twinkle.config.listDialog.display = function twinkleconfigListDialogDisplay(e) {
 		Twinkle.config.listDialog.save($prefbutton, dlgtbody);
 		dialog.close();
 	}, false);
-	button.textContent = "Save changes";
+	button.textContent = "Simpan perubahan";
 	dialogcontent.appendChild(button);
 	button = document.createElement("button");
 	button.setAttribute("type", "submit");  // so Morebits.simpleWindow puts the button in the button pane
 	button.addEventListener("click", function(e) {
 		Twinkle.config.listDialog.reset($prefbutton, dlgtbody);
 	}, false);
-	button.textContent = "Reset";
+	button.textContent = "Setel ulang";
 	dialogcontent.appendChild(button);
 	button = document.createElement("button");
 	button.setAttribute("type", "submit");  // so Morebits.simpleWindow puts the button in the button pane
 	button.addEventListener("click", function(e) {
 		dialog.close();  // the event parameter on this function seems to be broken
 	}, false);
-	button.textContent = "Cancel";
+	button.textContent = "Batal";
 	dialogcontent.appendChild(button);
 
 	dialog.setContent(dialogcontent);
