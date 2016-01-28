@@ -652,7 +652,7 @@ Twinkle.warn.messages = {
 				summary: "Peringatan terakhir: Penambahan pranala spam"
 			}
 		},
-		"Behavior towards other editors": {
+		"Perilaku terhadap pengguna lain": {
 			"uw-harass4": {
 				label: "Melecehkan pengguna lain",
 				summary: "Peringatan terakhir: Pelecehan terhadap pengguna lain"
@@ -766,7 +766,7 @@ Twinkle.warn.messages = {
 				summary: "Sekadar peringatan: Penambahan pranala spam"
 			}
 		},
-		"Behavior towards other editors": {
+		"Perilaku terhadap pengguna lain": {
 			"uw-harass4im": {
 				label: "Melecehkan pengguna lain",
 				summary: "Sekadar peringatan: Pelecehan terhadap pengguna lain"
@@ -776,7 +776,7 @@ Twinkle.warn.messages = {
 				summary: "Sekadar peringatan: Serangan pribadi terhadap pengguna tertentu"
 			}
 		},
-		"Other": {
+		"Lain-lain": {
 			"uw-create4im": {
 				label: "Membuat halaman yang tidak pantas",
 				summary: "Sekadar peringatan: Pembuatan halaman yang tidak pantas"
