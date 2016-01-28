@@ -38,21 +38,21 @@ Twinkle.warn = function twinklewarn() {
 
 Twinkle.warn.callback = function twinklewarnCallback() {
 	if( mw.config.get( 'wgRelevantUserName' ) === mw.config.get( 'wgUserName' ) &&
-			!confirm( 'You are about to warn yourself! Are you sure you want to proceed?' ) ) {
+			!confirm( 'Anda hendak memperingatkan diri sendiri! Apakah Anda yakin ingin melakukannya?' ) ) {
 		return;
 	}
 
 	var Window = new Morebits.simpleWindow( 600, 440 );
-	Window.setTitle( "Warn/notify user" );
+	Window.setTitle( "Peringatkan/beritahu pengguna" );
 	Window.setScriptName( "Twinkle" );
-	Window.addFooterLink( "Choosing a warning level", "WP:UWUL#Levels" );
+	Window.addFooterLink( "Pilih tingkat peringatan", "WP:UWUL#Levels" );
 	Window.addFooterLink( "Twinkle help", "WP:TW/DOC#warn" );
 
 	var form = new Morebits.quickForm( Twinkle.warn.callback.evaluate );
 	var main_select = form.append( {
 			type: 'field',
-			label: 'Choose type of warning/notice to issue',
-			tooltip: 'First choose a main warning group, then the specific warning to issue.'
+			label: 'Pilih jenis peringatan/pemberitahuan untuk ditampilkan',
+			tooltip: 'Pilih dahulu kelompok peringatan utama, lalu peringatan spesifik untuk ditampilkan.'
 		} );
 
 	var main_group = main_select.append( {
@@ -62,15 +62,15 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 		} );
 
 	var defaultGroup = parseInt(Twinkle.getPref('defaultWarningGroup'), 10);
-	main_group.append( { type: 'option', label: 'General note (1)', value: 'level1', selected: ( defaultGroup === 1 || defaultGroup < 1 || ( Morebits.userIsInGroup( 'sysop' ) ? defaultGroup > 8 : defaultGroup > 7 ) ) } );
-	main_group.append( { type: 'option', label: 'Caution (2)', value: 'level2', selected: ( defaultGroup === 2 ) } );
-	main_group.append( { type: 'option', label: 'Warning (3)', value: 'level3', selected: ( defaultGroup === 3 ) } );
-	main_group.append( { type: 'option', label: 'Final warning (4)', value: 'level4', selected: ( defaultGroup === 4 ) } );
-	main_group.append( { type: 'option', label: 'Only warning (4im)', value: 'level4im', selected: ( defaultGroup === 5 ) } );
-	main_group.append( { type: 'option', label: 'Single issue notices', value: 'singlenotice', selected: ( defaultGroup === 6 ) } );
-	main_group.append( { type: 'option', label: 'Single issue warnings', value: 'singlewarn', selected: ( defaultGroup === 7 ) } );
+	main_group.append( { type: 'option', label: 'Catatan umum (1)', value: 'level1', selected: ( defaultGroup === 1 || defaultGroup < 1 || ( Morebits.userIsInGroup( 'sysop' ) ? defaultGroup > 8 : defaultGroup > 7 ) ) } );
+	main_group.append( { type: 'option', label: 'Pemberitahuan (2)', value: 'level2', selected: ( defaultGroup === 2 ) } );
+	main_group.append( { type: 'option', label: 'Peringatan (3)', value: 'level3', selected: ( defaultGroup === 3 ) } );
+	main_group.append( { type: 'option', label: 'Peringatan terakhir (4)', value: 'level4', selected: ( defaultGroup === 4 ) } );
+	main_group.append( { type: 'option', label: 'Peringatan saja (4im)', value: 'level4im', selected: ( defaultGroup === 5 ) } );
+	main_group.append( { type: 'option', label: 'Pemberitahuan isu tunggal', value: 'singlenotice', selected: ( defaultGroup === 6 ) } );
+	main_group.append( { type: 'option', label: 'Peringatan isu tunggal', value: 'singlewarn', selected: ( defaultGroup === 7 ) } );
 	if( Twinkle.getPref( 'customWarningList' ).length ) {
-		main_group.append( { type: 'option', label: 'Custom warnings', value: 'custom', selected: ( defaultGroup === 9 ) } );
+		main_group.append( { type: 'option', label: 'Peringatan kustom', value: 'custom', selected: ( defaultGroup === 9 ) } );
 	}
 
 	main_select.append( { type: 'select', name: 'sub_group', event:Twinkle.warn.callback.change_subcategory } ); //Will be empty to begin with.
@@ -78,13 +78,13 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 	form.append( {
 			type: 'input',
 			name: 'article',
-			label: 'Linked article',
+			label: 'Artikel terkait',
 			value:( Morebits.queryString.exists( 'vanarticle' ) ? Morebits.queryString.get( 'vanarticle' ) : '' ),
-			tooltip: 'An article can be linked within the notice, perhaps because it was a revert to said article that dispatched this notice. Leave empty for no article to be linked.'
+			tooltip: 'Suatu artikel dapat ditautkan dalam pemberitahuan ini, mungkin karena merupakan pengembalian atas artikel terkait pemberitahuan ini. Biarkan kosong jika tidak ada artikel yang ingin ditautkan.'
 		} );
 
-	var more = form.append( { type: 'field', name: 'reasonGroup', label: 'Warning information' } );
-	more.append( { type: 'textarea', label: 'Optional message:', name: 'reason', tooltip: 'Perhaps a reason, or that a more detailed notice must be appended' } );
+	var more = form.append( { type: 'field', name: 'reasonGroup', label: 'Informasi peringatan' } );
+	more.append( { type: 'textarea', label: 'Pesan opsional:', name: 'reason', tooltip: 'Mungkin suatu alasan atau, jika tidak, diperlukan tambahan pemberitahuan yang lebih rinci.' } );
 
 	var previewlink = document.createElement( 'a' );
 	$(previewlink).click(function(){
@@ -116,143 +116,143 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 //   suppressArticleInSummary (optional): Set to true to suppress showing the article name in the edit summary. Useful if the warning relates to attack pages, or some such.
 Twinkle.warn.messages = {
 	level1: {
-		"Common warnings": {
+		"Peringatan umum": {
 			"uw-vandalism1": {
-				label: "Vandalism",
+				label: "Vandalisme",
 				summary: "General note: Unconstructive editing"
 			},
 			"uw-disruptive1": {
-				label: "Disruptive editing",
+				label: "Suntingan merusak",
 				summary: "General note: Unconstructive editing"
 			},
 			"uw-test1": {
-				label: "Editing tests",
+				label: "Suntingan uji coba",
 				summary: "General note: Editing tests"
 			},
 			"uw-delete1": {
-				label: "Removal of content, blanking",
+				label: "Menghapus konten, mengosongkan halaman",
 				summary: "General note: Removal of content, blanking"
 			}
 		},
-		"Behavior in articles": {
+		"Perilaku dalam artikel": {
 			"uw-biog1": {
-				label: "Adding unreferenced controversial information about living persons",
+				label: "Menambahkan informasi kontroversial tanpa rujukan tentang orang yang masih hidup",
 				summary: "General note: Adding unreferenced controversial information about living persons"
 			},
 			"uw-defamatory1": {
-				label: "Addition of defamatory content",
+				label: "Menambahkan konten yang memfitnah",
 				summary: "General note: Addition of defamatory content"
 			},
 			"uw-error1": {
-				label: "Introducing deliberate factual errors",
+				label: "Menambahkan kesalahan faktual secara sengaja",
 				summary: "General note: Introducing factual errors"
 			},
 			"uw-genre1": {
-				label: "Frequent or mass changes to genres without consensus or references",
+				label: "Mengubah secara massal atau sering tanpa konsensus atau rujukan",
 				summary: "General note: Frequent or mass changes to genres without consensus or references"
 			},
 			"uw-image1": {
-				label: "Image-related vandalism in articles",
+				label: "Vandalisme terkait berkas dalam artikel",
 				summary: "General note: Image-related vandalism in articles"
 			},
 			"uw-joke1": {
-				label: "Using improper humor in articles",
+				label: "Menggunakan lelucon yang tidak pantas dalam artikel",
 				summary: "General note: Using improper humor in articles"
 			},
 			"uw-nor1": {
-				label: "Adding original research, including unpublished syntheses of sources",
+				label: "Menambahkan riset asli, misalnya kumpulan rujukan yang belum dipublikasikan",
 				summary: "General note: Adding original research, including unpublished syntheses of sources"
 			},
 			"uw-notcensored1": {
-				label: "Censorship of material",
+				label: "Menyensor materi",
 				summary: "General note: Censorship of material"
 			},
 			"uw-own1": {
-				label: "Ownership of articles",
+				label: "Mengklaim kepemilikan artikel",
 				summary: "General note: Ownership of articles"
 			},
 			"uw-tdel1": {
-				label: "Removal of maintenance templates",
+				label: "Menghapus templat pemeliharaan",
 				summary: "General note: Removal of maintenance templates"
 			},
 			"uw-unsourced1": {
-				label: "Addition of unsourced or improperly cited material",
+				label: "Menambahkan materi tanpa dikutip dengan semestinya atau tanpa rujukan",
 				summary: "General note: Addition of unsourced or improperly cited material"
 			}
 		},
-		"Promotions and spam": {
+		"Promosi dan spam": {
 			"uw-advert1": {
-				label: "Using Wikipedia for advertising or promotion",
+				label: "Menggunakan Wikipedia untuk beriklan atau promosi",
 				summary: "General note: Using Wikipedia for advertising or promotion"
 			},
 			"uw-npov1": {
-				label: "Not adhering to neutral point of view",
+				label: "Tidak berpegang pada sudut pandang netral",
 				summary: "General note: Not adhering to neutral point of view"
 			},
 			"uw-spam1": {
-				label: "Adding spam links",
+				label: "Menambahkan pranala spam",
 				summary: "General note: Adding spam links"
 			}
 		},
-		"Behavior towards other editors": {
+		"Perilaku terhadap pengguna lain": {
 			"uw-agf1": {
-				label: "Not assuming good faith",
+				label: "Tidak mengasumsikan niat baik",
 				summary: "General note: Not assuming good faith"
 			},
 			"uw-harass1": {
-				label: "Harassment of other users",
+				label: "Melecehkan pengguna lain",
 				summary: "General note: Harassment of other users"
 			},
 			"uw-npa1": {
-				label: "Personal attack directed at a specific editor",
+				label: "Serangan pribadi terhadap seorang pengguna tertentu",
 				summary: "General note: Personal attack directed at a specific editor"
 			},
 			"uw-tempabuse1": {
-				label: "Improper use of warning or blocking template",
+				label: "Menyalahgunakan templat pemblokiran atau peringatan",
 				summary: "General note: Improper use of warning or blocking template"
 			}
 		},
-		"Removal of deletion tags": {
+		"Penghilangan tag penghapusan": {
 			"uw-afd1": {
-				label: "Removing {{afd}} templates",
+				label: "Menghilangkan templat {{Afd}}",
 				summary: "General note: Removing {{afd}} templates"
 			},
 			"uw-blpprod1": {
-				label: "Removing {{blp prod}} templates",
+				label: "Menghilangkan templat {{Prod blp}}",
 				summary: "General note: Removing {{blp prod}} templates"
 			},
 			"uw-idt1": {
-				label: "Removing file deletion tags",
+				label: "Menghilangkan tag penghapusan berkas",
 				summary: "General note: Removing file deletion tags"
 			},
 			"uw-speedy1": {
-				label: "Removing speedy deletion tags",
+				label: "Menghilangkan tag penghapusan cepat",
 				summary: "General note: Removing speedy deletion tags"
 			}
 		},
-		"Other": {
+		"Lain-lain": {
 			"uw-chat1": {
-				label: "Using talk page as forum",
+				label: "Menggunakan halaman pembicaraan sebagai forum",
 				summary: "General note: Using talk page as forum"
 			},
 			"uw-create1": {
-				label: "Creating inappropriate pages",
+				label: "Membuat halaman yang tidak pantas",
 				summary: "General note: Creating inappropriate pages"
 			},
 			"uw-mos1": {
-				label: "Manual of style",
+				label: "Pedoman gaya",
 				summary: "General note: Formatting, date, language, etc (Manual of style)"
 			},
 			"uw-move1": {
-				label: "Page moves against naming conventions or consensus",
+				label: "Memindahkan halaman bertentangan dengan konvensi penamaan atau konsensus",
 				summary: "General note: Page moves against naming conventions or consensus"
 			},
 			"uw-tpv1": {
-				label: "Refactoring others' talk page comments",
+				label: "Menyunting komentar pengguna lain di halaman pembicaraan",
 				summary: "General note: Refactoring others' talk page comments"
 			},
 			"uw-upload1": {
-				label: "Uploading unencyclopedic images",
+				label: "Menggunggah berkas nonensiklopedis",
 				summary: "General note: Uploading unencyclopedic images"
 			}
 		}/*,
