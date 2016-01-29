@@ -91,11 +91,11 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 		Twinkle.warn.callbacks.preview(result);  // |result| is defined below
 	});
 	previewlink.style.cursor = "pointer";
-	previewlink.textContent = 'Preview';
+	previewlink.textContent = 'Lihat pratayang';
 	more.append( { type: 'div', id: 'warningpreview', label: [ previewlink ] } );
 	more.append( { type: 'div', id: 'twinklewarn-previewbox', style: 'display: none' } );
 
-	more.append( { type: 'submit', label: 'Submit' } );
+	more.append( { type: 'submit', label: 'Kirimkan' } );
 
 	var result = form.render();
 	Window.setContent( result );
@@ -800,159 +800,159 @@ Twinkle.warn.messages = {
 
 	singlenotice: {
 		"uw-aiv": {
-			label: "Bad AIV report",
-			summary: "Notice: Bad AIV report"
+			label: "Laporan AIV tidak benar",
+			summary: "Pemberitahuan: Laporan AIV tidak benar"
 		},
 		"uw-autobiography": {
-			label: "Creating autobiographies",
-			summary: "Notice: Creating autobiographies"
+			label: "Membuat otobiografi",
+			summary: "Pemberitahuan: Pembuatan otobiografi"
 		},
 		"uw-badcat": {
-			label: "Adding incorrect categories",
-			summary: "Notice: Adding incorrect categories"
+			label: "Menambahkan kategori yang salah",
+			summary: "Pemberitahuan: Penambahan kategori yang salah"
 		},
 		"uw-badlistentry": {
-			label: "Adding inappropriate entries to lists",
-			summary: "Notice: Adding inappropriate entries to lists"
+			label: "Menambahkan entri yang tidak sepatutnya pada daftar",
+			summary: "Pemberitahuan: Penambahan entri yang tidak sepatutnya pada daftar"
 		},
 		"uw-bite": {
-			label: "\"Biting\" newcomers",
-			summary: "Notice: \"Biting\" newcomers",
+			label: "\"Menggigit\" pendatang baru",
+			summary: "Pemberitahuan: \"Menggigit\" pendatang baru",
 			suppressArticleInSummary: true  // non-standard (user name, not article), and not necessary
 		},
 		"uw-coi": {
-			label: "Conflict of interest",
-			summary: "Notice: Conflict of interest",
+			label: "Konflik kepentingan",
+			summary: "Pemberitahuan: Konflik kepentingan",
 			heading: "Managing a conflict of interest"
 		},
 		"uw-controversial": {
-			label: "Introducing controversial material",
-			summary: "Notice: Introducing controversial material"
+			label: "Memasukkan materi kontroversial",
+			summary: "Pemberitahuan: Pemasukan materi kontroversial"
 		},
 		"uw-copying": {
-			label: "Copying text to another page",
-			summary: "Notice: Copying text to another page"
+			label: "Menyalin teks ke halaman lain",
+			summary: "Pemberitahuan: Penyalinan teks ke halaman lain"
 		},
 		"uw-crystal": {
-			label: "Adding speculative or unconfirmed information",
-			summary: "Notice: Adding speculative or unconfirmed information"
+			label: "Menambahkan informasi spekulatif atau belum dikonfirmasi",
+			summary: "Pemberitahuan: Penambahan informasi spekulatif atau belum dikonfirmasi"
 		},
 		"uw-c&pmove": {
-			label: "Cut and paste moves",
-			summary: "Notice: Cut and paste moves"
+			label: "Pemindahan potong dan tempel",
+			summary: "Pemberitahuan: Pemindahan potong dan tempel"
 		},
 		"uw-dab": {
-			label: "Incorrect edit to a disambiguation page",
-			summary: "Notice: Incorrect edit to a disambiguation page"
+			label: "Suntingan tidak benar pada halaman disambiguasi",
+			summary: "Pemberitahuan: Suntingan tidak benar pada halaman disambiguasi"
 		},
 		"uw-date": {
-			label: "Unnecessarily changing date formats",
-			summary: "Notice: Unnecessarily changing date formats"
+			label: "Mengubah format tanggal secara tidak perlu",
+			summary: "Pemberitahuan: Pengubahan format tanggal secara tidak perlu"
 		},
 		"uw-deadlink": {
-			label: "Removing proper sources containing dead links",
-			summary: "Notice: Removing proper sources containing dead links"
+			label: "Menghapus rujukan layak yang mengandung pranala mati",
+			summary: "Pemberitahuan: Penghapusan rujukan layak yang mengandung pranala mati"
 		},
 		"uw-draftfirst": {
-			label: "User should draft in userspace without the risk of speedy deletion",
-			summary: "Notice: Consider drafting your article in [[Help:Userspace draft|userspace]]"
+			label: "Merancang dalam ruang pengguna tanpa risiko penghapusan cepat",
+			summary: "Pemberitahuan: Pertimbangkan merancang artikel Anda dalam [[Bantuan:Draf ruang pengguna|ruang pengguna]]"
 		},
 		"uw-editsummary": {
-			label: "Not using edit summary",
-			summary: "Notice: Not using edit summary"
+			label: "Tidak menggunakan ringkasan suntingan",
+			summary: "Pemberitahuan: Tidak menggunakan ringkasan suntingan"
 		},
 		"uw-english": {
-			label: "Not communicating in English",
-			summary: "Notice: Not communicating in English"
+			label: "Tidak berkomunikasi dalam bahasa Indonesia",
+			summary: "Pemberitahuan: Tidak berkomunikasi dalam bahasa Indonesia"
 		},
 		"uw-hasty": {
-			label: "Hasty addition of speedy deletion tags",
-			summary: "Notice: Allow creators time to improve their articles before tagging them for deletion"
+			label: "Menambahkan tag penghapusan cepat secara gegabah",
+			summary: "Pemberitahuan: Izinkan pembuat artikel memperbaikinya sebelum diberi tag hapus"
 		},
 		"uw-inline-el": {
-			label: "Adding external links to the body of an article",
-			summary: "Notice: Keep external links to External links sections at the bottom of an article"
+			label: "Menambahkan pranala luar ke bagian isi artikel",
+			summary: "Pemberitahuan: Letakkan pranala pada bagian Pranala luar di akhir artikel"
 		},
 		"uw-italicize": {
-			label: "Italicize books, films, albums, magazines, TV series, etc within articles",
-			summary: "Notice: Italicize books, films, albums, magazines, TV series, etc within articles"
+			label: "Cetak miring judul buku, film, album, majalah, serial TV, dll.",
+			summary: "Pemberitahuan: Cetak miring judul buku, film, album, majalah, serial TV, dll."
 		},
 		"uw-lang": {
-			label: "Unnecessarily changing between British and American English",
-			summary: "Notice: Unnecessarily changing between British and American English",
+			label: "Pengubahan yang tidak perlu antara bahasa Inggris Amerika dan Britania",
+			summary: "Pemberitahuan: Pengubahan yang tidak perlu antara bahasa Inggris Amerika dan Britania",
 			heading: "National varieties of English"
 		},
 		"uw-linking": {
-			label: "Excessive addition of redlinks or repeated blue links",
-			summary: "Notice: Excessive addition of redlinks or repeated blue links"
+			label: "Menambahkan pranala merah atau pengulangan pranala biru secara berlebihan",
+			summary: "Pemberitahuan: Penambahan pranala merah atau pengulangan pranala biru secara berlebihan"
 		},
 		"uw-minor": {
-			label: "Incorrect use of minor edits check box",
-			summary: "Notice: Incorrect use of minor edits check box"
+			label: "Menandai suntingan kecil secara tidak benar",
+			summary: "Pemberitahuan: Penandaan suntingan kecil secara tidak benar"
 		},
 		"uw-notenglish": {
-			label: "Creating non-English articles",
-			summary: "Notice: Creating non-English articles"
+			label: "Membuat artikel bukan dalam bahasa Indonesia",
+			summary: "Pemberitahuan: Pembuatan artikel bukan dalam bahasa Indonesia"
 		},
 		"uw-notvote": {
-			label: "We use consensus, not voting",
-			summary: "Notice: We use consensus, not voting"
+			label: "Kita menggunakan konsensus, bukan pemungutan suara",
+			summary: "Pemberitahuan: Kita menggunakan konsensus, bukan pemungutan suara"
 		},
 		"uw-plagiarism": {
-			label: "Copying from public domain sources without attribution",
-			summary: "Notice: Copying from public domain sources without attribution"
+			label: "Menyalin dari sumber domain publik tanpa atribusi",
+			summary: "Pemberitahuan: Penyalinan dari sumber domain publik tanpa atribusi"
 		},
 		"uw-preview": {
-			label: "Use preview button to avoid mistakes",
-			summary: "Notice: Use preview button to avoid mistakes"
+			label: "Menggunakan tombol Lihat pratayang untuk menghindari kesalahan",
+			summary: "Pemberitahuan: Penggunaan tombol Lihat pratayang untuk menghindari kesalahan"
 		},
 		"uw-redlink": {
-			label: "Indiscriminate removal of redlinks",
-			summary: "Notice: Be careful when removing redlinks"
+			label: "Penghapusan pranala merah secara sembarangan",
+			summary: "Pemberitahuan: Hati-hati saat menghapus pranala merah"
 		},
 		"uw-selfrevert": {
-			label: "Reverting self tests",
-			summary: "Notice: Reverting self tests"
+			label: "Mengembalikan uji coba sendiri",
+			summary: "Pemberitahuan: Pengembalian uji coba sendiri"
 		},
 		"uw-socialnetwork": {
-			label: "Wikipedia is not a social network",
-			summary: "Notice: Wikipedia is not a social network"
+			label: "Wikipedia bukanlah jejaring sosial",
+			summary: "Pemberitahuan: Wikipedia bukanlah jejaring sosial"
 		},
 		"uw-sofixit": {
-			label: "Be bold and fix things yourself",
-			summary: "Notice: You can be bold and fix things yourself"
+			label: "Jangan ragu, Anda dapat memperbaikinya",
+			summary: "Pemberitahuan: Jangan ragu, Anda dapat memperbaikinya"
 		},
 		"uw-spoiler": {
-			label: "Adding spoiler alerts or removing spoilers from appropriate sections",
-			summary: "Notice: Don't delete or flag potential 'spoilers' in Wikipedia articles"
+			label: "Menambahkan peringatan beberan atau menghapus beberan dari bagian terkait",
+			summary: "Pemberitahuan: Jangan menghapus atau menandai kemungkinan 'beberan'"
 		},
 		"uw-subst": {
-			label: "Remember to subst: templates",
-			summary: "Notice: Remember to subst: templates"
+			label: "Ingat, gnt: perlu ditambahkan pada templat",
+			summary: "Pemberitahuan: Ingat, gnt: perlu ditambahkan pada templat"
 		},
 		"uw-talkinarticle": {
-			label: "Talk in article",
-			summary: "Notice: Talk in article"
+			label: "Pembicaraan dalam artikel",
+			summary: "Pemberitahuan: Pembicaraan dalam artikel"
 		},
 		"uw-tilde": {
-			label: "Not signing posts",
-			summary: "Notice: Not signing posts"
+			label: "Tidak menandatangani pesan",
+			summary: "Pemberitahuan: Tidak menandatangani pesan"
 		},
 		"uw-toppost": {
-			label: "Posting at the top of talk pages",
-			summary: "Notice: Posting at the top of talk pages"
+			label: "Menulis pesan di bagian atas halaman pembicaraan",
+			summary: "Pemberitahuan: Penulisan pesan di bagian atas halaman pembicaraan"
 		},
 		"uw-userspace draft finish": {
-			label: "Stale userspace draft",
-			summary: "Notice: Stale userspace draft"
+			label: "Draf ruang pengguna yang terbengkalai",
+			summary: "Pemberitahuan: Draf ruang pengguna yang terbengkalai"
 		},
 		"uw-vgscope": {
-			label: "Adding video game walkthroughs, cheats or instructions",
-			summary: "Notice: Adding video game walkthroughs, cheats or instructions"
+			label: "Menambahkan instruksi, cara curang, atau penelusuran permainan video",
+			summary: "Pemberitahuan: Penambahan instruksi, cara curang, atau penelusuran permainan video"
 		},
 		"uw-warn": {
-			label: "Place user warning templates when reverting vandalism",
-			summary: "Notice: You can use user warning templates when reverting vandalism"
+			label: "Menggunakan templat peringatan pengguna setelah mengembalikan vandalisme",
+			summary: "Pemberitahuan: Penggunaan templat peringatan pengguna setelah mengembalikan vandalisme"
 		}
 	},
 
