@@ -45,8 +45,8 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 	var Window = new Morebits.simpleWindow( 600, 440 );
 	Window.setTitle( "Peringatkan/beritahu pengguna" );
 	Window.setScriptName( "Twinkle" );
-	Window.addFooterLink( "Pilih tingkat peringatan", "WP:UWUL#Levels" );
-	Window.addFooterLink( "Twinkle help", "WP:TW/DOC#warn" );
+	Window.addFooterLink( "Memilih tingkat peringatan", "WP:UWUL#Levels" );
+	Window.addFooterLink( "Bantuan Twinkle", "WP:TW/DOC#Warn_.28peringatan_di_pembicaraan_pengguna.29" );
 
 	var form = new Morebits.quickForm( Twinkle.warn.callback.evaluate );
 	var main_select = form.append( {
@@ -959,112 +959,112 @@ Twinkle.warn.messages = {
 
 	singlewarn: {
 		"uw-3rr": {
-			label: "Violating the three-revert rule; see also uw-ew",
-			summary: "Warning: Violating the three-revert rule"
+			label: "Melanggar aturan tiga kali pengembalian; lihat pula uw-ew",
+			summary: "Peringatan: Pelanggaran aturan tiga kali pengembalian"
 		},
 		"uw-affiliate": {
-			label: "Affiliate marketing",
-			summary: "Warning: Affiliate marketing"
+			label: "Pemasaran afiliasi",
+			summary: "Peringatan: Pemasaran afiliasi"
 		},
 		"uw-agf-sock": {
-			label: "Use of multiple accounts (assuming good faith)",
-			summary: "Warning: Using multiple accounts"
+			label: "Menggunakan lebih dari satu akun (asumsikan niat baik)",
+			summary: "Peringatan: Penggunaan lebih dari satu akun"
 		},
 		"uw-attack": {
-			label: "Creating attack pages",
-			summary: "Warning: Creating attack pages",
+			label: "Membuat halaman serangan",
+			summary: "Peringatan: Pembuatan halaman serangan",
 			suppressArticleInSummary: true
 		},
 		"uw-bizlist": {
-			label: "Business promotion",
-			summary: "Warning: Promoting a business"
+			label: "Mempromosikan bisnis",
+			summary: "Peringatan: Promosi bisnis"
 		},
 		"uw-botun": {
-			label: "Bot username",
-			summary: "Warning: Bot username"
+			label: "Nama pengguna bot",
+			summary: "Peringatan: Nama pengguna bot"
 		},
 		"uw-canvass": {
-			label: "Canvassing",
-			summary: "Warning: Canvassing"
+			label: "Penganvasan",
+			summary: "Peringatan: Penganvasan"
 		},
 		"uw-copyright": {
-			label: "Copyright violation",
-			summary: "Warning: Copyright violation"
+			label: "Pelanggaran hak cipta",
+			summary: "Peringatan: Pelanggaran hak cipta"
 		},
 		"uw-copyright-link": {
-			label: "Linking to copyrighted works violation",
-			summary: "Warning: Linking to copyrighted works violation"
+			label: "Menautkan ke pelanggaran karya berhak cipta",
+			summary: "Peringatan: Tautan ke pelanggaran karya berhak cipta"
 		},
 		"uw-copyright-new": {
-			label: "Copyright violation (with explanation for new users)",
-			summary: "Notice: Avoiding copyright problems",
+			label: "Pelanggaran hak cipta (dengan penjelasan bagi pengguna baru)",
+			summary: "Peringatan: Hindari masalah hak cipta",
 			heading: "Wikipedia and copyright"
 		},
 		"uw-copyright-remove": {
-			label: "Removing {{copyvio}} template from articles",
-			summary: "Warning: Removing {{copyvio}} templates"
+			label: "Menghapus templat {{copyvio}} dari artikel",
+			summary: "Peringatan: Penghapusan templat {{copyvio}}"
 		},
 		"uw-efsummary": {
-			label: "Edit summary triggering the edit filter",
-			summary: "Warning: Edit summary triggering the edit filter"
+			label: "Ringkasan suntingan memicu filter penyuntingan",
+			summary: "Pemberitahuan: Ringkasan suntingan memicu filter penyuntingan"
 		},
 		"uw-ew": {
-			label: "Edit warring (stronger wording)",
-			summary: "Warning: Edit warring"
+			label: "Perang suntingan (teguran keras)",
+			summary: "Peringatan: Perang suntingan"
 		},
 		"uw-ewsoft": {
-			label: "Edit warring (softer wording for newcomers)",
-			summary: "Warning: Edit warring"
+			label: "Perang suntingan (teguran lunak bagi pengguna baru)",
+			summary: "Pemberitahuan: Perang suntingan"
 		},
 		"uw-hoax": {
-			label: "Creating hoaxes",
-			summary: "Warning: Creating hoaxes"
+			label: "Membuat cerita/kabar bohong",
+			summary: "Peringatan: Pembuatan cerita bohong"
 		},
 		"uw-legal": {
-			label: "Making legal threats",
-			summary: "Warning: Making legal threats"
+			label: "Membuat ancaman hukum",
+			summary: "Peringatan: Pembuatan ancaman hukum"
 		},
 		"uw-login": {
-			label: "Editing while logged out",
-			summary: "Warning: Editing while logged out"
+			label: "Menyunting setelah keluar log",
+			summary: "Pemberitahuan: Penyuntingan setelah keluar log"
 		},
 		"uw-multipleIPs": {
-			label: "Usage of multiple IPs",
-			summary: "Warning: Usage of multiple IPs"
+			label: "Menggunakan lebih dari satu alamat IP",
+			summary: "Peringatan: Penggunaan lebih dari satu alamat IP"
 		},
 		"uw-pinfo": {
-			label: "Personal info",
-			summary: "Warning: Personal info"
+			label: "Menambahkan info pribadi pengguna lain",
+			summary: "Peringatan: Penambahan info pribadi pengguna lain"
 		},
 		"uw-salt": {
-			label: "Recreating salted articles under a different title",
-			summary: "Notice: Recreating creation-protected articles under a different title"
+			label: "Membuat kembali artikel dalam daftar hitam judul dengan judul berbeda",
+			summary: "Peringatan: Pembuatan kembali artikel yang tidak diperkenankan dengan judul berbeda"
 		},
 		"uw-socksuspect": {
-			label: "Sockpuppetry",
-			summary: "Warning: You are a suspected [[WP:SOCK|sockpuppet]]"  // of User:...
+			label: "Dugaan pengguna siluman",
+			summary: "Peringatan: Dugaan [[WP:SILUMAN|pengguna siluman]]"  // of User:...
 		},
 		"uw-upv": {
-			label: "Userpage vandalism",
-			summary: "Warning: Userpage vandalism"
+			label: "Vandalisme halaman pengguna",
+			summary: "Peringatan: Vandalisme halaman pengguna"
 		},
 		"uw-username": {
-			label: "Username is against policy",
-			summary: "Warning: Your username might be against policy",
+			label: "Nama pengguna tidak sesuai kebijakan",
+			summary: "Pemberitahuan: Nama pengguna tidak sesuai kebijakan",
 			suppressArticleInSummary: true  // not relevant for this template
 		},
 		"uw-coi-username": {
-			label: "Username is against policy, and conflict of interest",
-			summary: "Warning: Username and conflict of interest policy",
+			label: "Nama pengguna tidak sesuai kebijakan, dan konflik kepentingan",
+			summary: "Pemberitahuan: Kebijakan konflik kepentingan dan nama pengguna",
 			heading: "Your username"
 		},
 		"uw-userpage": {
-			label: "Userpage or subpage is against policy",
-			summary: "Warning: Userpage or subpage is against policy"
+			label: "Subhalaman atau halaman pengguna tidak sesuai kebijakan",
+			summary: "Pemberitahuan: Subhalaman atau halaman pengguna tidak sesuai kebijakan"
 		},
 		"uw-wrongsummary": {
-			label: "Using inaccurate or inappropriate edit summaries",
-			summary: "Warning: Using inaccurate or inappropriate edit summaries"
+			label: "Ketidaksesuaian atau ketidakakuratan penggunaan ringkasan suntingan",
+			summary: "Pemberitahuan: Ketidaksesuaian atau ketidakakuratan penggunaan ringkasan suntingan"
 		}
 	}
 };
@@ -1094,7 +1094,7 @@ Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCatego
 		if ( wrapInOptgroup && $.client.profile().platform === "iphone" ) {
 			var wrapperOptgroup = new Morebits.quickForm.element( {
 				type: 'optgroup',
-				label: 'Available templates'
+				label: 'Templat yang tersedia'
 			} );
 			wrapperOptgroup = wrapperOptgroup.render();
 			container.appendChild( wrapperOptgroup );
@@ -1170,13 +1170,13 @@ Twinkle.warn.callback.change_subcategory = function twinklewarnCallbackChangeSub
 	// change form labels according to the warning selected
 	if (value === "uw-socksuspect") {
 		Morebits.quickForm.setElementTooltipVisibility(e.target.form.article, false);
-		Morebits.quickForm.overrideElementLabel(e.target.form.article, "Username of sock master, if known (without User:) ");
+		Morebits.quickForm.overrideElementLabel(e.target.form.article, "Nama penguna induk siluman, jika diketahui (tanpa Pengguna:) ");
 	} else if (value === "uw-username") {
 		Morebits.quickForm.setElementTooltipVisibility(e.target.form.article, false);
-		Morebits.quickForm.overrideElementLabel(e.target.form.article, "Username violates policy because... ");
+		Morebits.quickForm.overrideElementLabel(e.target.form.article, "Nama pengguna melanggar kebijakan karena... ");
 	} else if (value === "uw-bite") {
 		Morebits.quickForm.setElementTooltipVisibility(e.target.form.article, false);
-		Morebits.quickForm.overrideElementLabel(e.target.form.article, "Username of 'bitten' user (without User:) ");
+		Morebits.quickForm.overrideElementLabel(e.target.form.article, "Nama pengguna yang 'digigit' (tanpa Pengguna:) ");
 	} else {
 		Morebits.quickForm.setElementTooltipVisibility(e.target.form.article, true);
 		Morebits.quickForm.resetElementLabel(e.target.form.article);
@@ -1187,14 +1187,14 @@ Twinkle.warn.callback.change_subcategory = function twinklewarnCallbackChangeSub
 
 	var $redWarning;
 	if (value === "uw-username") {
-		$redWarning = $("<div style='color: red;' id='tw-warn-red-notice'>{{uw-username}} should <b>not</b> be used for <b>blatant</b> username policy violations. " +
-			"Blatant violations should be reported directly to UAA (via Twinkle's ARV tab). " +
-			"{{uw-username}} should only be used in edge cases in order to engage in discussion with the user.</div>");
+		$redWarning = $("<div style='color: red;' id='tw-warn-red-notice'>{{uw-username}} seharusnya <b>tidak</b> digunakan untuk pelanggaran kebijakan nama pengguna secara <b>terang-terangan</b>. " +
+			"Pelanggaran terang-terangan seharusnya dilaporkan langsung kepada UAA (via tab ARV pada Twinkle). " +
+			"{{uw-username}} sebaiknya hanya digunakan dalam kasus ringan untuk berdiskusi dengan pengguna tersebut.</div>");
 		$redWarning.insertAfter(Morebits.quickForm.getElementLabelObject(e.target.form.reasonGroup));
 	} else if (value === "uw-coi-username") {
-		$redWarning = $("<div style='color: red;' id='tw-warn-red-notice'>{{uw-coi-username}} should <b>not</b> be used for <b>blatant</b> username policy violations. " +
+		$redWarning = $("<div style='color: red;' id='tw-warn-red-notice'>{{uw-coi-username}} seharusnya <b>tidak</b> digunakan untuk pelanggaran kebijakan nama pengguna secara <b>terang-terangan</b>. " +
 			"Blatant violations should be reported directly to UAA (via Twinkle's ARV tab). " +
-			"{{uw-coi-username}} should only be used in edge cases in order to engage in discussion with the user.</div>");
+			"{{uw-coi-username}} sebaiknya hanya digunakan dalam kasus ringan untuk berdiskusi dengan pengguna tersebut.</div>");
 		$redWarning.insertAfter(Morebits.quickForm.getElementLabelObject(e.target.form.reasonGroup));
 	}
 };
@@ -1263,8 +1263,8 @@ Twinkle.warn.callbacks = {
 			temp_time.setUTCHours( temp_time.getUTCHours() + 24 );
 
 			if( temp_time > date ) {
-				if( !confirm( "An identical " + params.sub_group + " has been issued in the last 24 hours.  \nWould you still like to add this warning/notice?" ) ) {
-					pageobj.statelem.info( 'aborted per user request' );
+				if( !confirm( "Suatu " + params.sub_group + " yang identik telah diberikan dalam 24 jam terakhir.  \nAnda tetap ingin memberikan peringatan/pemberitahuan ini?" ) ) {
+					pageobj.statelem.info( 'dibatalkan sesuai permintaan pengguna' );
 					return;
 				}
 			}
@@ -1273,8 +1273,8 @@ Twinkle.warn.callbacks = {
 		latest.date.setUTCMinutes( latest.date.getUTCMinutes() + 1 ); // after long debate, one minute is max
 
 		if( latest.date > date ) {
-			if( !confirm( "A " + latest.type + " has been issued in the last minute.  \nWould you still like to add this warning/notice?" ) ) {
-				pageobj.statelem.info( 'aborted per user request' );
+			if( !confirm( "Suatu " + latest.type + " telah diberikan dalam satu menit terakhir.  \nAnda tetap ingin memberikan peringatan/pemberitahuan ini?" ) ) {
+				pageobj.statelem.info( 'dibatalkan sesuai permintaan pengguna' );
 				return;
 			}
 		}
@@ -1297,14 +1297,14 @@ Twinkle.warn.callbacks = {
 		if( messageData.heading ) {
 			text += "== " + messageData.heading + " ==\n";
 		} else if( !dateHeaderRegexResult || dateHeaderRegexResult.index !== lastHeaderIndex ) {
-			Morebits.status.info( 'Info', 'Will create a new level 2 heading for the date, as none was found for this month' );
+			Morebits.status.info( 'Info', 'Akan membuat judul tingkat 2 yang baru untuk tanggal tersebut, karena belum ada untuk bulan ini' );
 			text += "== " + date.getUTCMonthName() + " " + date.getUTCFullYear() + " ==\n";
 		}
 		text += Twinkle.warn.callbacks.getWarningWikitext(params.sub_group, params.article,
 			params.reason, params.main_group === 'custom') + " ~~~~";
 
 		if ( Twinkle.getPref('showSharedIPNotice') && Morebits.isIPAddress( mw.config.get('wgTitle') ) ) {
-			Morebits.status.info( 'Info', 'Adding a shared IP notice' );
+			Morebits.status.info( 'Info', 'Menambahkan pemberitahuan IP bersama' );
 			text +=  "\n{{subst:Shared IP advice}}";
 		}
 
@@ -1313,26 +1313,26 @@ Twinkle.warn.callbacks = {
 		if( params.main_group === 'custom' ) {
 			switch( params.sub_group.substr( -1 ) ) {
 				case "1":
-					summary = "General note";
+					summary = "Catatan umum";
 					break;
 				case "2":
-					summary = "Caution";
+					summary = "Pemberitahuan";
 					break;
 				case "3":
-					summary = "Warning";
+					summary = "Peringatan";
 					break;
 				case "4":
-					summary = "Final warning";
+					summary = "Peringatan terakhir";
 					break;
 				case "m":
 					if( params.sub_group.substr( -3 ) === "4im" ) {
-						summary = "Only warning";
+						summary = "Sekadar peringatan";
 						break;
 					}
-					summary = "Notice";
+					summary = "Pemberitahuan";
 					break;
 				default:
-					summary = "Notice";
+					summary = "Pemberitahuan";
 					break;
 			}
 			summary += ": " + Morebits.string.toUpperCaseFirstChar(messageData.label);
@@ -1340,9 +1340,9 @@ Twinkle.warn.callbacks = {
 			summary = messageData.summary;
 			if ( messageData.suppressArticleInSummary !== true && params.article ) {
 				if ( params.sub_group === "uw-socksuspect" ) {  // this template requires a username
-					summary += " of [[User:" + params.article + "]]";
+					summary += " dari [[User:" + params.article + "]]";
 				} else {
-					summary += " on [[" + params.article + "]]";
+					summary += " di [[" + params.article + "]]";
 				}
 			}
 		}
@@ -1361,7 +1361,7 @@ Twinkle.warn.callback.evaluate = function twinklewarnCallbackEvaluate(e) {
 	// First, check to make sure a reason was filled in if uw-username was selected
 
 	if(e.target.sub_group.value === 'uw-username' && e.target.article.value.trim() === '') {
-		alert("You must supply a reason for the {{uw-username}} template.");
+		alert("Anda harus menuliskan alasan untuk menggunakan templat {{uw-username}}.");
 		return;
 	}
 
@@ -1381,9 +1381,9 @@ Twinkle.warn.callback.evaluate = function twinklewarnCallbackEvaluate(e) {
 	Morebits.status.init( e.target );
 
 	Morebits.wiki.actionCompleted.redirect = userTalkPage;
-	Morebits.wiki.actionCompleted.notice = "Warning complete, reloading talk page in a few seconds";
+	Morebits.wiki.actionCompleted.notice = "Peringatan telah diberikan, memuat kembali halaman pembicaraan dalam beberapa detik";
 
-	var wikipedia_page = new Morebits.wiki.page( userTalkPage, 'User talk page modification' );
+	var wikipedia_page = new Morebits.wiki.page( userTalkPage, 'Perubahan halaman pembicaraan pengguna' );
 	wikipedia_page.setCallbackParameters( params );
 	wikipedia_page.setFollowRedirect( true );
 	wikipedia_page.load( Twinkle.warn.callbacks.main );
