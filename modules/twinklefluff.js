@@ -385,20 +385,20 @@ Twinkle.fluff.callbacks = {
 		}
 
 		if( ! found ) {
-			self.statelem.error( [ 'No previous revision found. Perhaps ', Morebits.htmlNode( 'strong', self.params.user ), ' is the only contributor, or that the user has made more than ' + Twinkle.getPref('revertMaxRevisions') + ' edits in a row.' ] );
+			self.statelem.error( [ 'Tidak dapat ditemukan revisi sebelumnya. Bisa jadi ', Morebits.htmlNode( 'strong', self.params.user ), ' adalah satu-satunya penyunting, atau pengguna tersebut telah melakukan ' + Twinkle.getPref('revertMaxRevisions') + ' suntingan berturut-turut.' ] );
 			return;
 		}
 
 		if( ! count ) {
-			Morebits.status.error( 'Error', "We were to revert zero revisions. As that makes no sense, we'll stop reverting this time. It could be that the edit has already been reverted, but the revision ID was still the same." );
+			Morebits.status.error( 'Error', "Tidak bisa membatalkan nol revisi. Ini mungkin dikarenakan revisi tersebut telah dibatalkan namun ID revisi masih tetap sama." );
 			return;
 		}
 
 		var good_revision = revs[ found ];
 		var userHasAlreadyConfirmedAction = false;
 		if (self.params.type !== 'vand' && count > 1) {
-			if ( !confirm( self.params.user + ' has made ' + count + ' edits in a row. Are you sure you want to revert them all?') ) {
-				Morebits.status.info( 'Notice', 'Stopping reverting per user input' );
+			if ( !confirm( self.params.user + ' telah melakukan ' + count + ' suntingan berturut-turut. Apakah Anda yakin mau membatalkan semuanya?') ) {
+				Morebits.status.info( 'Notice', 'Menghentinkan pembatalan karena input dari pengguna' );
 				return;
 			}
 			userHasAlreadyConfirmedAction = true;
@@ -409,26 +409,26 @@ Twinkle.fluff.callbacks = {
 		self.params.goodid = good_revision.getAttribute( 'revid' );
 		self.params.gooduser = good_revision.getAttribute( 'user' );
 
-		self.statelem.status( [ ' revision ', Morebits.htmlNode( 'strong', self.params.goodid ), ' that was made ', Morebits.htmlNode( 'strong', count ), ' revisions ago by ', Morebits.htmlNode( 'strong', self.params.gooduser ) ] );
+		self.statelem.status( [ ' revisi ', Morebits.htmlNode( 'strong', self.params.goodid ), ' yang dilakukan ', Morebits.htmlNode( 'strong', count ), ' suntingan yang lalu oleh ', Morebits.htmlNode( 'strong', self.params.gooduser ) ] );
 
 		var summary, extra_summary;
 		switch( self.params.type ) {
 		case 'agf':
-			extra_summary = prompt( "An optional comment for the edit summary:                              ", "" );  // padded out to widen prompt in Firefox
+			extra_summary = prompt( "Komentar tambahan untuk ringkasan suntingan:                               ", "" );  // padded out to widen prompt in Firefox
 			if (extra_summary === null)
 			{
-				self.statelem.error( 'Aborted by user.' );
+				self.statelem.error( 'Dibatalkan oleh pengguna.' );
 				return;
 			}
 			userHasAlreadyConfirmedAction = true;
 
-			summary = Twinkle.fluff.formatSummary("Reverted [[WP:AGF|good faith]] edits by $USER", self.params.user, extra_summary);
+			summary = Twinkle.fluff.formatSummary("Membatalkan suntingan [[WP:ANB|berniat baik]] oleh $USER", self.params.user, extra_summary);
 			break;
 
 		case 'vand':
 
-			summary = "Reverted " + self.params.count + (self.params.count > 1 ? ' edits' : ' edit') + " by [[Special:Contributions/" +
-				self.params.user + "|" + self.params.user + "]] ([[User talk:" + self.params.user + "|talk]]) to last revision by " +
+			summary = "Membatalkan " + self.params.count + " suntingan oleh [[Special:Contributions/" +
+				self.params.user + "|" + self.params.user + "]] ([[User talk:" + self.params.user + "|bicara]]) ke revisi terakhir oleh " +
 				self.params.gooduser + "." + Twinkle.getPref('summaryAd');
 			break;
 
@@ -436,22 +436,22 @@ Twinkle.fluff.callbacks = {
 			/* falls through */
 		default:
 			if( Twinkle.getPref('offerReasonOnNormalRevert') ) {
-				extra_summary = prompt( "An optional comment for the edit summary:                              ", "" );  // padded out to widen prompt in Firefox
+				extra_summary = prompt( "Komentar tambahan untuk ringkasan suntingan:                              ", "" );  // padded out to widen prompt in Firefox
 				if (extra_summary === null)
 				{
-					self.statelem.error( 'Aborted by user.' );
+					self.statelem.error( 'Dibatalkan oleh pengguna.' );
 					return;
 				}
 				userHasAlreadyConfirmedAction = true;
 			}
 
-			summary = Twinkle.fluff.formatSummary("Reverted " + self.params.count + (self.params.count > 1 ? ' edits' : ' edit') +
-				" by $USER", self.params.user, extra_summary);
+			summary = Twinkle.fluff.formatSummary("Membatalkan " + self.params.count +
+				" suntingan oleh $USER", self.params.user, extra_summary);
 			break;
 		}
 
-		if (Twinkle.getPref('confirmOnFluff') && !userHasAlreadyConfirmedAction && !confirm("Reverting page: are you sure?")) {
-			self.statelem.error( 'Aborted by user.' );
+		if (Twinkle.getPref('confirmOnFluff') && !userHasAlreadyConfirmedAction && !confirm("Membatalkan halaman: apakah Anda yakin?")) {
+			self.statelem.error( 'Dibatalkan oleh pengguna.' );
 			return;
 		}
 
@@ -459,7 +459,7 @@ Twinkle.fluff.callbacks = {
 		if( (!self.params.autoRevert || Twinkle.getPref('openTalkPageOnAutoRevert')) &&
 				Twinkle.getPref('openTalkPage').indexOf( self.params.type ) !== -1 &&
 				mw.config.get('wgUserName') !== self.params.user ) {
-			Morebits.status.info( 'Info', [ 'Opening user talk page edit form for user ', Morebits.htmlNode( 'strong', self.params.user ) ] );
+			Morebits.status.info( 'Info', [ 'Membuka halaman penyuntingan halaman pembicaraan pengguna ', Morebits.htmlNode( 'strong', self.params.user ) ] );
 
 			query = {
 				'title': 'User talk:' + self.params.user,
@@ -514,9 +514,9 @@ Twinkle.fluff.callbacks = {
 		};
 
 		Morebits.wiki.actionCompleted.redirect = self.params.pagename;
-		Morebits.wiki.actionCompleted.notice = "Reversion completed";
+		Morebits.wiki.actionCompleted.notice = "Pembatalan selesai";
 
-		var wikipedia_api = new Morebits.wiki.api( 'Saving reverted contents', query, Twinkle.fluff.callbacks.complete, self.statelem);
+		var wikipedia_api = new Morebits.wiki.api( 'Menyimpan isi yang telah dibatalkan', query, Twinkle.fluff.callbacks.complete, self.statelem);
 		wikipedia_api.params = self.params;
 		wikipedia_api.post();
 
@@ -528,9 +528,9 @@ Twinkle.fluff.callbacks = {
 			var code = document.createElement('code');
 			code.style.fontFamily = "monospace";
 			code.appendChild(document.createTextNode(blacklist));
-			apiobj.statelem.error(['Could not rollback because the URL ', code, ' is on the spam blacklist.']);
+			apiobj.statelem.error(['Tidak dapat membatalkan karena URL ', code, ' berada dalam daftar hitam spam.']);
 		} else if ($edit.attr('nochange') === '') {
-			apiobj.statelem.warn("Revision we are reverting to is identical to current revision: Nothing to do");
+			apiobj.statelem.warn("Revisi yang dibatalkan sama dengan revisi terakhir: Tidak ada yang dapat dilakukan");
 		} else {
 			apiobj.statelem.info("done");
 
@@ -542,7 +542,7 @@ Twinkle.fluff.callbacks = {
 					'token': apiobj.params.edittoken,
 					'comment': Twinkle.getPref('summaryAd').trim()
 				};
-				var wikipedia_api = new Morebits.wiki.api('Automatically accepting your changes', query);
+				var wikipedia_api = new Morebits.wiki.api('Secara otomatis menerima suntingan Anda', query);
 				wikipedia_api.post();
 			}
 		}
