@@ -19,47 +19,47 @@ Twinkle.talkback = function() {
 		return;
 	}
 
-	Twinkle.addPortletLink( Twinkle.talkback.callback, "TB", "friendly-talkback", "Easy talkback" );
+	Twinkle.addPortletLink( Twinkle.talkback.callback, "TB", "balasan pembicaraan ramah", "Balasan pembicaraan mudah" );
 };
 
 Twinkle.talkback.callback = function( ) {
-	if( mw.config.get('wgRelevantUserName') === mw.config.get("wgUserName") && !confirm("Is it really so bad that you're talking back to yourself?") ){
+	if( mw.config.get('wgRelevantUserName') === mw.config.get("wgUserName") && !confirm("Apakah keadaan sebegitu buruknya sehingga Anda bercakap-cakap dengan diri sendiri?") ){
 		return;
 	}
 
 	var Window = new Morebits.simpleWindow( 600, 350 );
 	Window.setTitle("Talkback");
 	Window.setScriptName("Twinkle");
-	Window.addFooterLink( "About {{talkback}}", "Template:Talkback" );
-	Window.addFooterLink( "Twinkle help", "WP:TW/DOC#talkback" );
+	Window.addFooterLink( "Tentang {{talkback}}", "Template:Talkback" );
+	Window.addFooterLink( "Bantuan Twinkle", "WP:TW/DOC#talkback" );
 
 	var form = new Morebits.quickForm( callback_evaluate );
 
 	form.append({ type: "radio", name: "tbtarget",
 				list: [
 					{
-						label: "Talkback: my talk page",
+						label: "Balasan percakapan: halaman pembicaraan saya",
 						value: "mytalk",
 						checked: "true"
 					},
 					{
-						label: "Talkback: other user talk page",
+						label: "Balasan percakapan: halaman pembicaraan pengguna lain",
 						value: "usertalk"
 					},
 					{
-						label: "Talkback: other page",
+						label: "Balasan percakapan: halaman lain",
 						value: "other"
 					},
 					{
-						label: "\"Please see\"",
+						label: "\"Mohon lihat\"",
 						value: "see"
 					},
 					{
-						label: "Noticeboard notification",
+						label: "Notifikasi pengumuman",
 						value: "notice"
 					},
 					{
-						label: "\"You've got mail\"",
+						label: "\"Anda mendapat pesan!\"",
 						value: "mail"
 					}
 				],
@@ -86,7 +86,7 @@ Twinkle.talkback.callback = function( ) {
 	// Check whether the user has opted out from talkback
 	// TODO: wgCategories is only set on action=view (bug 45033)
 	var wgcat = mw.config.get("wgCategories");
-	if (wgcat.length && wgcat.indexOf("Users who do not wish to receive talkbacks") === -1) {
+	if (wgcat.length && wgcat.indexOf("Pengguna yang tidak mau menerima balasan percakapan") === -1) {
 		Twinkle.talkback.optout = false;
 	} else {
 		var query = {
@@ -108,7 +108,7 @@ Twinkle.talkback.callback.optoutStatus = function(apiobj) {
 	var $el = $(xml).find('el');
 
 	if ($el.length) {
-		Twinkle.talkback.optout = mw.config.get('wgRelevantUserName') + " prefers not to receive talkbacks";
+		Twinkle.talkback.optout = mw.config.get('wgRelevantUserName') + " memilih untuk tak menerima balasan percakapan";
 		var url = $el.text();
 		if (url.indexOf("reason=") > -1) {
 			Twinkle.talkback.optout += ": " + decodeURIComponent(url.substring(url.indexOf("reason=") + 7)) + ".";
@@ -146,7 +146,7 @@ var callback_change_target = function( e ) {
 
 	var work_area = new Morebits.quickForm.element({
 			type: "field",
-			label: "Talkback information",
+			label: "Informasi balasan percakapan",
 			name: "work_area"
 		});
 
@@ -163,7 +163,7 @@ var callback_change_target = function( e ) {
 			work_area.append({
 					type:"input",
 					name:"section",
-					label:"Linked section (optional)",
+					label:"Bagian tertaut (opsional)",
 					tooltip:"The section heading on your talk page where you left a message. Leave empty for no section to be linked.",
 					value: prev_section
 				});
