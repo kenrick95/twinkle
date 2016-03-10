@@ -86,7 +86,7 @@ Twinkle.welcome.normal = function() {
 	}
 	if( mw.config.get( 'wgNamespaceNumber' ) === 3 ) {
 		var username = mw.config.get( 'wgTitle' ).split( '/' )[0].replace( /\"/, "\\\""); // only first part before any slashes
-		Twinkle.addPortletLink( function(){ Twinkle.welcome.callback(username); }, "Wel", "friendly-welcome", "Welcome user" );
+		Twinkle.addPortletLink( function(){ Twinkle.welcome.callback(username); }, "Wel", "friendly-welcome", "Sambut pengguna" );
 	}
 };
 
@@ -101,24 +101,24 @@ Twinkle.welcome.welcomeUser = function welcomeUser() {
 	};
 
 	Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
-	Morebits.wiki.actionCompleted.notice = "Welcoming complete, reloading talk page in a few seconds";
+	Morebits.wiki.actionCompleted.notice = "Penyambutan selesai, halaman akan dimuat ulang beberapa saat lagi";
 
-	var wikipedia_page = new Morebits.wiki.page(mw.config.get('wgPageName'), "User talk page modification");
+	var wikipedia_page = new Morebits.wiki.page(mw.config.get('wgPageName'), "Mengubah halaman pembicaraan pengguna");
 	wikipedia_page.setFollowRedirect(true);
 	wikipedia_page.setCallbackParameters(params);
 	wikipedia_page.load(Twinkle.welcome.callbacks.main);
 };
 
 Twinkle.welcome.callback = function friendlywelcomeCallback( uid ) {
-	if( uid === mw.config.get('wgUserName') && !confirm( 'Are you really sure you want to welcome yourself?...' ) ){
+	if( uid === mw.config.get('wgUserName') && !confirm( 'Anda yakin ingin menyambut diri Anda sendiri' ) ){
 		return;
 	}
 
 	var Window = new Morebits.simpleWindow( 600, 420 );
-	Window.setTitle( "Welcome user" );
+	Window.setTitle( "Sambut pengguna" );
 	Window.setScriptName( "Twinkle" );
-	Window.addFooterLink( "Welcoming Committee", "WP:WC" );
-	Window.addFooterLink( "Twinkle help", "WP:TW/DOC#welcome" );
+	Window.addFooterLink( "Panitia penyambutan", "WP:WC" );
+	Window.addFooterLink( "Bantuan Twinkle", "WP:TW/DOC#welcome" );
 
 	var form = new Morebits.quickForm( Twinkle.welcome.callback.evaluate );
 
@@ -128,10 +128,10 @@ Twinkle.welcome.callback = function friendlywelcomeCallback( uid ) {
 			label: 'Type of welcome: ',
 			event: Twinkle.welcome.populateWelcomeList,
 			list: [
-				{ type: 'option', value: 'standard', label: 'Standard welcomes', selected: !Morebits.isIPAddress(mw.config.get('wgTitle')) },
-				{ type: 'option', value: 'anonymous', label: 'IP user welcomes', selected: Morebits.isIPAddress(mw.config.get('wgTitle')) },
-				{ type: 'option', value: 'wikiProject', label: 'WikiProject welcomes' },
-				{ type: 'option', value: 'nonEnglish', label: 'Non-English welcomes' }
+				{ type: 'option', value: 'standard', label: 'Penyambutan biasa', selected: !Morebits.isIPAddress(mw.config.get('wgTitle')) },
+				{ type: 'option', value: 'anonymous', label: 'Penyambutan pengguna beralamat IP', selected: Morebits.isIPAddress(mw.config.get('wgTitle')) },
+				{ type: 'option', value: 'wikiProject', label: 'Penyambutan WikiProject' },
+				{ type: 'option', value: 'nonEnglish', label: 'Penyambutan pengguna non-bahasa Inggris' }
 			]
 		});
 
@@ -144,9 +144,9 @@ Twinkle.welcome.callback = function friendlywelcomeCallback( uid ) {
 	form.append( {
 			type: 'input',
 			name: 'article',
-			label: '* Linked article (if supported by template):',
+			label: '* Artikel terkait (jika didukung oleh templat):',
 			value:( Morebits.queryString.exists( 'vanarticle' ) ? Morebits.queryString.get( 'vanarticle' ) : '' ),
-			tooltip: 'An article might be linked from within the welcome if the template supports it. Leave empty for no article to be linked.  Templates that support a linked article are marked with an asterisk.'
+			tooltip: 'Artikel mungkin dapat ditautkan dari proses penyambutan ini jika didukung oleh templat. Kosongkan untuk tidak menautkan artikel. Templat yang mendukung penautan artikel ditandai dengan tanda bintang.'
 		} );
 
 	var previewlink = document.createElement( 'a' );
@@ -175,7 +175,7 @@ Twinkle.welcome.populateWelcomeList = function(e) {
 	var container = new Morebits.quickForm.element({ type: "fragment" });
 
 	if ((type === "standard" || type === "anonymous") && Twinkle.getFriendlyPref("customWelcomeList").length) {
-		container.append({ type: 'header', label: 'Custom welcome templates' });
+		container.append({ type: 'header', label: 'Templat sambutan yang disesuaikan' });
 		container.append({
 			type: 'radio',
 			name: 'template',
@@ -206,7 +206,7 @@ Twinkle.welcome.populateWelcomeList = function(e) {
 
 	switch (type) {
 		case "standard":
-			container.append({ type: 'header', label: 'General welcome templates' });
+			container.append({ type: 'header', label: 'Templat penyambutan umum' });
 			appendTemplates([
 				"welcome",
 				"welcome-short",
@@ -219,7 +219,7 @@ Twinkle.welcome.populateWelcomeList = function(e) {
 				"welcome teacher",
 				"welcome non-latin"
 			]);
-			container.append({ type: 'header', label: 'Problem user welcome templates' });
+			container.append({ type: 'header', label: 'Templat penyambutan pengguna bermasalah' });
 			appendTemplates([
 				"welcomelaws",
 				"first article",
@@ -235,7 +235,7 @@ Twinkle.welcome.populateWelcomeList = function(e) {
 			]);
 			break;
 		case "anonymous":
-			container.append({ type: 'header', label: 'Anonymous user welcome templates' });
+			container.append({ type: 'header', label: 'Templat penyambutan pengguna anonim' });
 			appendTemplates([
 				"welcome-anon",
 				"welcome-anon-test",
@@ -245,7 +245,7 @@ Twinkle.welcome.populateWelcomeList = function(e) {
 			]);
 			break;
 		case "wikiProject":
-			container.append({ type: 'header', label: 'WikiProject-specific welcome templates' });
+			container.append({ type: 'header', label: 'Templat penyambutan WikiProject tertentu' });
 			appendTemplates([
 				"welcome-au",
 				"welcome-bd",
@@ -274,7 +274,7 @@ Twinkle.welcome.populateWelcomeList = function(e) {
 			]);
 			break;
 		case "nonEnglish":
-			container.append({ type: 'header', label: 'Non-English welcome templates' });
+			container.append({ type: 'header', label: 'Templat penyambutan pengguna bukan pengguna bahasa Inggris' });
 			appendTemplates([
 				"welcomeen-sq",
 				"welcomeen-ar",
@@ -297,7 +297,7 @@ Twinkle.welcome.populateWelcomeList = function(e) {
 			]);
 			break;
 		default:
-			container.append({ type: 'div', label: 'Twinkle.welcome.populateWelcomeList: something went wrong' });
+			container.append({ type: 'div', label: 'Twinkle.welcome.populateWelcomeList: terjadi kesalahan' });
 			break;
 	}
 
@@ -332,32 +332,32 @@ Twinkle.welcome.templates = {
 		syntax: "{{subst:welcome|$USERNAME$|art=$ARTICLE$}} ~~~~"
 	},
 	"welcome-short": {
-		description: "a shorter welcome message",
+		description: "pesan sambutan pendek",
 		linkedArticle: false,
 		syntax: "{{subst:welcome-short|$USERNAME$}} $EXTRA$ ~~~~"
 	},
 	"welcome-personal": {
-		description: "more personal welcome, including a plate of cookies",
+		description: "sambutan lebih ramah, dengan semangkuk kue",
 		linkedArticle: false,
 		syntax: "{{subst:welcome-personal|$USERNAME$}} ~~~~"
 	},
 	"welcome-graphical": {
-		description: "colorful welcome message with table of about 20 links",
+		description: "pesan sambutan berwarna dengan tabel berisi 20 pranala",
 		linkedArticle: false,
 		syntax: "$HEADER$ {{subst:welcome-graphical|$EXTRA$}}"
 	},
 	"welcome-menu": {
-		description: "welcome message with large table of about 60 links",
+		description: "pesan sambutan dengan tabel lebih besar (60 pranala)",
 		linkedArticle: false,
 		syntax: "{{subst:welcome-menu}}"
 	},
 	"welcome-screen": {
-		description: "welcome message with clear, annotated table of 10 links",
+		description: "pesan sambutan dengan tabel bertanda dan jelas dengan 10 pranala",
 		linkedArticle: false,
 		syntax: "$HEADER$ {{subst:welcome-screen|static=true}}"
 	},
 	"welcome-belated": {
-		description: "welcome for users with more substantial contributions",
+		description: "sambutan untuk pengguna dengan kontribusi berguna",
 		linkedArticle: false,
 		syntax: "{{subst:welcome-belated|$USERNAME$}}"
 	},

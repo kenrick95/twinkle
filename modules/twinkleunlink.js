@@ -64,7 +64,7 @@ Twinkle.unlink.callback = function(presetReason) {
 	form.append( {
 		type: 'input',
 		name: 'reason',
-		label: 'Reason: ',
+		label: 'Alasan: ',
 		value: (presetReason ? presetReason : ''),
 		size: 60
 	} );
@@ -160,14 +160,14 @@ Twinkle.unlink.callbacks = {
 				}
 				else
 				{
-					apiobj.params.form.append( { type:'header', label: 'File usage' } );
+					apiobj.params.form.append( { type:'header', label: 'Penggunaan berkas' } );
 					namespaces = [];
 					$.each(Twinkle.getPref('unlinkNamespaces'), function(k, v) {
 						namespaces.push(Morebits.wikipedia.namespacesFriendly[v]);
 					});
 					apiobj.params.form.append( {
 						type: 'div',
-						label: "Ruang nama terpilih: " + namespaces.join(', '),
+						label: "Ruangnama terpilih: " + namespaces.join(', '),
 						tooltip: "Anda dapat mengubah setelan ini di preferensi Twinkle Anda: [[WP:TWPREFS]]"
 					});
 					if ($(xmlDoc).find('query-continue').length) {
@@ -206,14 +206,14 @@ Twinkle.unlink.callbacks = {
 					var title = backlinks[i].getAttribute('title');
 					list.push( { label: title, value: title, checked: true } );
 				}
-				apiobj.params.form.append( { type:'header', label: 'Backlinks' } );
+				apiobj.params.form.append( { type:'header', label: 'Pranala balik' } );
 				namespaces = [];
 				$.each(Twinkle.getPref('unlinkNamespaces'), function(k, v) {
 					namespaces.push(Morebits.wikipedia.namespacesFriendly[v]);
 				});
 				apiobj.params.form.append( {
 					type: 'div',
-					label: "Ruang nama terpilih: " + namespaces.join(', '),
+					label: "Ruangnama terpilih: " + namespaces.join(', '),
 					tooltip: "Anda dapat mengubah setelan ini di preferensi Twinkle Anda: [[WP:TWPREFS]]"
 				});
 				if ($(xmlDoc).find('query-continue').length) {

@@ -24,7 +24,7 @@ Twinkle.config = {};
 
 Twinkle.config.commonEnums = {
 	watchlist: { yes: "Tambahkan ke daftar pantauan", no: "Jangan tambahkan ke daftar pantauan", "default": "Ikuti preferensi baku di situs ini" },
-	talkPageMode: { window: "Dalam sebuah jendela, menggantikan pembicaraan pengguna lain", tab: "Di tab baru", blank: "Di sebuah jendela baru" }
+	talkPageMode: { window: "Dalam sebuah jendela, menggantikan pembicaraan pengguna lain", tab: "Di tab baru", blank: "Di jendela baru" }
 };
 
 Twinkle.config.commonSets = {
@@ -1113,7 +1113,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 							pref: pref,
 							inFriendlyConfig: section.inFriendlyConfig
 						});
-						button.appendChild(document.createTextNode("Sunting item"));
+						button.appendChild(document.createTextNode("Sunting butir"));
 						cell.appendChild(button);
 						break;
 
@@ -1145,7 +1145,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 						resetlink.style.cssFloat = "right";
 					}
 					resetlink.style.margin = "0 0.6em";
-					resetlink.appendChild(document.createTextNode("Setel ulang"));
+					resetlink.appendChild(document.createTextNode("Atur ulang"));
 					cell.appendChild(resetlink);
 				}
 				row.appendChild(cell);
@@ -1206,15 +1206,15 @@ Twinkle.config.init = function twinkleconfigInit() {
 			box.style.borderWidth = "2px";
 
 			if (mw.config.get("wgArticleId") > 0) {  // page exists
-				box.appendChild(document.createTextNode("This page contains your Twinkle preferences. You can change them using the "));
+				box.appendChild(document.createTextNode("Halaman ini berisi preferensi Twinkle Anda. Anda dapat mengubahnya dengan menggunakan "));
 			} else {  // page does not exist
-				box.appendChild(document.createTextNode("You can customize Twinkle to suit your preferences by using the "));
+				box.appendChild(document.createTextNode("Anda bisa menyesuaikan Twinkle untuk menyamakan preferensi Anda dengan menggunakan "));
 			}
 			link = document.createElement("a");
 			link.setAttribute("href", mw.util.getUrl(mw.config.get("wgFormattedNamespaces")[mw.config.get("wgNamespaceIds").project] + ":Twinkle/Preferences") );
-			link.appendChild(document.createTextNode("Twinkle preferences panel"));
+			link.appendChild(document.createTextNode("Bilah preferensi Twinkle"));
 			box.appendChild(link);
-			box.appendChild(document.createTextNode(", or by editing this page."));
+			box.appendChild(document.createTextNode(", atau dengan menyunting halaman ini."));
 			$(box).insertAfter($("#contentSub"));
 
 		} else if (["monobook", "vector", "cologneblue", "modern", "common"].indexOf(scriptPageName) !== -1) {
@@ -1224,7 +1224,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 			box.appendChild(document.createTextNode("If you want to set Twinkle preferences, you can use the "));
 			link = document.createElement("a");
 			link.setAttribute("href", mw.util.getUrl(mw.config.get("wgFormattedNamespaces")[mw.config.get("wgNamespaceIds").project] + ":Twinkle/Preferences") );
-			link.appendChild(document.createTextNode("Twinkle preferences panel"));
+			link.appendChild(document.createTextNode("Bilah preferensi Twinkle"));
 			box.appendChild(link);
 			box.appendChild(document.createTextNode("."));
 			$(box).insertAfter($("#contentSub"));
@@ -1508,7 +1508,7 @@ Twinkle.config.save = function twinkleconfigSave(e) {
 	Morebits.wiki.actionCompleted.notice = "Save";
 
 	var userjs = mw.config.get("wgFormattedNamespaces")[mw.config.get("wgNamespaceIds").user] + ":" + mw.config.get("wgUserName") + "/twinkleoptions.js";
-	var wikipedia_page = new Morebits.wiki.page(userjs, "Saving preferences to " + userjs);
+	var wikipedia_page = new Morebits.wiki.page(userjs, "Menyimpan preferensi ke " + userjs);
 	wikipedia_page.setCallbackParameters(e.target);
 	wikipedia_page.load(Twinkle.config.writePrefs);
 
@@ -1667,7 +1667,7 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 					case "integer":  // read from the input box
 						userValue = parseInt(form[pref.name].value, 10);
 						if (isNaN(userValue)) {
-							Morebits.status.warn("Saving", "The value you specified for " + pref.name + " (" + pref.value + ") was invalid.  The save will continue, but the invalid data value will be skipped.");
+							Morebits.status.warn("Menyimpan", "Nilai yang Anda masukkan untuk " + pref.name + " (" + pref.value + ") tidak sah. Proses penyimpanan akan dilanjutkan, namun data yang tidak sah itu akan dilewati.");
 							userValue = null;
 						}
 						break;
@@ -1748,19 +1748,19 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 		"// End of twinkleoptions.js\n";
 
 	pageobj.setPageText(text);
-	pageobj.setEditSummary("Saving Twinkle preferences: automatic edit from [[" + Morebits.pageNameNorm + "]] ([[WP:TW|TW]])");
+	pageobj.setEditSummary("Menyimpan preferensi Twinkle: suntingan otomatis dari [[" + Morebits.pageNameNorm + "]] ([[WP:TW|TW]])");
 	pageobj.setCreateOption("recreate");
 	pageobj.save(Twinkle.config.saveSuccess);
 };
 
 Twinkle.config.saveSuccess = function twinkleconfigSaveSuccess(pageobj) {
-	pageobj.getStatusElement().info("successful");
+	pageobj.getStatusElement().info("berhasil");
 
 	var noticebox = document.createElement("div");
 	noticebox.className = "successbox";
 	noticebox.style.fontSize = "100%";
 	noticebox.style.marginTop = "2em";
-	noticebox.innerHTML = "<p><b>Your Twinkle preferences have been saved.</b></p><p>To see the changes, you will need to <b>clear your browser cache entirely</b> (see <a href=\"" + mw.util.getUrl("WP:BYPASS") + "\" title=\"WP:BYPASS\">WP:BYPASS</a> for instructions).</p>";
+	noticebox.innerHTML = "<p><b>Preferensi Twinkle Anda telah disimpan.</b></p><p>Untuk melihat perubahan, Anda mungkin perly <b>mengosongkan semua tembolok peramban Anda</b> (kunjungi <a href=\"" + mw.util.getUrl("WP:BYPASS") + "\" title=\"WP:BYPASS\">WP:BYPASS</a> untuk informasi lanjutan).</p>";
 	Morebits.status.root.appendChild(noticebox);
 	var noticeclear = document.createElement("br");
 	noticeclear.style.clear = "both";
