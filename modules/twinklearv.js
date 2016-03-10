@@ -19,14 +19,14 @@ Twinkle.arv = function twinklearv() {
 		return;
 	}
 
-	var title = Morebits.isIPAddress( username ) ? 'Report IP to administrators' : 'Report user to administrators';
+	var title = Morebits.isIPAddress( username ) ? 'Laporkan IP kepada pengurus' : 'Laporkan kepada pengurus';
 
 	Twinkle.addPortletLink( function(){ Twinkle.arv.callback(username); }, "ARV", "tw-arv", title );
 };
 
 Twinkle.arv.callback = function ( uid ) {
 	if ( uid === mw.config.get('wgUserName') ) {
-		alert( 'You don\'t want to report yourself, do you?' );
+		alert( 'Anda tidak akan melaporkan diri sendiri, kan?' );
 		return;
 	}
 
