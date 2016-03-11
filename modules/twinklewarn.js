@@ -15,7 +15,7 @@
 
 Twinkle.warn = function twinklewarn() {
 	if( mw.config.get( 'wgRelevantUserName' ) ) {
-			Twinkle.addPortletLink( Twinkle.warn.callback, "Warn", "tw-warn", "Warn/notify user" );
+			Twinkle.addPortletLink( Twinkle.warn.callback, "Peringati", "tw-warn", "Peringatkan/beritahukan pengguna" );
 	}
 
 	// modify URL of talk page on rollback success pages
@@ -23,7 +23,7 @@ Twinkle.warn = function twinklewarn() {
 		var $vandalTalkLink = $("#mw-rollback-success").find(".mw-usertoollinks a").first();
 		if ( $vandalTalkLink.length ) {
 			$vandalTalkLink.css("font-weight", "bold");
-			$vandalTalkLink.wrapInner($("<span/>").attr("title", "If appropriate, you can use Twinkle to warn the user about their edits to this page."));
+			$vandalTalkLink.wrapInner($("<span/>").attr("title", "Jika sesuai, Anda dapat menggunakan Twinkle untuk memperingatkan pengguna terkait suntingan mereka pada halaman ini."));
 
 			var extraParam = "vanarticle=" + mw.util.rawurlencode(Morebits.pageNameNorm);
 			var href = $vandalTalkLink.attr("href");
@@ -1273,7 +1273,7 @@ Twinkle.warn.callbacks = {
 		latest.date.setUTCMinutes( latest.date.getUTCMinutes() + 1 ); // after long debate, one minute is max
 
 		if( latest.date > date ) {
-			if( !confirm( "Suatu " + latest.type + " telah diberikan dalam satu menit terakhir.  \nAnda tetap ingin memberikan peringatan/pemberitahuan ini?" ) ) {
+			if( !confirm( "Suatu " + latest.type + " diberikan dalam satu menit terakhir.  \nAnda tetap ingin memberikan peringatan/pemberitahuan ini?" ) ) {
 				pageobj.statelem.info( 'dibatalkan sesuai permintaan pengguna' );
 				return;
 			}

@@ -25,12 +25,12 @@ Twinkle.tag = function friendlytag() {
 	// file tagging
 	else if( mw.config.get('wgNamespaceNumber') === 6 && !document.getElementById("mw-sharedupload") && document.getElementById("mw-imagepage-section-filehistory") ) {
 		Twinkle.tag.mode = 'file';
-		Twinkle.addPortletLink( Twinkle.tag.callback, "Tag", "friendly-tag", "Add maintenance tags to file" );
+		Twinkle.addPortletLink( Twinkle.tag.callback, "Tag", "friendly-tag", "Beri tag pemeliharaan ke artikel" );
 	}
 	// article/draft article tagging
 	else if( ( mw.config.get('wgNamespaceNumber') === 0 || mw.config.get('wgNamespaceNumber') === 118 || /^Wikipedia( talk)?\:Articles for creation\//.exec(Morebits.pageNameNorm) ) && mw.config.get('wgCurRevisionId') ) {
 		Twinkle.tag.mode = 'article';
-		Twinkle.addPortletLink( Twinkle.tag.callback, "Tag", "friendly-tag", "Add maintenance tags to article" );
+		Twinkle.addPortletLink( Twinkle.tag.callback, "Tag", "friendly-tag", "Beri tag pemeliharaan ke artikel" );
 	}
 };
 
@@ -38,7 +38,7 @@ Twinkle.tag.callback = function friendlytagCallback() {
 	var Window = new Morebits.simpleWindow( 630, (Twinkle.tag.mode === "article") ? 500 : 400 );
 	Window.setScriptName( "Twinkle" );
 	// anyone got a good policy/guideline/info page/instructional page link??
-	Window.addFooterLink( "Twinkle help", "WP:TW/DOC#tag" );
+	Window.addFooterLink( "Bantuan Twinkle", "WP:TW/DOC#tag" );
 
 	var form = new Morebits.quickForm( Twinkle.tag.callback.evaluate );
 
@@ -47,7 +47,7 @@ Twinkle.tag.callback = function friendlytagCallback() {
 			type: 'checkbox',
 			list: [
 				{
-					label: 'Mark the page as patrolled',
+					label: 'Tandai halaman ini sebagai terpatroli',
 					value: 'patrolPage',
 					name: 'patrolPage',
 					checked: Twinkle.getFriendlyPref('markTaggedPagesAsPatrolled')
@@ -58,17 +58,17 @@ Twinkle.tag.callback = function friendlytagCallback() {
 
 	switch( Twinkle.tag.mode ) {
 		case 'article':
-			Window.setTitle( "Article maintenance tagging" );
+			Window.setTitle( "Pemberian tag pemeliharaan dalam artikel" );
 
 			form.append({
 				type: 'select',
 				name: 'sortorder',
-				label: 'View this list:',
-				tooltip: 'You can change the default view order in your Twinkle preferences (WP:TWPREFS).',
+				label: 'Lihat daftar ini:',
+				tooltip: 'Anda dapat mengganti tampilan susunan baku dalam preferensi Twinkle Anda (WP:TWPREFS).',
 				event: Twinkle.tag.updateSortOrder,
 				list: [
-					{ type: 'option', value: 'cat', label: 'By categories', selected: Twinkle.getFriendlyPref('tagArticleSortOrder') === 'cat' },
-					{ type: 'option', value: 'alpha', label: 'In alphabetical order', selected: Twinkle.getFriendlyPref('tagArticleSortOrder') === 'alpha' }
+					{ type: 'option', value: 'cat', label: 'Menurut kategori', selected: Twinkle.getFriendlyPref('tagArticleSortOrder') === 'cat' },
+					{ type: 'option', value: 'alpha', label: 'Menurut abjad', selected: Twinkle.getFriendlyPref('tagArticleSortOrder') === 'alpha' }
 				]
 			});
 
@@ -83,10 +83,10 @@ Twinkle.tag.callback = function friendlytagCallback() {
 					type: 'checkbox',
 					list: [
 						{
-							label: 'Group inside {{multiple issues}} if possible',
+							label: 'Kelompokkan dalam {{multiple issues}} jika dibutuhkan',
 							value: 'group',
 							name: 'group',
-							tooltip: 'If applying three or more templates supported by {{multiple issues}} and this box is checked, all supported templates will be grouped inside a {{multiple issues}} template.',
+							tooltip: 'Jika menerapkan tiga templat atau lebih yang didukung oleh {{multiple issues}} dan kotak ini dicentang, semua templat yang didukung akan dikelompokkan dalam templat {{multiple issues}}.',
 							checked: Twinkle.getFriendlyPref('groupByDefault')
 						}
 					]
@@ -96,36 +96,36 @@ Twinkle.tag.callback = function friendlytagCallback() {
 			break;
 
 		case 'file':
-			Window.setTitle( "File maintenance tagging" );
+			Window.setTitle( "Pemberian tag pemeliharaan berkas" );
 
 			// TODO: perhaps add custom tags TO list of checkboxes
 
-			form.append({ type: 'header', label: 'License and sourcing problem tags' });
+			form.append({ type: 'header', label: 'Tag lisensi dan sumber bermasalah' });
 			form.append({ type: 'checkbox', name: 'imageTags', list: Twinkle.tag.file.licenseList } );
 
-			form.append({ type: 'header', label: 'Wikimedia Commons-related tags' });
+			form.append({ type: 'header', label: 'Tag terkait dengan Commons' });
 			form.append({ type: 'checkbox', name: 'imageTags', list: Twinkle.tag.file.commonsList } );
 
-			form.append({ type: 'header', label: 'Cleanup tags' } );
+			form.append({ type: 'header', label: 'Tag perapian' } );
 			form.append({ type: 'checkbox', name: 'imageTags', list: Twinkle.tag.file.cleanupList } );
 
-			form.append({ type: 'header', label: 'Image quality tags' } );
+			form.append({ type: 'header', label: 'Tag kualitas gambar' } );
 			form.append({ type: 'checkbox', name: 'imageTags', list: Twinkle.tag.file.qualityList } );
 
-			form.append({ type: 'header', label: 'Replacement tags' });
+			form.append({ type: 'header', label: 'Tag penggantian' });
 			form.append({ type: 'checkbox', name: 'imageTags', list: Twinkle.tag.file.replacementList } );
 			break;
 
 		case 'redirect':
-			Window.setTitle( "Redirect tagging" );
+			Window.setTitle( "Tag pengalihan" );
 
-			form.append({ type: 'header', label:'Spelling, misspelling, tense and capitalization templates' });
+			form.append({ type: 'header', label:'Templat ejaan, salah ketik, gaya, dan kapitalisasi' });
 			form.append({ type: 'checkbox', name: 'redirectTags', list: Twinkle.tag.spellingList });
 
-			form.append({ type: 'header', label:'Alternative name templates' });
+			form.append({ type: 'header', label:'Templat nama pengganti' });
 			form.append({ type: 'checkbox', name: 'redirectTags', list: Twinkle.tag.alternativeList });
 
-			form.append({ type: 'header', label:'Miscellaneous and administrative redirect templates' });
+			form.append({ type: 'header', label:'Templat administrasi dan pengalihan lain-lain' });
 			form.append({ type: 'checkbox', name: 'redirectTags', list: Twinkle.tag.administrativeList });
 			break;
 
@@ -171,8 +171,8 @@ Twinkle.tag.updateSortOrder = function(e) {
 				checkbox.subgroup = {
 					name: 'cleanup',
 					type: 'input',
-					label: 'Specific reason why cleanup is needed: ',
-					tooltip: 'Required.',
+					label: 'Alasan perapian diperlukan: ',
+					tooltip: 'Wajib diisi.',
 					size: 35
 				};
 				break;
@@ -180,8 +180,8 @@ Twinkle.tag.updateSortOrder = function(e) {
 				checkbox.subgroup = {
 					name: 'copyEdit',
 					type: 'input',
-					label: '"This article may require copy editing for..." ',
-					tooltip: 'e.g. "consistent spelling". Optional.',
+					label: '"Artikel ini perlu disunting lebih lanjut untuk..." ',
+					tooltip: 'seperti ¨ejaan yang salah¨. Opsional.',
 					size: 35
 				};
 				break;
@@ -189,8 +189,8 @@ Twinkle.tag.updateSortOrder = function(e) {
 				checkbox.subgroup = {
 					name: 'copypaste',
 					type: 'input',
-					label: 'Source URL: ',
-					tooltip: 'If known.',
+					label: 'URL sumber: ',
+					tooltip: 'Jika diketahui.',
 					size: 50
 				};
 				break;
@@ -198,8 +198,8 @@ Twinkle.tag.updateSortOrder = function(e) {
 				checkbox.subgroup = {
 					name: 'expertSubject',
 					type: 'input',
-					label: 'Name of relevant WikiProject: ',
-					tooltip: 'Optionally, enter the name of a WikiProject which might be able to help recruit an expert. Don\'t include the "WikiProject" prefix.'
+					label: 'Nama WikiProject terkait: ',
+					tooltip: 'Opsional. Berikan nama WikiProject yang dapat membantu merekrut pengguna ahli. Jangan berikan awalan "WikiProject".'
 				};
 				break;
 			case "globalize":
@@ -207,7 +207,7 @@ Twinkle.tag.updateSortOrder = function(e) {
 					name: 'globalize',
 					type: 'select',
 					list: [
-						{ label: "{{globalize}}: article may not represent a worldwide view of the subject", value: "globalize" },
+						{ label: "{{globalize}}: artikel mungkin tidak mewakili keseluruhan subjek yang dibahas", value: "globalize" },
 						{
 							label: "Region-specific {{globalize}} subtemplates",
 							list: [
@@ -241,27 +241,27 @@ Twinkle.tag.updateSortOrder = function(e) {
 				switch (tag)
 				{
 					case "merge from":
-						otherTagName = "merge to";
+						otherTagName = "digabungkan ke";
 						break;
 					case "merge to":
-						otherTagName = "merge from";
+						otherTagName = "digabung dari";
 						break;
 				}
 				checkbox.subgroup = [
 					{
 						name: 'mergeTarget',
 						type: 'input',
-						label: 'Other article(s): ',
-						tooltip: 'If specifying multiple articles, separate them with pipe characters: Article one|Article two'
+						label: 'Artikel lainnya: ',
+						tooltip: 'Jika beberapa artikel ditulis, pisahkan dengan karakter pipa: Artikel pertama|Artikel kedua'
 					},
 					{
 						name: 'mergeTagOther',
 						type: 'checkbox',
 						list: [
 							{
-								label: 'Tag the other article with a {{' + otherTagName + '}} tag',
+								label: 'Berikan tag ke artikel lainnya dengan tag {{' + otherTagName + '}}',
 								checked: true,
-								tooltip: 'Only available if a single article name is entered.'
+								tooltip: 'Hanya ada jika nama artikel tunggal diberikan.'
 							}
 						]
 					}
@@ -270,9 +270,9 @@ Twinkle.tag.updateSortOrder = function(e) {
 					checkbox.subgroup.push({
 						name: 'mergeReason',
 						type: 'textarea',
-						label: 'Rationale for merge (will be posted on ' +
-							(tag === "merge to" ? 'the other article\'s' : 'this article\'s') + ' talk page):',
-						tooltip: 'Optional, but strongly recommended. Leave blank if not wanted. Only available if a single article name is entered.'
+						label: 'Alasan penggabungan (akan dikirimkan ke ' +
+							(tag === "digabungkan ke" ? 'artikel lainnya' : 'artikel ini') + ' halaman pembicaraan):',
+						tooltip: 'Opsional, namun sangat disarankan. Kosongkan jika tidak diinginkan. Hanya tersedia jika nama artikel tunggal diberikan.'
 					});
 				}
 				break;
@@ -282,7 +282,7 @@ Twinkle.tag.updateSortOrder = function(e) {
 					{
 						name: 'translationLanguage',
 						type: 'input',
-						label: 'Language of article (if known): ',
+						label: 'Bahasa artikel (jika diketahui): ',
 						tooltip: 'Consider looking at [[WP:LRC]] for help. If listing the article at PNT, please try to avoid leaving this box blank, unless you are completely unsure.'
 					}
 				];
@@ -292,9 +292,9 @@ Twinkle.tag.updateSortOrder = function(e) {
 						type: 'checkbox',
 						list: [
 							{
-								label: 'Notify article creator',
+								label: 'Beritahukan pembuat artikel',
 								checked: true,
-								tooltip: "Places {{uw-notenglish}} on the creator's talk page."
+								tooltip: "Tempatkan {{uw-notenglish}} di halaman pembicaraannya."
 							}
 						]
 					});
@@ -320,7 +320,7 @@ Twinkle.tag.updateSortOrder = function(e) {
 				checkbox.subgroup = {
 					name: 'notability',
 					type: 'select',
-					list: [
+					/* list: [
 						{ label: "{{notability}}: article\'s subject may not meet the general notability guideline", value: "none" },
 						{ label: "{{notability|Academics}}: notability guideline for academics", value: "Academics" },
 						{ label: "{{notability|Biographies}}: notability guideline for biographies", value: "Biographies" },
@@ -335,7 +335,7 @@ Twinkle.tag.updateSortOrder = function(e) {
 						{ label: "{{notability|Products}}: notability guideline for products and services", value: "Products" },
 						{ label: "{{notability|Sport}}: notability guideline for sports and athletics", value: "Sport" },
 						{ label: "{{notability|Web}}: notability guideline for web content", value: "Web" }
-					]
+					] */
 				};
 				break;
 			default:
@@ -390,7 +390,7 @@ Twinkle.tag.updateSortOrder = function(e) {
 
 	// append any custom tags
 	if (Twinkle.getFriendlyPref('customTagList').length) {
-		container.append({ type: 'header', label: 'Custom tags' });
+		container.append({ type: 'header', label: 'Tag yang disesuaikan' });
 		container.append({ type: 'checkbox', name: 'articleTags', list: Twinkle.getFriendlyPref('customTagList') });
 	}
 
@@ -424,15 +424,15 @@ Twinkle.tag.article = {};
 // To ensure tags appear in the default "categorized" view, add them to the tagCategories hash below.
 
 Twinkle.tag.article.tags = {
-	"advert": "article is written like an advertisement",
-	"all plot": "article is almost entirely a plot summary",
-	"autobiography": "article is an autobiography and may not be written neutrally",
-	"BLP sources": "BLP article needs additional sources for verification",
-	"BLP unsourced": "BLP article has no sources at all (use BLP PROD instead for new articles)",
-	"citation style": "article has unclear or inconsistent inline citations",
-	"cleanup": "article may require cleanup",
-	"cleanup-reorganize": "article may be in need of reorganization to comply with Wikipedia's layout guidelines",
-	"close paraphrasing": "article contains close paraphrasing of a non-free copyrighted source",
+	"advert": "artikel ditulis seperti iklan",
+	"all plot": "artikel hampir semuanya ringkasan alur",
+	"autobiography": "artikel adalah otobiografi yang tidak ditulis secara netral",
+	"BLP sources": "artikel BOH perlu referensi lebih banyak untuk diperiksa",
+	"BLP unsourced": "artikel BOH yang tidak punya referensi",
+	"citation style": "artikel yang kutipannya tidak jelas atau tak konsisten",
+	"cleanup": "artikel memerlukan perapian",
+	"cleanup-reorganize": "artikel memerlukan pengubahan struktur agar sesuai dengan pedoman Wikipedia",
+	"close paraphrasing": "artikel mengandung parafrasa yang mirip dengan sumber tidak bebas berhak cipta",
 	"COI": "article creator or major contributor may have a conflict of interest",
 	"condense": "article may have too many section headers dividing up its content",
 	"confusing": "article may be confusing or unclear",
