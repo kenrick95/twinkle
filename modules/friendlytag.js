@@ -470,7 +470,7 @@ Twinkle.tag.article.tags = {
 	"no footnotes": "artikel punya referensi, namun tidak punya catatan kaki",
 	"non-free": "artikel mungkin mengandung materi yang berhak cipta yang tidak digunakan sebagaimana mestinya",
 	"notability": "subjek artikel tidak memenuhi kelayakan",
-	/* "not English": "article is written in a language other than English and needs translation", */
+	"not Indonesian": "artikel tidak ditulis dalam bahasa Indonesia dan perlu diterjemahkan",
 	"one source": "artikel hanya merujuk pada sebuah sumber saja",
 	"original research": "artikel memiliki penggunaan riset asli klaim yang tidak terperiksa",
 	"orphan": "artikel tidak memiliki hubungan dengan artikel lain",
