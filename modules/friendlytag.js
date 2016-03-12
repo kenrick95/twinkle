@@ -468,40 +468,40 @@ Twinkle.tag.article.tags = {
 	"new unreviewed article": "tandai artikel untuk diperiksa nanti",
 	"news release": "gaya artikel mirip seperti berita",
 	"no footnotes": "artikel punya referensi, namun tidak punya catatan kaki",
-	"non-free": "article may contain excessive or improper use of copyrighted materials",
-	"notability": "article's subject may not meet the notability guideline",
-	"not English": "article is written in a language other than English and needs translation",
-	"one source": "article relies largely or entirely upon a single source",
-	"original research": "article has original research or unverified claims",
-	"orphan": "article is linked to from no other articles",
-	"overcoverage": "article has an extensive bias or disproportional coverage towards one or more specific regions",
-	"overlinked": "article may have too many duplicate and/or irrelevant links",
-	"overly detailed": "article contains an excessive amount of intricate detail",
-	"peacock": "article may contain peacock terms that promote the subject without adding information",
-	"plot": "plot summary in article is too long",
-	"POV": "article does not maintain a neutral point of view",
-	"primary sources": "article relies too heavily on primary sources, and needs secondary sources",
-	"prose": "article is in a list format that may be better presented using prose",
-	"recentism": "article is slanted towards recent events",
-	"refimprove": "article needs additional references or sources for verification",
-	"rough translation": "article is poorly translated and needs cleanup",
-	"sections": "article needs to be broken into sections",
-	"self-published": "article may contain improper references to self-published sources",
-	"technical": "article may be too technical for the uninitiated reader",
-	"tense": "article is written in an incorrect tense",
-	"third-party": "article relies too heavily on affiliated sources, and needs third-party sources",
-	"tone": "tone of article is not appropriate",
-	"too few opinions": "article may not include all significant viewpoints",
-	"uncategorized": "article is uncategorized",
-	"under construction": "article is currently in the middle of an expansion or major revamping",
-	"underlinked": "article may require additional wikilinks",
-	"undue": "article lends undue weight to certain aspects of the subject but not others",
-	"unfocused": "article lacks focus or is about more than one topic",
-	"unreferenced": "article has no references at all",
-	"unreliable sources": "article's references may not be reliable sources",
-	"update": "article needs additional up-to-date information added",
-	"very long": "article is too long",
-	"weasel": "article neutrality is compromised by the use of weasel words"
+	"non-free": "artikel mungkin mengandung materi yang berhak cipta yang tidak digunakan sebagaimana mestinya",
+	"notability": "subjek artikel tidak memenuhi kelayakan",
+	/* "not English": "article is written in a language other than English and needs translation", */
+	"one source": "artikel hanya merujuk pada sebuah sumber saja",
+	"original research": "artikel memiliki penggunaan riset asli klaim yang tidak terperiksa",
+	"orphan": "artikel tidak memiliki hubungan dengan artikel lain",
+	"overcoverage": "artikel mengandung anggapan atau cakupan tidak sesuai terhadap satu bagian atau lebih",
+	"overlinked": "artikel banyak mengandung pranala duplikat dan/atau tidak berhubungan",
+	"overly detailed": "artikel mengandung jumlah detail yang terlalu banyak",
+	"peacock": "artikel mengandung istilah hiperbola yang mempromosikan subjek tanpa informasi lengkap",
+	"plot": "ringkasan alur di artikel terlalu panjang",
+	"POV": "sudut pandang penulisan artikel tidak netral",
+	"primary sources": "artikel terlalu mengandalkan sumber primer, dan butuh sumber tambahan",
+	"prose": "artikel mengandung format yang lebih sesuai ditulis dalam bentuk prosa",
+	"recentism": "artikel ini terlalu condong dengan peristiwa terkini",
+	"refimprove": "artikel perlu sumber tambahan untuk diperiksa",
+	"rough translation": "artikel sangat jelek penerjemahannya dan memerlukan perbaikan",
+	"sections": "artikel perlu dibagi dalam subbagian",
+	"self-published": "artikel mengandung sumber yang mungkin tak sesuai untuk sumber yang diterbitkan oleh diri sendiri",
+	"technical": "artikel mengandung banyak istilah yang rumit",
+	"tense": "artikel ditulis dalam gaya tidak sesuai",
+	"third-party": "artikel terlalu mengandalkan sumber kedua, dan butuh sumber ketiga",
+	"tone": "gaya penulisan tak sesuai",
+	"too few opinions": "artikel tidak mengandung keseluruhan sudut pandang yang penting",
+	"uncategorized": "artikel tidak ada kategori",
+	"under construction": "artikel sedang dalam tahap pengembangan",
+	"underlinked": "artikel perlu lebih banyak pranala wiki",
+	/* "undue": "article lends undue weight to certain aspects of the subject but not others" */
+	"unfocused": "artikel kurang memfokuskan subjek atau punya topik yang lebih dari satu",
+	"unreferenced": "artikel tidak punya referensi sama sekali",
+	"unreliable sources": "sumber artikel mungkin tidak dapat dipercaya",
+	"update": "artikel memerlukan informasi yang lebih aktual",
+	"very long": "artikel sangaaaat panjang",
+	"weasel": "kenetralan artikel diganggu oleh penggunaan kata bersayap"
 };
 
 // A list of tags in order of category
@@ -509,18 +509,18 @@ Twinkle.tag.article.tags = {
 // Add new categories with discretion - the list is long enough as is!
 
 Twinkle.tag.article.tagCategories = {
-	"Cleanup and maintenance tags": {
-		"General cleanup": [
+	"Tag rapikan dan pemeliharaan": {
+		"Perapian secara umum": [
 			"cleanup",  // has a subgroup with text input
 			"copy edit"  // has a subgroup with text input
 		],
-		"Potentially unwanted content": [
+		"Mengandung konten yang tidak diinginkan": [
 			"close paraphrasing",
 			"copypaste",  // has a subgroup with text input
 			"external links",
 			"non-free"
 		],
-		"Structure, formatting, and lead section": [
+		"Struktur, format, dan pengantar": [
 			"cleanup-reorganize",
 			"condense",
 			"lead missing",
@@ -530,18 +530,18 @@ Twinkle.tag.article.tagCategories = {
 			"sections",
 			"very long"
 		],
-		"Fiction-related cleanup": [
+		"Perapian terkait isi fiksi": [
 			"all plot",
 			"fiction",
 			"in-universe",
 			"plot"
 		]
 	},
-	"General content issues": {
-		"Importance and notability": [
+	"Masalah konten secara umum": {
+		"Kepentingan dan kelayakan": [
 			"notability"  // has a subgroup with subcategories
 		],
-		"Style of writing": [
+		"Gaya penulisan": [
 			"advert",
 			"essay-like",
 			"fansite",
@@ -552,22 +552,22 @@ Twinkle.tag.article.tagCategories = {
 			"tense",
 			"tone"
 		],
-		"Sense (or lack thereof)": [
+		"Makna": [
 			"confusing",
 			"incomprehensible",
 			"unfocused"
 		],
-		"Information and detail": [
+		"Detail dan informasi": [
 			"context",
 			"expert-subject",
 			"metricate",
 			"overly detailed",
 			"undue"
 		],
-		"Timeliness": [
+		"Keaktualan": [
 			"update"
 		],
-		"Neutrality, bias, and factual accuracy": [
+		"Netralitas, kecondongan dan akurasi faktual": [
 			"autobiography",
 			"COI",
 			"disputed",
@@ -580,7 +580,7 @@ Twinkle.tag.article.tagCategories = {
 			"too few opinions",
 			"weasel"
 		],
-		"Verifiability and sources": [
+		"Pemeriksaan dan sumber": [
 			"BLP sources",
 			"BLP unsourced",
 			"one source",
@@ -593,35 +593,35 @@ Twinkle.tag.article.tagCategories = {
 			"unreliable sources"
 		]
 	},
-	"Specific content issues": {
-		"Language": [
-			"not English",  // has a subgroup with several options
+	"Masalah konten tertentu": {
+		"Bahasa": [
+			/ "not English",  // has a subgroup with several options
 			"rough translation",  // has a subgroup with several options
 			"expand language"
 		],
-		"Links": [
+		"Pranala dan tautan": [
 			"dead end",
 			"orphan",
 			"overlinked",
 			"underlinked"
 		],
-		"Referencing technique": [
+		"Teknik pemberian referensi": [
 			"citation style",
 			"linkrot",
 			"more footnotes",
 			"no footnotes"
 		],
-		"Categories": [
+		"Kategori": [
 			"improve categories",
 			"uncategorized"
 		]
 	},
-	"Merging": [  // these three have a subgroup with several options
+	"Penggabungan": [  // these three have a subgroup with several options
 		"merge",
 		"merge from",
 		"merge to"
 	],
-	"Informational": [
+	"Informasi halaman": [
 		"GOCEinuse",
 		"in use",
 		"new unreviewed article",
@@ -633,47 +633,47 @@ Twinkle.tag.article.tagCategories = {
 
 Twinkle.tag.spellingList = [
 	{
-		label: '{{R from initialism}}: redirect from an initialism (e.g. AGF) to its expanded form',
+		label: '{{R from initialism}}: dialihkan dari penyingkatan (contoh ANB) ke bentuk panjangnya',
 		value: 'R from initialism'
 	},
 	{
-		label: '{{R from acronym}}: redirect from an acronym (e.g. POTUS) to its expanded form',
+		label: '{{R from acronym}}: dialihkan dari akronim (contoh POTUS) ke bentuk panjangnya',
 		value: 'R from acronym'
 	},
 	{
-		label: '{{R to list entry}}: redirect to a \"list of minor entities\"-type article which contains brief descriptions of subjects not notable enough to have separate articles',
+		label: '{{R to list entry}}: mengalihkan ke artikel berbentuk \¨entitas kecil\¨ yang mengandung pemerian ringkas subjek yang tidak cukup layak untuk dipisahkan artikelnya',
 		value: 'R to list entry'
 	},
 	{
-		label: '{{R to section}}: similar to {{R to list entry}}, but when list is organized in sections, such as list of characters in a fictional universe.',
+		label: '{{R to section}}: mirip dengan {{R to list entry}}, tetapi ketika daftar disusun dalam bagian seperti daftar karakter fiksi.',
 		value: 'R to section'
 	},
 	{
-		label: '{{R from misspelling}}: redirect from a misspelling or typographical error',
+		label: '{{R from misspelling}}: pengalihan dari kesalahan ejaan atau tipografi',
 		value: 'R from misspelling'
 	},
 	{
-		label: '{{R from alternative spelling}}: redirect from a title with a different spelling',
+		label: '{{R from alternative spelling}}: pengalihan dari judul dengan ejaan berbeda',
 		value: 'R from alternative spelling'
 	},
 	{
-		label: '{{R from plural}}: redirect from a plural word to the singular equivalent',
+		label: '{{R from plural}}: pengalihan dari kata yang menunjukkan jumlah banyak ke padanan jumlah tunggalnya',
 		value: 'R from plural'
 	},
 	{
-		label: '{{R from related word}}: redirect from a related word',
+		label: '{{R from related word}}: pengalihan dari kata yang berkaitan',
 		value: 'R from related word'
 	},
 	{
-		label: '{{R with possibilities}}: redirect from a more specific title to a more general, less detailed article, hence something which can and should be expanded',
+		label: '{{R with possibilities}}: pengalihan dari judul yang spesifik ke judul yang lebih umum',
 		value: 'R with possibilities'
 	},
 	{
-		label: '{{R from member}}: redirect from a member of a group to a related topic such as the group, organization, or team that he or she belongs to',
+		label: '{{R from member}}: pengalihan dari anggota kelompok ke topik terkait seperti kelompok, organisasi, atau tim yang ia terlibat di dalamnya',
 		value: 'R from member'
 	},
 	{
-		label: '{{R from other capitalisation}}: redirect from a title with another method of capitalisation',
+		label: '{{R from other capitalisation}}: pengalihan dari judul dengan metode kapitalisasi lainnya',
 		value: 'R from other capitalisation'
 	}
 ];
