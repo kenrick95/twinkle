@@ -21,21 +21,21 @@ Twinkle.protect = function twinkleprotect() {
 	}
 
 	Twinkle.addPortletLink(Twinkle.protect.callback, Morebits.userIsInGroup('sysop') ? "PP" : "RPP", "tw-rpp",
-		Morebits.userIsInGroup('sysop') ? "Protect page" : "Request page protection" );
+		Morebits.userIsInGroup('sysop') ? "Lindungi halaman" : "Permintaan perlindungan halaman" );
 };
 
 Twinkle.protect.callback = function twinkleprotectCallback() {
 	var Window = new Morebits.simpleWindow( 620, 530 );
-	Window.setTitle( Morebits.userIsInGroup( 'sysop' ) ? "Apply, request or tag page protection" : "Request or tag page protection" );
+	Window.setTitle( Morebits.userIsInGroup( 'sysop' ) ? "Terapkan, meminta atau menandai halaman terlindungi" : "Minta atau tandai perlindungan halaman" );
 	Window.setScriptName( "Twinkle" );
-	Window.addFooterLink( "Protection templates", "Template:Protection templates" );
-	Window.addFooterLink( "Protection policy", "WP:PROT" );
-	Window.addFooterLink( "Twinkle help", "WP:TW/DOC#protect" );
+	Window.addFooterLink( "Templat perlindungan", "Templat:Templat perlindungan" );
+	Window.addFooterLink( "Kebijakan perlindungan", "WP:LINDUNG" );
+	Window.addFooterLink( "Bantuan Twinkle", "WP:TW/DOC#protect" );
 
 	var form = new Morebits.quickForm( Twinkle.protect.callback.evaluate );
 	var actionfield = form.append( {
 			type: 'field',
-			label: 'Type of action'
+			label: 'Jenis tindakan'
 		} );
 	if( Morebits.userIsInGroup( 'sysop' ) ) {
 		actionfield.append( {
@@ -44,9 +44,9 @@ Twinkle.protect.callback = function twinkleprotectCallback() {
 				event: Twinkle.protect.callback.changeAction,
 				list: [
 					{
-						label: 'Protect page',
+						label: 'Lindungi halaman',
 						value: 'protect',
-						tooltip: 'Apply actual protection to the page.',
+						tooltip: 'Terapkan perlindungan ke halaman ini.',
 						checked: true
 					}
 				]
@@ -58,21 +58,21 @@ Twinkle.protect.callback = function twinkleprotectCallback() {
 			event: Twinkle.protect.callback.changeAction,
 			list: [
 				{
-					label: 'Request page protection',
+					label: 'Meminta perlindungan halaman',
 					value: 'request',
-					tooltip: 'If you want to request protection via WP:RPP' + (Morebits.userIsInGroup('sysop') ? ' instead of doing the protection by yourself.' : '.'),
+					tooltip: 'Jika Anda ingin meminta perlindungan halaman melalui WP:RPP' + (Morebits.userIsInGroup('sysop') ? ' alih-alih melindunginya sendiri.' : '.'),
 					checked: !Morebits.userIsInGroup('sysop')
 				},
 				{
-					label: 'Tag page with protection template',
+					label: 'Tandai halaman dengan templat perlindungan',
 					value: 'tag',
-					tooltip: 'If the protecting admin forgot to apply a protection template, or you have just protected the page without tagging, you can use this to apply the appropriate protection tag.',
+					tooltip: 'Jika pengurus yang melakukan perlindungan lupa memberi templat, atau Anda sudah melindunginya tanpa menandai, Anda dapat menggunakan ini untuk menandai tag yang cocok.',
 					disabled: mw.config.get('wgArticleId') === 0
 				}
 			]
 		} );
 
-	form.append({ type: 'field', label: 'Preset', name: 'field_preset' });
+	form.append({ type: 'field', label: 'Jenis pengaturan', name: 'field_preset' });
 	form.append({ type: 'field', label: '1', name: 'field1' });
 	form.append({ type: 'field', label: '2', name: 'field2' });
 
@@ -158,15 +158,15 @@ Twinkle.protect.callback.showLogAndCurrentProtectInfo = function twinkleprotectC
 
 		if (Twinkle.protect.hasProtectLog)
 			$linkMarkup.append(
-				$( '<a target="_blank" href="' + mw.util.getUrl('Special:Log', {action: 'view', page: mw.config.get('wgPageName'), type: 'protect'}) + '">protection log</a>' ),
+				$( '<a target="_blank" href="' + mw.util.getUrl('Special:Log', {action: 'view', page: mw.config.get('wgPageName'), type: 'protect'}) + '">log perlindungan</a>' ),
 				Twinkle.protect.hasStableLog ? $("<span> &bull; </span>") : null
 			);
 		if (Twinkle.protect.hasStableLog)
-			$linkMarkup.append($( '<a target="_blank" href="' + mw.util.getUrl('Special:Log', {action: 'view', page: mw.config.get('wgPageName'), type: 'stable'}) + '">pending changes log</a>)' ));
+			$linkMarkup.append($( '<a target="_blank" href="' + mw.util.getUrl('Special:Log', {action: 'view', page: mw.config.get('wgPageName'), type: 'stable'}) + '">log perubahan tertunda</a>)' ));
 
 		Morebits.status.init($('div[name="hasprotectlog"] span')[0]);
 		Morebits.status.warn(
-			currentlyProtected ? 'Previous protections' : 'This page has been protected in the past',
+			currentlyProtected ? 'Perlindungan sebelumnya' : 'Halaman ini telah dilindungi sebelumnya',
 			$linkMarkup[0]
 		);
 	}
@@ -176,7 +176,7 @@ Twinkle.protect.callback.showLogAndCurrentProtectInfo = function twinkleprotectC
 
 	if (currentlyProtected) {
 		$.each(Twinkle.protect.currentProtectionLevels, function(type, settings) {
-			var label = type === 'stabilize' ? 'Pending Changes' : Morebits.string.toUpperCaseFirstChar(type);
+			var label = type === 'stabilize' ? 'Perubahan tertunda' : Morebits.string.toUpperCaseFirstChar(type);
 			protectionNode.push($("<b>" + label + ": " + settings.level + "</b>")[0]);
 			if (settings.expiry === 'infinity') {
 				protectionNode.push(" (indefinite) ");
@@ -192,7 +192,7 @@ Twinkle.protect.callback.showLogAndCurrentProtectInfo = function twinkleprotectC
 		protectionNode.push($("<b>no protection</b>")[0]);
 	}
 
-	Morebits.status[statusLevel]("Current protection level", protectionNode);
+	Morebits.status[statusLevel]("Tingkat perlindungan saat ini", protectionNode);
 };
 
 Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAction(e) {
@@ -203,20 +203,20 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 
 	switch (e.target.values) {
 		case 'protect':
-			field_preset = new Morebits.quickForm.element({ type: 'field', label: 'Preset', name: 'field_preset' });
+			field_preset = new Morebits.quickForm.element({ type: 'field', label: 'Pilihan aturan', name: 'field_preset' });
 			field_preset.append({
 					type: 'select',
 					name: 'category',
-					label: 'Choose a preset:',
+					label: 'Pilih pilihan berikut:',
 					event: Twinkle.protect.callback.changePreset,
 					list: (mw.config.get('wgArticleId') ?
 						Twinkle.protect.protectionTypes.filter(function(v) {
-							return isTemplate || v.label !== 'Template protection';
+							return isTemplate || v.label !== 'Templat perlindungan';
 						}) :
 						Twinkle.protect.protectionTypesCreate)
 				});
 
-			field2 = new Morebits.quickForm.element({ type: 'field', label: 'Protection options', name: 'field2' });
+			field2 = new Morebits.quickForm.element({ type: 'field', label: 'Opsi perlindungan', name: 'field2' });
 			field2.append({ type: 'div', name: 'currentprot', label: ' ' });  // holds the current protection level, as filled out by the async callback
 			field2.append({ type: 'div', name: 'hasprotectlog', label: ' ' });
 			// for existing pages
@@ -227,9 +227,9 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 						event: Twinkle.protect.formevents.editmodify,
 						list: [
 							{
-								label: 'Modify edit protection',
+								label: 'Ubah perlindungan suntingan',
 								value: 'editmodify',
-								tooltip: 'If this is turned off, the edit protection level, and expiry time, will be left as is.',
+								tooltip: 'Jika ini dimatikan, tingkat perlindungan suntingan, dan jangka waktu perlindungan, akan ditinggalkan seperti sediakala.',
 								checked: true
 							}
 						]
@@ -237,59 +237,59 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 				var editlevel = field2.append({
 						type: 'select',
 						name: 'editlevel',
-						label: 'Edit protection:',
+						label: 'Perlindungan suntingan:',
 						event: Twinkle.protect.formevents.editlevel
 					});
 				editlevel.append({
 						type: 'option',
-						label: 'All',
+						label: 'Semua',
 						value: 'all'
 					});
 				editlevel.append({
 						type: 'option',
-						label: 'Autoconfirmed',
+						label: 'Terkonfirmasi otomatis',
 						value: 'autoconfirmed'
 					});
 				if (isTemplate) {
 					editlevel.append({
 							type: 'option',
-							label: 'Template editor',
+							label: 'Editor templat',
 							value: 'templateeditor'
 						});
 				}
 				editlevel.append({
 						type: 'option',
-						label: 'Sysop',
+						label: 'Pengurus',
 						value: 'sysop',
 						selected: true
 					});
 				field2.append({
 						type: 'select',
 						name: 'editexpiry',
-						label: 'Expires:',
+						label: 'Jangka waktu perlindungan:',
 						event: function(e) {
 							if (e.target.value === 'custom') {
 								Twinkle.protect.doCustomExpiry(e.target);
 							}
 						},
 						list: [
-							{ label: '1 hour', value: '1 hour' },
-							{ label: '2 hours', value: '2 hours' },
-							{ label: '3 hours', value: '3 hours' },
-							{ label: '6 hours', value: '6 hours' },
-							{ label: '12 hours', value: '12 hours' },
-							{ label: '1 day', value: '1 day' },
-							{ label: '2 days', selected: true, value: '2 days' },
-							{ label: '3 days', value: '3 days' },
-							{ label: '4 days', value: '4 days' },
-							{ label: '1 week', value: '1 week' },
-							{ label: '2 weeks', value: '2 weeks' },
-							{ label: '1 month', value: '1 month' },
-							{ label: '2 months', value: '2 months' },
-							{ label: '3 months', value: '3 months' },
-							{ label: '1 year', value: '1 year' },
-							{ label: 'indefinite', value:'indefinite' },
-							{ label: 'Custom...', value: 'custom' }
+							{ label: '1 jam', value: '1 hour' },
+							{ label: '2 jam', value: '2 hours' },
+							{ label: '3 jam', value: '3 hours' },
+							{ label: '6 jam', value: '6 hours' },
+							{ label: '12 jam', value: '12 hours' },
+							{ label: '1 hari', value: '1 day' },
+							{ label: '2 hari', selected: true, value: '2 days' },
+							{ label: '3 hari', value: '3 days' },
+							{ label: '4 hari', value: '4 days' },
+							{ label: '1 minggu', value: '1 week' },
+							{ label: '2 minggu', value: '2 weeks' },
+							{ label: '1 bulan', value: '1 month' },
+							{ label: '2 bulan', value: '2 months' },
+							{ label: '3 bulan', value: '3 months' },
+							{ label: '1 tahun', value: '1 year' },
+							{ label: 'tak terbatas', value:'indefinite' },
+							{ label: 'Lain-lain...', value: 'custom' }
 						]
 					});
 				field2.append({
@@ -298,9 +298,9 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 						event: Twinkle.protect.formevents.movemodify,
 						list: [
 							{
-								label: 'Modify move protection',
+								label: 'Ubah perlindungan pemindahan',
 								value: 'movemodify',
-								tooltip: 'If this is turned off, the move protection level, and expiry time, will be left as is.',
+								tooltip: 'Jika opsi ini dimatikan, tingkat perlindungan pemindahan halaman dan jangka waktu kedaluwarsa akan ditinggalkan sebagaimana adanya.',
 								checked: true
 							}
 						]
@@ -308,59 +308,59 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 				var movelevel = field2.append({
 						type: 'select',
 						name: 'movelevel',
-						label: 'Move protection:',
+						label: 'Perlindungan pemindahan:',
 						event: Twinkle.protect.formevents.movelevel
 					});
 				movelevel.append({
 						type: 'option',
-						label: 'All',
+						label: 'Semua',
 						value: 'all'
 					});
 				movelevel.append({
 						type: 'option',
-						label: 'Autoconfirmed',
+						label: 'Terkonfirmasi otomatis',
 						value: 'autoconfirmed'
 					});
 				if (isTemplate) {
 					movelevel.append({
 							type: 'option',
-							label: 'Template editor',
+							label: 'Editor templat',
 							value: 'templateeditor'
 						});
 				}
 				movelevel.append({
 						type: 'option',
-						label: 'Sysop',
+						label: 'Pengurus',
 						value: 'sysop',
 						selected: true
 					});
 				field2.append({
 						type: 'select',
 						name: 'moveexpiry',
-						label: 'Expires:',
+						label: 'Jangka waktu perlindungan:',
 						event: function(e) {
 							if (e.target.value === 'custom') {
 								Twinkle.protect.doCustomExpiry(e.target);
 							}
 						},
 						list: [
-							{ label: '1 hour', value: '1 hour' },
-							{ label: '2 hours', value: '2 hours' },
-							{ label: '3 hours', value: '3 hours' },
-							{ label: '6 hours', value: '6 hours' },
-							{ label: '12 hours', value: '12 hours' },
-							{ label: '1 day', value: '1 day' },
-							{ label: '2 days', value: '2 days' },
-							{ label: '3 days', value: '3 days' },
-							{ label: '4 days', value: '4 days' },
-							{ label: '1 week', value: '1 week' },
-							{ label: '2 weeks', value: '2 weeks' },
-							{ label: '1 month', value: '1 month' },
-							{ label: '2 months', value: '2 months' },
-							{ label: '3 months', value: '3 months' },
-							{ label: '1 year', value: '1 year' },
-							{ label: 'indefinite', selected: true, value:'indefinite' },
-							{ label: 'Custom...', value: 'custom' }
+							{ label: '1 jam', value: '1 hour' },
+							{ label: '2 jam', value: '2 hours' },
+							{ label: '3 jam', value: '3 hours' },
+							{ label: '6 jam', value: '6 hours' },
+							{ label: '12 jam', value: '12 hours' },
+							{ label: '1 hari', value: '1 day' },
+							{ label: '2 hari', selected: true, value: '2 days' },
+							{ label: '3 hari', value: '3 days' },
+							{ label: '4 hari', value: '4 days' },
+							{ label: '1 minggu', value: '1 week' },
+							{ label: '2 minggu', value: '2 weeks' },
+							{ label: '1 bulan', value: '1 month' },
+							{ label: '2 bulan', value: '2 months' },
+							{ label: '3 bulan', value: '3 months' },
+							{ label: '1 tahun', value: '1 year' },
+							{ label: 'tak terbatas', value:'indefinite' },
+							{ label: 'Lain-lain...', value: 'custom' }
 						]
 					});
 				field2.append({
@@ -369,9 +369,9 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 						event: Twinkle.protect.formevents.pcmodify,
 						list: [
 							{
-								label: 'Modify pending changes protection',
+								label: 'Ubah perlindungan perubahan tertunda',
 								value: 'pcmodify',
-								tooltip: 'If this is turned off, the pending changes level, and expiry time, will be left as is.',
+								tooltip: 'Jika ini dimatikan, tingkat perubahan tertunda, dan waktu kedaluwarsa, akan diabaikan.',
 								checked: true
 							}
 						]
@@ -379,131 +379,131 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 				var pclevel = field2.append({
 						type: 'select',
 						name: 'pclevel',
-						label: 'Pending changes:',
+						label: 'Perubahan tertunda:',
 						event: Twinkle.protect.formevents.pclevel
 					});
 				pclevel.append({
 						type: 'option',
-						label: 'None',
+						label: 'Tidak ada',
 						value: 'none'
 					});
 				pclevel.append({
 						type: 'option',
-						label: 'Level 1',
+						label: 'Tingkat 1',
 						value: 'autoconfirmed',
 						selected: true
 					});
 				pclevel.append({
 						type: 'option',
-						label: 'Level 2 (do not use)',
+						label: 'Tingkat 2 (jangan digunakan)',
 						value: 'review'
 					});
 				field2.append({
 						type: 'select',
 						name: 'pcexpiry',
-						label: 'Expires:',
+						label: 'Jangka waktu perlindungan:',
 						event: function(e) {
 							if (e.target.value === 'custom') {
 								Twinkle.protect.doCustomExpiry(e.target);
 							}
 						},
 						list: [
-							{ label: '1 hour', value: '1 hour' },
-							{ label: '2 hours', value: '2 hours' },
-							{ label: '3 hours', value: '3 hours' },
-							{ label: '6 hours', value: '6 hours' },
-							{ label: '12 hours', value: '12 hours' },
-							{ label: '1 day', value: '1 day' },
-							{ label: '2 days', value: '2 days' },
-							{ label: '3 days', value: '3 days' },
-							{ label: '4 days', value: '4 days' },
-							{ label: '1 week', value: '1 week' },
-							{ label: '2 weeks', value: '2 weeks' },
-							{ label: '1 month', selected: true, value: '1 month' },
-							{ label: '2 months', value: '2 months' },
-							{ label: '3 months', value: '3 months' },
-							{ label: '1 year', value: '1 year' },
-							{ label: 'indefinite', value:'indefinite' },
-							{ label: 'Custom...', value: 'custom' }
+							{ label: '1 jam', value: '1 hour' },
+							{ label: '2 jam', value: '2 hours' },
+							{ label: '3 jam', value: '3 hours' },
+							{ label: '6 jam', value: '6 hours' },
+							{ label: '12 jam', value: '12 hours' },
+							{ label: '1 hari', value: '1 day' },
+							{ label: '2 hari', selected: true, value: '2 days' },
+							{ label: '3 hari', value: '3 days' },
+							{ label: '4 hari', value: '4 days' },
+							{ label: '1 minggu', value: '1 week' },
+							{ label: '2 minggu', value: '2 weeks' },
+							{ label: '1 bulan', value: '1 month' },
+							{ label: '2 bulan', value: '2 months' },
+							{ label: '3 bulan', value: '3 months' },
+							{ label: '1 tahun', value: '1 year' },
+							{ label: 'tak terbatas', value:'indefinite' },
+							{ label: 'Lain-lain...', value: 'custom' }
 						]
 					});
 			} else {  // for non-existing pages
 				var createlevel = field2.append({
 						type: 'select',
 						name: 'createlevel',
-						label: 'Create protection:',
+						label: 'Perlindungan pembuatan:',
 						event: Twinkle.protect.formevents.createlevel
 					});
 				createlevel.append({
 						type: 'option',
-						label: 'All',
+						label: 'Semua',
 						value: 'all'
 					});
 				createlevel.append({
 						type: 'option',
-						label: 'Autoconfirmed',
+						label: 'Terkonfirmasi otomatis',
 						value: 'autoconfirmed'
 					});
 				if (isTemplate) {
 					createlevel.append({
 							type: 'option',
-							label: 'Template editor',
+							label: 'Editor templat',
 							value: 'templateeditor'
 						});
 				}
 				createlevel.append({
 						type: 'option',
-						label: 'Sysop',
+						label: 'Pengurus',
 						value: 'sysop',
 						selected: true
 					});
 				field2.append({
 						type: 'select',
 						name: 'createexpiry',
-						label: 'Expires:',
+						label: 'Jangka waktu perlindungan:',
 						event: function(e) {
 							if (e.target.value === 'custom') {
 								Twinkle.protect.doCustomExpiry(e.target);
 							}
 						},
 						list: [
-							{ label: '1 hour', value: '1 hour' },
-							{ label: '2 hours', value: '2 hours' },
-							{ label: '3 hours', value: '3 hours' },
-							{ label: '6 hours', value: '6 hours' },
-							{ label: '12 hours', value: '12 hours' },
-							{ label: '1 day', value: '1 day' },
-							{ label: '2 days', value: '2 days' },
-							{ label: '3 days', value: '3 days' },
-							{ label: '4 days', value: '4 days' },
-							{ label: '1 week', value: '1 week' },
-							{ label: '2 weeks', value: '2 weeks' },
-							{ label: '1 month', value: '1 month' },
-							{ label: '2 months', value: '2 months' },
-							{ label: '3 months', value: '3 months' },
-							{ label: '1 year', value: '1 year' },
-							{ label: 'indefinite', selected: true, value: 'indefinite' },
-							{ label: 'Custom...', value: 'custom' }
+							{ label: '1 jam', value: '1 hour' },
+							{ label: '2 jam', value: '2 hours' },
+							{ label: '3 jam', value: '3 hours' },
+							{ label: '6 jam', value: '6 hours' },
+							{ label: '12 jam', value: '12 hours' },
+							{ label: '1 hari', value: '1 day' },
+							{ label: '2 hari', selected: true, value: '2 days' },
+							{ label: '3 hari', value: '3 days' },
+							{ label: '4 hari', value: '4 days' },
+							{ label: '1 minggu', value: '1 week' },
+							{ label: '2 minggu', value: '2 weeks' },
+							{ label: '1 bulan', value: '1 month' },
+							{ label: '2 bulan', value: '2 months' },
+							{ label: '3 bulan', value: '3 months' },
+							{ label: '1 tahun', value: '1 year' },
+							{ label: 'tak terbatas', value:'indefinite' },
+							{ label: 'Lain-lain...', value: 'custom' }
 						]
 					});
 			}
 			field2.append({
 					type: 'textarea',
 					name: 'protectReason',
-					label: 'Reason (for protection log):'
+					label: 'Alasan (untuk log perlindungan):'
 				});
 			if (!mw.config.get('wgArticleId')) {  // tagging isn't relevant for non-existing pages
 				break;
 			}
 			/* falls through */
 		case 'tag':
-			field1 = new Morebits.quickForm.element({ type: 'field', label: 'Tagging options', name: 'field1' });
+			field1 = new Morebits.quickForm.element({ type: 'field', label: 'Opsi penandaan tag', name: 'field1' });
 			field1.append({ type: 'div', name: 'currentprot', label: ' ' });  // holds the current protection level, as filled out by the async callback
 			field1.append({ type: 'div', name: 'hasprotectlog', label: ' ' });
 			field1.append( {
 					type: 'select',
 					name: 'tagtype',
-					label: 'Choose protection template:',
+					label: 'Pilih templat:',
 					list: Twinkle.protect.protectionTags,
 					event: Twinkle.protect.formevents.tagtype
 				} );
@@ -512,14 +512,14 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 					list: [
 						{
 							name: 'small',
-							label: 'Iconify (small=yes)',
-							tooltip: 'Will use the |small=yes feature of the template, and only render it as a keylock',
+							label: 'Ikon (small=yes)',
+							tooltip: 'Akan menggunakan fitur |small=yes dari templat, dan hanya tampil dengan ikon gembok',
 							checked: true
 						},
 						{
 							name: 'noinclude',
-							label: 'Wrap protection template with <noinclude>',
-							tooltip: 'Will wrap the protection template in &lt;noinclude&gt; tags, so that it won\'t transclude',
+							label: 'Sembunyikan templat ke dalam <noinclude>',
+							tooltip: 'Akan menyembunyikan templat perlindungan dalam tag &lt;noinclude&gt;, sehingga tidak akan ditransklusi',
 							checked: (mw.config.get('wgNamespaceNumber') === 10)
 						}
 					]
@@ -527,36 +527,36 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 			break;
 
 		case 'request':
-			field_preset = new Morebits.quickForm.element({ type: 'field', label: 'Type of protection', name: 'field_preset' });
+			field_preset = new Morebits.quickForm.element({ type: 'field', label: 'Jenis perlindungan', name: 'field_preset' });
 			field_preset.append({
 					type: 'select',
 					name: 'category',
-					label: 'Type and reason:',
+					label: 'Jenis dan alasan:',
 					event: Twinkle.protect.callback.changePreset,
 					list: (mw.config.get('wgArticleId') ? Twinkle.protect.protectionTypes : Twinkle.protect.protectionTypesCreate)
 				});
 
-			field1 = new Morebits.quickForm.element({ type: 'field', label: 'Options', name: 'field1' });
+			field1 = new Morebits.quickForm.element({ type: 'field', label: 'Opsi', name: 'field1' });
 			field1.append({ type: 'div', name: 'currentprot', label: ' ' });  // holds the current protection level, as filled out by the async callback
 			field1.append({ type: 'div', name: 'hasprotectlog', label: ' ' });
 			field1.append( {
 					type: 'select',
 					name: 'expiry',
-					label: 'Duration: ',
+					label: 'Jangka waktu: ',
 					list: [
-						{ label: 'Temporary', value: 'temporary' },
-						{ label: 'Indefinite', value: 'indefinite' },
+						{ label: 'Sementara', value: 'temporary' },
+						{ label: 'Selamanya', value: 'indefinite' },
 						{ label: '', selected: true, value: '' }
 					]
 				} );
 			field1.append({
 					type: 'textarea',
 					name: 'reason',
-					label: 'Reason: '
+					label: 'Alasan: '
 				});
 			break;
 		default:
-			alert("Something's afoot in twinkleprotect");
+			alert("Terjadi sesuatu di twinkleprotect");
 			break;
 	}
 
@@ -637,7 +637,7 @@ Twinkle.protect.formevents = {
 };
 
 Twinkle.protect.doCustomExpiry = function twinkleprotectDoCustomExpiry(target) {
-	var custom = prompt('Enter a custom expiry time.  \nYou can use relative times, like "1 minute" or "19 days", or absolute timestamps, "yyyymmddhhmm" (e.g. "200602011405" is Feb 1, 2006, at 14:05 UTC).', '');
+	var custom = prompt('Masukkan waktu lainnya.  \nAnda dapat menggunakan waktu relatif, seperti ¨1 menit¨ atau ¨19 hari¨, atau stempel waktu absolut, "yyyymmddhhmm" (contohnya "200602011405" adalah 1 Februari 2006, pukul 14.05 GMT).', '');
 	if (custom) {
 		var option = document.createElement('option');
 		option.setAttribute('value', custom);
@@ -650,64 +650,64 @@ Twinkle.protect.doCustomExpiry = function twinkleprotectDoCustomExpiry(target) {
 };
 
 Twinkle.protect.protectionTypes = [
-	{ label: 'Unprotection', value: 'unprotect' },
+	{ label: 'Hapus perlindungan', value: 'unprotect' },
 	{
-		label: 'Full protection',
+		label: 'Perlindungan penuh',
 		list: [
-			{ label: 'Generic (full)', value: 'pp-protected' },
-			{ label: 'Content dispute/edit warring (full)', value: 'pp-dispute' },
-			{ label: 'Persistent vandalism (full)', value: 'pp-vandalism' },
-			{ label: 'User talk of blocked user (full)', value: 'pp-usertalk' }
+			{ label: 'Bawaan (penuh)', value: 'pp-protected' },
+			{ label: 'Isi yang dipertentangkan/perang suntingan (penuh)', value: 'pp-dispute' },
+			{ label: 'Vandalisme berulang (penuh)', value: 'pp-vandalism' },
+			{ label: 'Pembicaraan pengguna yang diblokir (penuh)', value: 'pp-usertalk' }
 		]
 	},
 	{
-		label: 'Template protection',
+		label: 'Perlindungan templat',
 		list: [
-			{ label: 'Highly visible template (TE)', value: 'pp-template' }
+			{ label: 'Templat yang sering dipakai', value: 'pp-template' }
 		]
 	},
 	{
-		label: 'Semi-protection',
+		label: 'Perlindungan sebagian',
 		list: [
-			{ label: 'Generic (semi)', value: 'pp-semi-protected' },
-			{ label: 'Persistent vandalism (semi)', selected: true, value: 'pp-semi-vandalism' },
-			{ label: 'Disruptive editing (semi)', value: 'pp-semi-disruptive' },
-			{ label: 'Adding unsourced content (semi)', value: 'pp-semi-unsourced' },
-			{ label: 'BLP policy violations (semi)', value: 'pp-semi-blp' },
-			{ label: 'Sockpuppetry (semi)', value: 'pp-semi-sock' },
-			{ label: 'User talk of blocked user (semi)', value: 'pp-semi-usertalk' }
+			{ label: 'Bawaan (semi)', value: 'pp-semi-protected' },
+			{ label: 'Vandalisme berulang (semi)', selected: true, value: 'pp-semi-vandalism' },
+			{ label: 'Suntingan merusak (semi)', value: 'pp-semi-disruptive' },
+			{ label: 'Penambahan isi tanpa sumber (semi)', value: 'pp-semi-unsourced' },
+			{ label: 'Melanggar kebijakan BLP (semi)', value: 'pp-semi-blp' },
+			{ label: 'Penggunaan akun boneka (semi)', value: 'pp-semi-sock' },
+			{ label: 'Pembicaraan pengguna yang diblokir (semi)', value: 'pp-semi-usertalk' }
 		]
 	},
 	{
-		label: 'Pending changes',
+		label: 'Perubahan tertunda',
 		list: [
-			{ label: 'Generic (PC)', value: 'pp-pc-protected' },
-			{ label: 'Persistent vandalism (PC)', value: 'pp-pc-vandalism' },
-			{ label: 'Disruptive editing (PC)', value: 'pp-pc-disruptive' },
-			{ label: 'Adding unsourced content (PC)', value: 'pp-pc-unsourced' },
-			{ label: 'BLP policy violations (PC)', value: 'pp-pc-blp' }
+			{ label: 'Bawaan (PT)', value: 'pp-pc-protected' },
+			{ label: 'Vandalisme berulang (PT)', value: 'pp-pc-vandalism' },
+			{ label: 'Suntingan merusak (PT)', value: 'pp-pc-disruptive' },
+			{ label: 'Penambahan isi tanpa sumber (PT)', value: 'pp-pc-unsourced' },
+			{ label: 'Penyalahgunaan kebijakan BLP (PT)', value: 'pp-pc-blp' }
 		]
 	},
 	{
-		label: 'Move protection',
+		label: 'Perlindungan pemindahan',
 		list: [
-			{ label: 'Generic (move)', value: 'pp-move' },
-			{ label: 'Dispute/move warring (move)', value: 'pp-move-dispute' },
-			{ label: 'Page-move vandalism (move)', value: 'pp-move-vandalism' },
-			{ label: 'Highly visible page (move)', value: 'pp-move-indef' }
+			{ label: 'Bawaan (pemindahan)', value: 'pp-move' },
+			{ label: 'Isi yang dipertentangkan/perang suntingan (pemindahan)', value: 'pp-move-dispute' },
+			{ label: 'Vandalisme pemindahan halaman (pemindahan)', value: 'pp-move-vandalism' },
+			{ label: 'Halaman yang banyak ditampilkan (pemindahan)', value: 'pp-move-indef' }
 		]
 	}
 ];
 
 Twinkle.protect.protectionTypesCreate = [
-	{ label: 'Unprotection', value: 'unprotect' },
+	{ label: 'Hapus perlindungan', value: 'unprotect' },
 	{
-		label: 'Create protection',
+		label: 'Buat perlindungan',
 		list: [
-			{ label: 'Generic ({{pp-create}})', value: 'pp-create' },
-			{ label: 'Offensive name', value: 'pp-create-offensive' },
-			{ label: 'Repeatedly recreated', selected: true, value: 'pp-create-salt' },
-			{ label: 'Recently deleted BLP', value: 'pp-create-blp' }
+			{ label: 'Bawaan ({{pp-create}})', value: 'pp-create' },
+			{ label: 'Judul halaman yang menghasut', value: 'pp-create-offensive' },
+			{ label: 'Pembuatan halaman berulang', selected: true, value: 'pp-create-salt' },
+			{ label: 'Halaman biografi orang hidup yang dibuat kembali', value: 'pp-create-blp' }
 		]
 	}
 ];
@@ -735,58 +735,58 @@ Twinkle.protect.protectionPresetsInfo = {
 	'pp-dispute': {
 		edit: 'sysop',
 		move: 'sysop',
-		reason: '[[WP:PP#Content disputes|Edit warring / content dispute]]'
+		reason: 'Perang suntingan/isi yang dipertentangkan'
 	},
 	'pp-vandalism': {
 		edit: 'sysop',
 		move: 'sysop',
-		reason: 'Persistent [[WP:Vandalism|vandalism]]'
+		reason: '[[WP:VANDAL|vandalisme]] yang berulang-ulang'
 	},
 	'pp-usertalk': {
 		edit: 'sysop',
 		move: 'sysop',
-		reason: '[[WP:PP#Talk-page protection|Inappropriate use of user talk page while blocked]]'
+		reason: 'Penyalahgunaan halaman pembicaraan pengguna saat diblokir'
 	},
 	'pp-template': {
 		edit: 'templateeditor',
 		move: 'templateeditor',
-		reason: '[[WP:High-risk templates|Highly visible template]]'
+		reason: 'Templat yang sering digunakan'
 	},
 	'pp-semi-vandalism': {
 		edit: 'autoconfirmed',
-		reason: 'Persistent [[WP:Vandalism|vandalism]]',
+		reason: '[[WP:VANDAL|vandalisme]] berulang-ulang',
 		template: 'pp-vandalism'
 	},
 	'pp-semi-disruptive': {
 		edit: 'autoconfirmed',
-		reason: 'Persistent [[WP:Disruptive editing|disruptive editing]]',
+		reason: 'Suntingan yang tidak berguna secara berulang-ulang',
 		template: 'pp-protected'
 	},
 	'pp-semi-unsourced': {
 		edit: 'autoconfirmed',
-		reason: 'Persistent addition of [[WP:INTREF|unsourced or poorly sourced content]]',
+		reason: 'Penambahan isi halaman tanpa sumber',
 		template: 'pp-protected'
 	},
 	'pp-semi-blp': {
 		edit: 'autoconfirmed',
-		reason: 'Violations of the [[WP:BLP|biographies of living persons policy]]',
+		reason: 'Melanggar kebijakan tokoh yang masih hidup',
 		template: 'pp-blp'
 	},
 	'pp-semi-usertalk': {
 		edit: 'autoconfirmed',
 		move: 'autoconfirmed',
-		reason: '[[WP:PP#Talk-page protection|Inappropriate use of user talk page while blocked]]',
+		reason: 'Penyalahgunaan halaman pembicaraan pengguna saat diblokir',
 		template: 'pp-usertalk'
 	},
 	'pp-semi-template': {  // removed for now
 		edit: 'autoconfirmed',
 		move: 'autoconfirmed',
-		reason: '[[WP:High-risk templates|Highly visible template]]',
+		reason: 'Templat berisiko tinggi',
 		template: 'pp-template'
 	},
 	'pp-semi-sock': {
 		edit: 'autoconfirmed',
-		reason: 'Persistent [[WP:Sock puppetry|sock puppetry]]',
+		reason: 'Suntingan dari akun boneka berulang-ulang',
 		template: 'pp-sock'
 	},
 	'pp-semi-protected': {
@@ -796,22 +796,22 @@ Twinkle.protect.protectionPresetsInfo = {
 	},
 	'pp-pc-vandalism': {
 		stabilize: 'autoconfirmed',  // stabilize = Pending Changes
-		reason: 'Persistent [[WP:Vandalism|vandalism]]',
+		reason: '[[WP:VANDAL|vandalisme]] berulang-ulang',
 		template: 'pp-pc1'
 	},
 	'pp-pc-disruptive': {
 		stabilize: 'autoconfirmed',
-		reason: 'Persistent [[WP:Disruptive editing|disruptive editing]]',
+		reason: '[[WP:VANDAL|Suntingan merusak]] berulang-ulang',
 		template: 'pp-pc1'
 	},
 	'pp-pc-unsourced': {
 		stabilize: 'autoconfirmed',
-		reason: 'Persistent addition of [[WP:INTREF|unsourced or poorly sourced content]]',
+		reason: 'Penambahan isi artikel tanpa sumber',
 		template: 'pp-pc1'
 	},
 	'pp-pc-blp': {
 		stabilize: 'autoconfirmed',
-		reason: 'Violations of the [[WP:BLP|biographies of living persons policy]]',
+		reason: 'Melanggar kebijakan tokoh yang masih hidup',
 		template: 'pp-pc1'
 	},
 	'pp-pc-protected': {
@@ -825,35 +825,35 @@ Twinkle.protect.protectionPresetsInfo = {
 	},
 	'pp-move-dispute': {
 		move: 'sysop',
-		reason: '[[WP:MOVP|Move warring]]'
+		reason: 'Perang pemindahan halaman'
 	},
 	'pp-move-vandalism': {
 		move: 'sysop',
-		reason: '[[WP:MOVP|Page-move vandalism]]'
+		reason: 'Vandalisme pemindahan halaman'
 	},
 	'pp-move-indef': {
 		move: 'sysop',
-		reason: '[[WP:MOVP|Highly visible page]]'
+		reason: 'Halaman dengan lalu-lintas tinggi'
 	},
 	'unprotect': {
-		edit: 'all',
-		move: 'all',
-		stabilize: 'none',
-		create: 'all',
+		edit: 'semua',
+		move: 'semua',
+		stabilize: 'tidak ada',
+		create: 'semua',
 		reason: null,
-		template: 'none'
+		template: 'tidak ada'
 	},
 	'pp-create-offensive': {
 		create: 'sysop',
-		reason: '[[WP:SALT|Offensive name]]'
+		reason: 'Nama yang menghasut'
 	},
 	'pp-create-salt': {
 		create: 'sysop',
-		reason: '[[WP:SALT|Repeatedly recreated]]'
+		reason: 'Halaman yang berulang kali dibuat dalam waktu dekat'
 	},
 	'pp-create-blp': {
 		create: 'sysop',
-		reason: '[[WP:BLPDEL|Recently deleted BLP]]'
+		reason: 'Halaman tokoh hidup yang dibuat kembali'
 	},
 	'pp-create': {
 		create: 'sysop',
@@ -863,39 +863,39 @@ Twinkle.protect.protectionPresetsInfo = {
 
 Twinkle.protect.protectionTags = [
 	{
-		label: 'None (remove existing protection templates)',
+		label: 'Tidak ada (hapus templat perlindungan yang ada)',
 		value: 'none'
 	},
 	{
-		label: 'None (do not remove existing protection templates)',
+		label: 'Tidak ada (jangan hapus templat perlindungan yang ada)',
 		value: 'noop'
 	},
 	{
-		label: 'Edit protection templates',
+		label: 'Sunting templat perlindungan',
 		list: [
-			{ label: '{{pp-vandalism}}: vandalism', value: 'pp-vandalism' },
-			{ label: '{{pp-dispute}}: dispute/edit war', value: 'pp-dispute', selected: true },
-			{ label: '{{pp-blp}}: BLP violations', value: 'pp-blp' },
-			{ label: '{{pp-sock}}: sockpuppetry', value: 'pp-sock' },
-			{ label: '{{pp-template}}: high-risk template', value: 'pp-template' },
-			{ label: '{{pp-usertalk}}: blocked user talk', value: 'pp-usertalk' },
-			{ label: '{{pp-protected}}: general protection', value: 'pp-protected' },
-			{ label: '{{pp-semi-indef}}: general long-term semi-protection', value: 'pp-semi-indef' }
+			{ label: '{{pp-vandalism}}: vandalisme', value: 'pp-vandalism' },
+			{ label: '{{pp-dispute}}: perang suntingan', value: 'pp-dispute', selected: true },
+			{ label: '{{pp-blp}}: melanggar kebijakan BLP', value: 'pp-blp' },
+			{ label: '{{pp-sock}}: penyalahgunaan akun boneka', value: 'pp-sock' },
+			{ label: '{{pp-template}}: templat berisiko tinggi', value: 'pp-template' },
+			{ label: '{{pp-usertalk}}: halaman pembicaraan pengguna yang diblokir', value: 'pp-usertalk' },
+			{ label: '{{pp-protected}}: perlindungan umum', value: 'pp-protected' },
+			{ label: '{{pp-semi-indef}}: perlindungan sebagian dalam jangka waktu lama umum', value: 'pp-semi-indef' }
 		]
 	},
 	{
-		label: 'Pending changes templates',
+		label: 'Templat perubahan tertunda',
 		list: [
-			{ label: '{{pp-pc1}}: pending changes level 1', value: 'pp-pc1' }
+			{ label: '{{pp-pc1}}: perubahan tertunda tingkat 1', value: 'pp-pc1' }
 		]
 	},
 	{
-		label: 'Move protection templates',
+		label: 'Templat perlindungan pemindahan',
 		list: [
-			{ label: '{{pp-move-dispute}}: dispute/move war', value: 'pp-move-dispute' },
-			{ label: '{{pp-move-vandalism}}: page-move vandalism', value: 'pp-move-vandalism' },
-			{ label: '{{pp-move-indef}}: general long-term', value: 'pp-move-indef' },
-			{ label: '{{pp-move}}: other', value: 'pp-move' }
+			{ label: '{{pp-move-dispute}}: perang suntingan', value: 'pp-move-dispute' },
+			{ label: '{{pp-move-vandalism}}: vandalisme pemindahan halaman', value: 'pp-move-vandalism' },
+			{ label: '{{pp-move-indef}}: umum dalam jangka waktu lama', value: 'pp-move-indef' },
+			{ label: '{{pp-move}}: lainnya', value: 'pp-move' }
 		]
 	}
 ];
@@ -1022,7 +1022,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 			// protect the page
 
 			Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
-			Morebits.wiki.actionCompleted.notice = "Protection complete";
+			Morebits.wiki.actionCompleted.notice = "Perlindungan selesai";
 
 			var statusInited = false;
 			var thispage;
@@ -1046,7 +1046,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 			}
 
 			var protectIt = function twinkleprotectCallbackProtectIt(next) {
-				thispage = new Morebits.wiki.page(mw.config.get('wgPageName'), "Protecting page");
+				thispage = new Morebits.wiki.page(mw.config.get('wgPageName'), "Sedang melindungi...");
 				if (mw.config.get('wgArticleId')) {
 					if (form.editmodify.checked) {
 						thispage.setEditProtection(form.editlevel.value, form.editexpiry.value);
@@ -1062,7 +1062,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 				if (form.protectReason.value) {
 					thispage.setEditSummary(form.protectReason.value);
 				} else {
-					alert("You must enter a protect reason, which will be inscribed into the protection log.");
+					alert("Berikan alasan perlindungan, yang nantinya akan dimasukkan ke log perlindungan.");
 					return;
 				}
 
@@ -1080,13 +1080,13 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 					thispage.getStatusElement().info("done");
 				}
 
-				thispage = new Morebits.wiki.page(mw.config.get('wgPageName'), "Applying pending changes protection");
+				thispage = new Morebits.wiki.page(mw.config.get('wgPageName'), "Menerapkan perlindungan perubahan tertunda");
 				thispage.setFlaggedRevs(stabilizeValues.pclevel, stabilizeValues.pcexpiry);
 
 				if (stabilizeValues.protectReason) {
 					thispage.setEditSummary(stabilizeValues.protectReason);
 				} else {
-					alert("You must enter a protect reason, which will be inscribed into the protection log.");
+					alert("Berikan alasan perlindungan, yang nantinya akan dimasukkan ke log perlindungan.");
 					return;
 				}
 
@@ -1109,7 +1109,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 			} else if (form.pcmodify && form.pcmodify.checked) {
 				stabilizeIt();
 			} else {
-				alert("Please give Twinkle something to do! \nIf you just want to tag the page, you can choose the 'Tag page with protection template' option at the top.");
+				alert("Berikan tugas kepada Twinkle! \nJika Anda hanya ingin menandai halaman, pilih opsi ¨Tandai halaman dengan templat perlindungan¨ di bagian atas.");
 			}
 
 			break;
@@ -1122,7 +1122,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 
 			Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
 			Morebits.wiki.actionCompleted.followRedirect = false;
-			Morebits.wiki.actionCompleted.notice = "Tagging complete";
+			Morebits.wiki.actionCompleted.notice = "Penandaan selesai";
 
 			Twinkle.protect.callbacks.taggingPageInitial(tagparams);
 			break;
@@ -1176,52 +1176,52 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 			}
 			switch (form.category.value) {
 				case 'pp-dispute':
-					typereason = 'Content dispute/edit warring';
+					typereason = 'Perang suntingan';
 					break;
 				case 'pp-vandalism':
 				case 'pp-semi-vandalism':
 				case 'pp-pc-vandalism':
-					typereason = 'Persistent vandalism';
+					typereason = 'Vandalisme berulang-ulang';
 					break;
 				case 'pp-semi-disruptive':
 				case 'pp-pc-disruptive':
-					typereason = 'Persistent [[Wikipedia:Disruptive editing|disruptive editing]]';
+					typereason = 'Suntingan tidak berguna berulang-ulang';
 					break;
 				case 'pp-semi-unsourced':
 				case 'pp-pc-unsourced':
-					typereason = 'Persistent addition of [[WP:INTREF|unsourced or poorly sourced content]]';
+					typereason = 'Menambahkan isi yang tidak memiliki sumber';
 					break;
 				case 'pp-template':
-					typereason = 'Highly visible template';
+					typereason = 'Templat yang banyak digunakan';
 					break;
 				case 'pp-usertalk':
 				case 'pp-semi-usertalk':
-					typereason = 'Inappropriate use of user talk page while blocked';
+					typereason = 'Penyalahgunaan halaman pembicaraan pengguna yang sedang diblokir';
 					break;
 				case 'pp-semi-sock':
-					typereason = 'Persistent sockpuppetry';
+					typereason = 'Penggunaan akun boneka berulang-ulang';
 					break;
 				case 'pp-semi-blp':
 				case 'pp-pc-blp':
-					typereason = '[[WP:BLP|BLP]] policy violations';
+					typereason = 'Melanggar kebijakan tokoh yang masih hidup';
 					break;
 				case 'pp-move-dispute':
-					typereason = 'Page title dispute/move warring';
+					typereason = 'Judul halaman yang dipertentangkan/perang pemindahan halaman';
 					break;
 				case 'pp-move-vandalism':
-					typereason = 'Page-move vandalism';
+					typereason = 'Vandalisme pemindahan halaman';
 					break;
 				case 'pp-move-indef':
-					typereason = 'Highly visible page';
+					typereason = 'Halaman yang banyak ditampilkan';
 					break;
 				case 'pp-create-offensive':
-					typereason = 'Offensive name';
+					typereason = 'Nama yang menghasut';
 					break;
 				case 'pp-create-blp':
-					typereason = 'Recently deleted [[WP:BLP|BLP]]';
+					typereason = 'Halaman tokoh yang masih hidup yang baru dihapus';
 					break;
 				case 'pp-create-salt':
-					typereason = 'Repeatedly recreated';
+					typereason = 'Pembuatan halaman berulang-ulang dalam waktu dekat';
 					break;
 				default:
 					typereason = '';
@@ -1249,19 +1249,19 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 			Morebits.simpleWindow.setButtonsEnabled( false );
 			Morebits.status.init( form );
 
-			var rppName = 'Wikipedia:Requests for page protection';
+			var rppName = 'Wikipedia:Permintaan perhatian pengurus/Perlindungan';
 
 			// Updating data for the action completed event
 			Morebits.wiki.actionCompleted.redirect = rppName;
-			Morebits.wiki.actionCompleted.notice = "Nomination completed, redirecting now to the discussion page";
+			Morebits.wiki.actionCompleted.notice = "Nominasi selesai, membuka halaman diskusi";
 
-			var rppPage = new Morebits.wiki.page( rppName, 'Requesting protection of page');
+			var rppPage = new Morebits.wiki.page( rppName, 'Meminta perlindungan halaman');
 			rppPage.setFollowRedirect( true );
 			rppPage.setCallbackParameters( rppparams );
 			rppPage.load( Twinkle.protect.callbacks.fileRequest );
 			break;
 		default:
-			alert("twinkleprotect: unknown kind of action");
+			alert("twinkleprotect: tindakan tidak diketahui");
 			break;
 	}
 };
@@ -1269,11 +1269,11 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 Twinkle.protect.callbacks = {
 	taggingPageInitial: function( tagparams ) {
 		if (tagparams.tag === 'noop') {
-			Morebits.status.info("Applying protection template", "nothing to do");
+			Morebits.status.info("Terapkan templat perlindungan", "tidak tahu apa yang mau dilakukan");
 			return;
 		}
 
-		var protectedPage = new Morebits.wiki.page( mw.config.get('wgPageName'), 'Tagging page');
+		var protectedPage = new Morebits.wiki.page( mw.config.get('wgPageName'), 'Tandai halaman');
 		protectedPage.setCallbackParameters( tagparams );
 		protectedPage.load( Twinkle.protect.callbacks.taggingPage );
 	},
@@ -1285,7 +1285,7 @@ Twinkle.protect.callbacks = {
 		var oldtag_re = /\s*(?:<noinclude>)?\s*\{\{\s*(pp-[^{}]*?|protected|(?:t|v|s|p-|usertalk-v|usertalk-s|sb|move)protected(?:2)?|protected template|privacy protection)\s*?\}\}\s*(?:<\/noinclude>)?\s*/gi;
 		var re_result = oldtag_re.exec(text);
 		if (re_result) {
-			if (confirm("{{" + re_result[1] + "}} was found on the page. \nClick OK to remove it, or click Cancel to leave it there.")) {
+			if (confirm("{{" + re_result[1] + "}} ditemukan di halaman ini. \nKlik OK untuk menghapusnya, atau Cancel untuk mengabaikan.")) {
 				text = text.replace( oldtag_re, '' );
 			}
 		}
@@ -1304,7 +1304,7 @@ Twinkle.protect.callbacks = {
 		}
 
 		if( params.tag === 'none' ) {
-			summary = 'Removing protection template' + Twinkle.getPref('summaryAd');
+			summary = 'Menghapus templat perlindungan' + Twinkle.getPref('summaryAd');
 		} else {
 			if( params.noinclude ) {
 				text = "<noinclude>{{" + tag + "}}</noinclude>" + text;
@@ -1313,7 +1313,7 @@ Twinkle.protect.callbacks = {
 			} else {
 				text = "{{" + tag + "}}\n" + text;
 			}
-			summary = "Adding {{" + params.tag + "}}" + Twinkle.getPref('summaryAd');
+			summary = "Menambahkan {{" + params.tag + "}}" + Twinkle.getPref('summaryAd');
 		}
 
 		protectedPage.setEditSummary( summary );
@@ -1337,13 +1337,13 @@ Twinkle.protect.callbacks = {
 		rppLink.appendChild(document.createTextNode(rppPage.getPageName()));
 
 		if ( tag ) {
-			statusElement.error( [ 'There is already a protection request for this page at ', rppLink, ', aborting.' ] );
+			statusElement.error( [ 'Sudah ada permintaan perlindungan halaman ini di ', rppLink, ', sedang membatalkan permintaan.' ] );
 			return;
 		}
 
 		var newtag = '=== [[:' + Morebits.pageNameNorm + ']] ===\n';
 		if( ( new RegExp( '^' + RegExp.escape( newtag ).replace( /\s+/g, '\\s*' ), 'm' ) ).test( text ) ) {
-			statusElement.error( [ 'There is already a protection request for this page at ', rppLink, ', aborting.' ] );
+			statusElement.error( [ 'Sudah ada permintaan perlindungan halaman ini di ', rppLink, ', sedang membatalkan permintaan.' ] );
 			return;
 		}
 		newtag += '* {{pagelinks|' + Morebits.pageNameNorm + '}}\n\n';
@@ -1351,10 +1351,10 @@ Twinkle.protect.callbacks = {
 		var words;
 		switch( params.expiry ) {
 		case 'temporary':
-			words = "Temporary ";
+			words = "Sementara ";
 			break;
 		case 'indefinite':
-			words = "Indefinite ";
+			words = "Selamanya ";
 			break;
 		default:
 			words = "";
@@ -1413,13 +1413,13 @@ Twinkle.protect.callbacks = {
 		if (text.length === originalTextLength)
 		{
 			var linknode = document.createElement('a');
-			linknode.setAttribute("href", mw.util.getUrl("Wikipedia:Twinkle/Fixing RPP") );
-			linknode.appendChild(document.createTextNode('How to fix RPP'));
-			statusElement.error( [ 'Could not find relevant heading on WP:RPP. To fix this problem, please see ', linknode, '.' ] );
+			linknode.setAttribute("href", mw.util.getUrl("Wikipedia:Twinkle/Fixing PPH") );
+			linknode.appendChild(document.createTextNode('Bagaimana memperbaiki PPH'));
+			statusElement.error( [ 'Tidak menemukan bagian yang sesuai di WP:RPP. Untuk memperbaiki masalah ini, lihat ', linknode, '.' ] );
 			return;
 		}
-		statusElement.status( 'Adding new request...' );
-		rppPage.setEditSummary( "Requesting " + params.typename + (params.typename === "pending changes" ? ' on [[' : ' of [[') +
+		statusElement.status( 'Menambahkan permintaan baru...' );
+		rppPage.setEditSummary( "Meminta " + params.typename + (params.typename === "perubahan tertunda" ? ' di [[' : ' dari [[') +
 			Morebits.pageNameNorm + ']].' + Twinkle.getPref('summaryAd') );
 		rppPage.setPageText( text );
 		rppPage.setCreateOption( 'recreate' );
