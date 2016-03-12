@@ -193,7 +193,7 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 						label: 'Buka halaman pembicaraan pengguna saat mengirimkan',
 						value: 'openusertalk',
 						name: 'openusertalk',
-						tooltip: 'Secara baku akan membuka preferensi buka-halaman-pembicaraan ketika menghapus halaman dengan alasan ini. Jangan ubah jika Anda memilih untuk menghapus dalam beberapa kriteria.',
+						tooltip: 'Secara baku akan membuka preferensi buka-halaman-pembicaraan ketika menghapus halaman dengan alasan ini. Jangan ubah jika Anda memilihnya untuk menghapus dalam beberapa kriteria.',
 						checked : false
 					}
 				]
@@ -208,7 +208,7 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 	if( Morebits.userIsInGroup( 'sysop' ) ) {
 		tagOptions.append( {
 				type: 'header',
-				label: 'Tag-related options'
+				label: 'Opsi terkait dengan tag'
 			} );
 	}
 
@@ -515,7 +515,7 @@ Twinkle.speedy.customRationale = [
 	{
 		label: 'Alasan lain' + (Morebits.userIsInGroup('sysop') ? ' (alasan penghapusan lainnya)' : ' menggunakan kriteria templat {{db}}'),
 		value: 'reason',
-		tooltip: '{{db}} kependekan dari ¨dihapus karena¨. Sekurang-kurangnya satu kriteria harus diberikan, dan sebutkan alasannya.',
+		tooltip: '{{db}} kependekan dari "dihapus karena". Sekurang-kurangnya satu kriteria harus diberikan, dan sebutkan alasannya.',
 		subgroup: {
 			name: 'reason_1',
 			type: 'input',
@@ -549,7 +549,7 @@ Twinkle.speedy.fileList = [
 	{
 		label: 'B2: Halaman deskripsi berkas yang tidak dibutuhkan untuk berkas yang berada di Commons',
 		value: 'fpcfail',
-		tooltip: 'Gambar yang disimpan di Commons tanpa tag atau informasi pada halaman deskripsi di Wikipedia bahasa Inggris yang tidak diperlukan lagi.',
+		tooltip: 'Gambar yang disimpan di Commons tanpa tag atau informasi pada halaman deskripsi di Wikipedia bahasa Indonesia yang tidak diperlukan lagi.',
 		hideWhenMultiple: true
 	},
 	{
@@ -607,7 +607,7 @@ Twinkle.speedy.fileList = [
 			type: 'input',
 			label: 'Nama berkas di Commons: ',
 			value: Morebits.pageNameNorm,
-			tooltip: 'Kosongkan jika berkasnya bernama sama. Awalan "File:" opsional.'
+			tooltip: 'Kosongkan jika berkasnya memiliki nama yang sama. Awalan "File:" opsional.'
 		},
 		hideWhenMultiple: true
 	},
@@ -618,7 +618,7 @@ Twinkle.speedy.fileList = [
 		subgroup: {
 			name: 'imgcopyvio_url',
 			type: 'input',
-			label: 'URL copyvio, termasuk "http://".  Jika tidak dapat menaruh URL, mohon tidak menggunakan KPC B9.  (Pengecualian: copyvio untuk bahan non-Internet, biarkan kosong.) ',
+			label: 'URL sumber konten, termasuk "http://". Jika tidak dapat memberikan URL, mohon tidak menggunakan KPC B9. (Pengecualian: copyvio untuk bahan non-Internet, biarkan kosong.) ',
 			size: 60
 		}
 	},
@@ -744,7 +744,7 @@ Twinkle.speedy.categoryList = [
 		tooltip: 'Kategori tanpa isi yang selama paling tidak empat hari masih tidak memiliki isi. Yang tidak termasuk di dalamnya: kategori disambiguasi, pengalihan kategori, kategori topik pilihan, atau kategori yang menurut naturnya dapat menjadi kosong sewaktu-waktu (mis. kategori yang ditransklusikan oleh kotak pengguna.)'
 	},
 	{
-		label: 'K2: Kategori yang sudah diganti namanya',
+		label: 'K2: Kategori yang namanya telah diganti',
 		value: 'k2',
 		tooltip: 'Koreksi tipografi; Koreksi kapitalisasi; Perubahan dari bentuk tunggal ke jamak, atau sebaliknya; Ketidaksesuaian dengan pedoman pemerian nama kategori "x di y", "x oleh y", "x dari y" seperti yang tertera di Wikipedia:pedoman pemberian nama kategori.; Pemanjangan nama negara; Koreksi disambiguasi dari nama yang tak unik.'
 	},
@@ -757,7 +757,7 @@ Twinkle.speedy.categoryList = [
 
 Twinkle.speedy.userList = [
 	{
-		label: 'H1: Permintaan pengguna.',
+		label: 'H1: Permintaan pengguna',
 		value: 'userreq',
 		tooltip: 'Yang termasuk di dalamnya: halaman dan subhalaman pengguna (tetapi tidak halaman pembicaraan pengguna) yang diminta untuk dihapus oleh penggunanya. Dalam kasus-kasus yang langka ada kemungkinan halaman tersebut perlu dipertahankan untuk kepentingan administratif.',
 		subgroup: ((mw.config.get('wgNamespaceNumber') === 3 && mw.config.get('wgTitle').indexOf('/') === -1) ? {
@@ -777,7 +777,7 @@ Twinkle.speedy.userList = [
 	{
 		label: 'H3: Galeri tak bebas',
 		value: 'gallery',
-		tooltip: 'Galeri di ruang nama pengguna yang terdiri lebih dari separuhnya gambar-gambar tak bebas atau "penggunaan wajar". Kebijakan Wikipedia melarang penggunaan berkas-berkas tak bebas di ruang nama pengguna, walaupun yang memuat adalah pengguna itu sendiri; penggunaan berkas-berkas yang berada di bawah domain umum atau lisensi bebas diperkenankan.'
+		tooltip: 'Galeri di ruangnama pengguna yang terdiri lebih dari separuhnya gambar-gambar tak bebas atau "penggunaan wajar". Kebijakan Wikipedia melarang penggunaan berkas-berkas tak bebas di ruangnama pengguna, walaupun yang memuat adalah pengguna itu sendiri; penggunaan berkas-berkas yang berada di bawah domain umum atau lisensi bebas diperkenankan.'
 	},
 	// {
 	// 	label: 'U5: Blatant WP:NOTWEBHOST violations',
@@ -787,20 +787,20 @@ Twinkle.speedy.userList = [
 	{
 		label: 'U6: Draf kosong',
 		value: 'blankdraft',
-		tooltip: 'Draf di ruang nama pengguna berisi hanya teks baku dari Wisaya Artikel, dan penulis halaman telah nonaktif selama lebih dari satu tahun.',
+		tooltip: 'Draf di ruangnama pengguna berisi hanya teks baku dari Wisaya Artikel, dan penulis halaman telah nonaktif selama lebih dari satu tahun.',
 		hideWhenMultiple: true
 	},
 	{
     label: 'U11: Halaman pengguna yang berisi iklan, dengan menggunakan nama pengguna berkesan iklan',
 		value: 'spamuser',
-		tooltip: 'A promotional user page, with a username that promotes or implies affiliation with the thing being promoted. Note that simply having a page on a company or product in one\'s userspace does not qualify it for deletion. If a user page is spammy but the username is not, then consider tagging with regular G11 instead.',
+		tooltip: 'Halaman pengguna untuk promosi, dengan nama pengguna untuk tujuan promosi. Perhatikan pula bahwa dengan adanya halaman mengenai perusahaan pada halaman pengguna tidak termasuk dalam kriteria ini. Jika halaman pengguna adalah spam, dan nama penggunanya tidak, tandai dengan U11 saja.',
 		hideWhenMultiple: true
 	}
 ];
 
 Twinkle.speedy.templateList = [
 	{
-		label: 'T2: Templat yang merupakan penyimpangan terang-terangan dari kebijakan yang ada.',
+		label: 'T2: Templat yang merupakan penyimpangan terang-terangan dari kebijakan yang ada',
 		value: 'policy',
 		tooltip: 'Templat yang merupakan penyimpangan terang-terangan dari kebijakan yang ada.'
 	},
@@ -812,7 +812,7 @@ Twinkle.speedy.templateList = [
 			name: 'duplicatetemplate_2',
 			type: 'input',
 			label: 'Templat yang membuat templat ini redundan: ',
-			tooltip: 'Prefiks "Templat:" tidak diperlukan.'
+			tooltip: 'Awalan "Templat:" tidak diperlukan.'
 		},
 		hideWhenMultiple: true
 	}
@@ -820,9 +820,9 @@ Twinkle.speedy.templateList = [
 
 Twinkle.speedy.portalList = [
 	{
-		label: 'P1: Semua topik yang dapat memenuhi kriteria penghapusan cepat artikel.',
+		label: 'P1: Semua topik yang dapat memenuhi kriteria penghapusan cepat artikel',
 		value: 'p1',
-		tooltip: 'harus menyebutkan KPC yang berlaku untuk kasus ini (A1, A3, A7, or A10).',
+		tooltip: 'Harus menyebutkan KPC yang berlaku untuk kasus ini (A1, A3, A7, atau A10).',
 		subgroup: {
 			name: 'p1_1',
 			type: 'select',
@@ -841,23 +841,23 @@ Twinkle.speedy.generalList = [
 	{
     label: 'U1: Tulisan ngawur. Yang termasuk di dalamnya: Halaman-halaman yang isinya hanyalah ujaran tak keruan, tanpa makna dan isi.',
     value: 'nonsense',
-    tooltip: 'Yang tidak termasuk di dalamnya: penulisan yang buruk, terjemahan buruk, vandalisme, materi fiktif, materi berbahasa selain bahasa Indonesia, materi palsu.',
+    tooltip: 'Yang tidak termasuk di dalamnya: penulisan yang buruk, terjemahan buruk, vandalisme, materi fiktif, materi berbahasa selain bahasa Indonesia, dan materi palsu.',
 		hideWhenRedirect: true
 	},
 	{
 		label: 'U2: Uji coba',
 		value: 'test',
-		tooltip: 'Halaman yang dibuat untuk mencoba sintaks-sintaks wiki. Yang tidak termasuk di dalamnya: penyuntingan di halaman-halaman bernama "bak pasir" dan ruangnama pengguna.'
+		tooltip: 'Halaman yang dibuat untuk mencoba kode-kode wiki. Yang tidak termasuk di dalamnya: penyuntingan di halaman-halaman bernama "bak pasir" dan ruangnama pengguna.'
 	},
 	{
 		label: 'U3: Vandalisme murni/terang-terangan.',
 		value: 'vandalism',
-		tooltip: 'Vandalisme murni/terang-terangan. (termasuk pengalihan yang ditinggalkan dari vandalisme pemindahan halaman)'
+		tooltip: 'Vandalisme murni/terang-terangan (termasuk pengalihan yang ditinggalkan dari vandalisme pemindahan halaman).'
 	},
 	{
 		label: 'U3: Materi palsu terang-terangan',
 		value: 'hoax',
-		tooltip: 'Materi palsu terang-terangan untuk tujuan vandalisme',
+		tooltip: 'Materi palsu terang-terangan untuk tujuan vandalisme.',
 		hideWhenMultiple: true
 	},
 	{
@@ -868,7 +868,7 @@ Twinkle.speedy.generalList = [
 			name: 'repost_1',
 			type: 'input',
 			label: 'Halaman yang memuat diskusi penghapusan: ',
-			tooltip: 'Harus dimulai dengan "Wikipedia:"',
+			tooltip: 'Harus dimulai dengan awalan "Wikipedia:"',
 			size: 60
 		},
 		hideSubgroupWhenMultiple: true
@@ -876,7 +876,7 @@ Twinkle.speedy.generalList = [
 	{
 		label: 'U5: Pengguna yang diblokir atau yang dilarang.',
 		value: 'banned',
-		tooltip: 'Halaman-halaman yang dibuat oleh pengguna yang sedang diblokir atau dilarang, termasuk yang terbukti membuat akun siluman, yang melanggar ketentuan pemblokiran atau pelarangan mereka.',
+		tooltip: 'Halaman-halaman yang dibuat oleh pengguna yang sedang diblokir atau dilarang, termasuk yang terbukti membuat akun siluman, yang melanggar ketentuan pemblokiran atau peringatan kepada mereka.',
 		subgroup: {
 			name: 'banned_1',
 			type: 'input',
@@ -888,18 +888,18 @@ Twinkle.speedy.generalList = [
 	{
 		label: 'U6: Penggabungan riwayat halaman',
 		value: 'histmerge',
-		tooltip: 'Temporarily deleting a page in order to merge page histories',
+		tooltip: 'Hapus sementara sebuah halaman untuk menggabungkan sejarah halaman.',
 		subgroup: {
 			name: 'histmerge_1',
 			type: 'input',
-			label: 'Page to be merged into this one: '
+			label: 'Halaman akan digabungkan dengan: '
 		},
 		hideWhenMultiple: true
 	},
 	{
 		label: 'U6: Pemindahan',
 		value: 'move',
-		tooltip: 'Memberi tempat untuk pemindahan',
+		tooltip: 'Memberi tempat untuk pemindahan.',
 		subgroup: [
 			{
 				name: 'move_1',
@@ -965,7 +965,7 @@ Twinkle.speedy.generalList = [
 			name: 'author_rationale',
 			type: 'input',
 			label: 'Penjelasan opsional: ',
-			tooltip: 'Coba taruh halaman di mana pengguna meminta penghapusan ini.',
+			tooltip: 'Coba letakkan halaman di mana pengguna meminta penghapusan ini.',
 			size: 60
 		},
 		hideSubgroupWhenSysop: true
@@ -996,7 +996,7 @@ Twinkle.speedy.generalList = [
 	{
 		label: 'U10: Biografi orang hidup yang semuanya bernada negatif dan tanpa sumber',
 		value: 'negublp',
-		tooltip: 'Artikel biografi orang hidup yang isinya semuanya bernada negatif dan tidak memiliki sumber (dan di sejarah revisinya tidak ada versi yang netral yang dapat digunakan)',
+		tooltip: 'Artikel biografi orang hidup yang isinya semuanya bernada negatif dan tidak memiliki sumber (dan di sejarah revisinya tidak ada versi yang netral yang dapat digunakan).',
 		hideWhenMultiple: true
 	},
 	{
@@ -1043,9 +1043,9 @@ Twinkle.speedy.generalList = [
 
 Twinkle.speedy.redirectList = [
 	{
-		label: 'R2: Pengalihan dari ruang nama artikel ke ruang nama lain, kecuali ruang nama Kategori:, Templat:, Wikipedia:, Bantuan:, dan Portal:',
+		label: 'R2: Pengalihan dari ruangnama artikel ke ruangnama lain, kecuali ruangnama Kategori:, Templat:, Wikipedia:, Bantuan:, dan Portal:',
 		value: 'rediruser',
-		tooltip: 'Jika pengalihan ditimbulkan karena pemindahan halaman, tunggu satu atau hari sebelum menghapus pengalihan. Lihat pula Wikipedia:Pengalihan antar-ruang nama.'
+		tooltip: 'Jika pengalihan ditimbulkan karena pemindahan halaman, tunggu satu atau beberapa hari sebelum menghapus pengalihan. Lihat pula Wikipedia:Pengalihan antar-ruangnama.'
 	},
 	{
 		label: 'R3: Pengalihan yang baru dibuat karena kesalahan ketik atau kesalahan penamaan yang tidak disengaja',
@@ -1059,7 +1059,7 @@ Twinkle.speedy.redirectList = [
 		hideWhenMultiple: true
 	},
 	{
-		label: 'U8: Pengalihan ke target tidak valid, seperti target yang tidak ada, pengalihan ganda, dan judul buruk',
+		label: 'U8: Pengalihan ke target tidak sah, seperti target yang tidak ada, pengalihan ganda, dan judul yang buruk',
 		value: 'redirnone',
 		tooltip: 'Ini tidak berlaku untuk halaman berguna ke sebuah proyek, dan khususnya: diskusi penghapusan yang tidak dicatat di tempat lain, halaman pengguna dan pembicaraannya, arsip halaman pembicaraan, pengalihan yang dapat diperbaiki, dan halaman berkas dan pembicaraannya yang ada di Commons.'
 	}
@@ -1290,7 +1290,7 @@ Twinkle.speedy.callbacks = {
 					}
 				});
 				$bigtext = $('<span/>', {
-					'text': 'Ke pranala balik yatim',
+					'text': 'Tuju ke pranala balik yang yatim',
 					'css': { 'fontSize': '100%', 'fontWeight': 'bold' }
 				});
 				Morebits.status.info($bigtext[0], $link[0]);
@@ -1318,7 +1318,7 @@ Twinkle.speedy.callbacks = {
 					'css': { 'fontSize': '100%', 'fontWeight': 'bold' }
 				});
 				$bigtext = $('<span/>', {
-					'text': 'Beri tahu pembuat halaman',
+					'text': 'Beritahu pembuat halaman',
 					'css': { 'fontSize': '100%', 'fontWeight': 'bold' }
 				});
 				Morebits.status.info($bigtext[0], $link[0]);
@@ -1342,7 +1342,7 @@ Twinkle.speedy.callbacks = {
 					break;
 				}
 
-				statusIndicator.info( 'complete' );
+				statusIndicator.info( 'selesai' );
 			}
 		},
 		deleteRedirectsMain: function( apiobj ) {
@@ -1352,7 +1352,7 @@ Twinkle.speedy.callbacks = {
 			var statusIndicator = apiobj.statelem;
 
 			if( !total ) {
-				statusIndicator.status("tidak ada pengalihan ditemukan");
+				statusIndicator.status("tidak ada pengalihan yang ditemukan");
 				return;
 			}
 
@@ -1385,7 +1385,7 @@ Twinkle.speedy.callbacks = {
 			var statelem = pageobj.getStatusElement();
 
 			if (!pageobj.exists()) {
-				statelem.error( "Sepertinya halaman ini tidak ada; mungkin halaman ini telah dihapus" );
+				statelem.error( "Sepertinya halaman ini tidak ada; mungkin telah dihapus" );
 				return;
 			}
 
@@ -1465,18 +1465,18 @@ Twinkle.speedy.callbacks = {
 
 					// disallow warning yourself
 					if (initialContrib === mw.config.get('wgUserName')) {
-						Morebits.status.warn("Anda (" + initialContrib + ") membuat halaman ini; lewati notifikasi");
+						Morebits.status.warn("Anda (" + initialContrib + ") membuat halaman ini; lewati pemberitahuan");
 
 					// don't notify users when their user talk page is nominated
 					} else if (initialContrib === mw.config.get('wgTitle') && mw.config.get('wgNamespaceNumber') === 3) {
-						Morebits.status.warn("Memberi tahu penyunting awal: pengguna ini membuat halaman pembicaraannya sendiri; lewati notifikasi");
+						Morebits.status.warn("Memberitahu penyunting awal: pengguna ini membuat halaman pembicaraannya sendiri; lewati pemberitahuan");
 
 					// quick hack to prevent excessive unwanted notifications, per request. Should actually be configurable on recipient page...
 					} else if ((initialContrib === "Cyberbot I" || initialContrib === "SoxBot") && params.normalizeds[0] === "f2") {
-						Morebits.status.warn("Memberi tahu kontributor awal: halaman dibuat oleh bot; lewati notifikasi");
+						Morebits.status.warn("Memberitahu kontributor awal: halaman dibuat oleh bot; lewati pemberitahuan");
 
 					} else {
-						var usertalkpage = new Morebits.wiki.page('User talk:' + initialContrib, "Memberi tahu penyunting awal (" + initialContrib + ")"),
+						var usertalkpage = new Morebits.wiki.page('User talk:' + initialContrib, "Memberitahu penyunting awal (" + initialContrib + ")"),
 							notifytext, i;
 
 						// specialcase "db" and "db-multiple"
@@ -1499,7 +1499,7 @@ Twinkle.speedy.callbacks = {
 						}
 						notifytext += (params.welcomeuser ? "" : "|nowelcome=yes") + "}} ~~~~";
 
-						var editsummary = "Notifikasi: nominasi penghapusan cepat";
+						var editsummary = "Pemberitahuan: nominasi penghapusan cepat";
 						if (params.normalizeds.indexOf("g10") === -1) {  // no article name in summary for G10 deletions
 							editsummary += " untuk [[" + Morebits.pageNameNorm + "]].";
 						} else {
@@ -1532,7 +1532,7 @@ Twinkle.speedy.callbacks = {
 		//   for CSD: params.values, params.normalizeds  (note: normalizeds is an array)
 		//   for DI: params.fromDI = true, params.templatename, params.normalized  (note: normalized is a string)
 		addToLog: function(params, initialContrib) {
-			var wikipedia_page = new Morebits.wiki.page("User:" + mw.config.get('wgUserName') + "/" + Twinkle.getPref('speedyLogPageName'), "Menambah entri ke log ruang nama pengguna");
+			var wikipedia_page = new Morebits.wiki.page("User:" + mw.config.get('wgUserName') + "/" + Twinkle.getPref('speedyLogPageName'), "Menambahkan entri ke log ruangnama pengguna");
 			params.logInitialContrib = initialContrib;
 			wikipedia_page.setCallbackParameters(params);
 			wikipedia_page.load(Twinkle.speedy.callbacks.user.saveLog);
@@ -1547,7 +1547,7 @@ Twinkle.speedy.callbacks = {
 			// add blurb if log page doesn't exist
 			if (!pageobj.exists()) {
 				appendText +=
-					"Ini adalah log semua nominasi [[WP:KPC|penghapusan cepat]] yang dibuat oleh pengguna ini menggunakan modul KPC [[WP:TW|Twinkle]].\n\n" +
+					"Ini adalah log semua nominasi [[WP:KPC|penghapusan cepat]] yang dibuat oleh pengguna ini dengan menggunakan modul KPC [[WP:TW|Twinkle]].\n\n" +
                     "Jika Anda tidak ingin menyimpan log ini, Anda dapat mematikannya di  [[Wikipedia:Twinkle/Preferences|panel preferensi]], dan " +
                     "menominasikan halaman ini untuk dihapus di bawah [[WP:KPC#H1|KPC U1]].\n";
 				if (Morebits.userIsInGroup("sysop")) {
@@ -1649,7 +1649,7 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 				if (form["csd.histmerge_1"]) {
 					var merger = form["csd.histmerge_1"].value;
 					if (!merger || !merger.trim()) {
-						alert( 'KPC U6 (histmerge): Mohon tuliskan halaman yang akan digabung.' );
+						alert( 'KPC U6 (histmerge): Mohon tuliskan nama halaman yang akan digabung.' );
 						parameters = null;
 						return false;
 					}
@@ -1662,7 +1662,7 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 					var movepage = form["csd.move_1"].value,
 						movereason = form["csd.move_2"].value;
 					if (!movepage || !movepage.trim()) {
-						alert( 'KPC U6 (move): Mohon tuliskan halaman yang akan dipindahkan ke sini.' );
+						alert( 'KPC U6 (move): Mohon tuliskan nama halaman yang akan dipindahkan ke sini.' );
 						parameters = null;
 						return false;
 					}

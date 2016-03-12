@@ -21,7 +21,7 @@ Twinkle.fluff = {
 	auto: function() {
 		if( parseInt( Morebits.queryString.get('oldid'), 10) !== mw.config.get('wgCurRevisionId') ) {
 			// not latest revision
-			alert("Can't rollback, page has changed in the meantime.");
+			alert("Tidak dapat mengembalikan revisi, halaman sudah berubah saat ini.");
 			return;
 		}
 
@@ -52,14 +52,14 @@ Twinkle.fluff = {
 					var revNode = document.createElement('strong');
 					var revLink = document.createElement('a');
 					revLink.appendChild( spanTag( 'Black', '[' ) );
-					revLink.appendChild( spanTag( 'SteelBlue', 'rollback' ) );
+					revLink.appendChild( spanTag( 'SteelBlue', 'kembalikan' ) );
 					revLink.appendChild( spanTag( 'Black', ']' ) );
 					revNode.appendChild(revLink);
 
 					var revVandNode = document.createElement('strong');
 					var revVandLink = document.createElement('a');
 					revVandLink.appendChild( spanTag( 'Black', '[' ) );
-					revVandLink.appendChild( spanTag( 'Red', 'vandalism' ) );
+					revVandLink.appendChild( spanTag( 'Red', 'vandalisme' ) );
 					revVandLink.appendChild( spanTag( 'Black', ']' ) );
 					revVandNode.appendChild(revVandLink);
 
@@ -120,7 +120,7 @@ Twinkle.fluff = {
 				Twinkle.fluff.revertToRevision(oldrev);
 			});
 			revertToRevisionLink.appendChild( spanTag( 'Black', '[' ) );
-			revertToRevisionLink.appendChild( spanTag( 'SaddleBrown', 'restore this version' ) );
+			revertToRevisionLink.appendChild( spanTag( 'SaddleBrown', 'kembalikan revisi ini' ) );
 			revertToRevisionLink.appendChild( spanTag( 'Black', ']' ) );
 
 			otitle.insertBefore( revertToRevision, otitle.firstChild );
@@ -139,7 +139,7 @@ Twinkle.fluff = {
 					Twinkle.fluff.revertToRevision(newrev);
 				});
 				revertToRevisionLink.appendChild( spanTag( 'Black', '[' ) );
-				revertToRevisionLink.appendChild( spanTag( 'SaddleBrown', 'restore this version' ) );
+				revertToRevisionLink.appendChild( spanTag( 'SaddleBrown', 'kembalikan revisi ini' ) );
 				revertToRevisionLink.appendChild( spanTag( 'Black', ']' ) );
 				ntitle.insertBefore( revertToRevision, ntitle.firstChild );
 
@@ -271,10 +271,10 @@ Twinkle.fluff.callbacks = {
 				return;
 			}
 
-			var optional_summary = prompt( "Mohon berikan alasan pengembalian:                                ", "" );  // padded out to widen prompt in Firefox
+			var optional_summary = prompt( "Berikan alasan pengembalian ini:                                ", "" );  // padded out to widen prompt in Firefox
 			if (optional_summary === null)
 			{
-				self.statelem.error( 'Dibatalkan pengguna.' );
+				self.statelem.error( 'Dibatalkan oleh pengguna.' );
 				return;
 			}
 			var summary = Twinkle.fluff.formatSummary("Dikembalikan ke revisi " + revertToRevID + " oleh $USER", revertToUser, optional_summary);
@@ -295,7 +295,7 @@ Twinkle.fluff.callbacks = {
 			Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
 			Morebits.wiki.actionCompleted.notice = "Pengembalian selesai";
 
-			var wikipedia_api = new Morebits.wiki.api( 'Menyimpan isi yang terkembalikan', query, Twinkle.fluff.callbacks.complete, self.statelem);
+			var wikipedia_api = new Morebits.wiki.api( 'Menyimpan isi yang dikembalikan', query, Twinkle.fluff.callbacks.complete, self.statelem);
 			wikipedia_api.params = self.params;
 			wikipedia_api.post();
 
@@ -313,37 +313,37 @@ Twinkle.fluff.callbacks = {
 		var revs = $(xmlDoc).find('rev');
 
 		if( revs.length < 1 ) {
-			self.statelem.error( 'We have less than one additional revision, thus impossible to revert' );
+			self.statelem.error( 'Hanya memiliki revisi tambahan yang kurang dari satu, sehingga tidak mungkin untuk dikembalikan' );
 			return;
 		}
 		var top = revs[0];
 		if( lastrevid < self.params.revid ) {
-			Morebits.status.error( 'Error', [ 'The most recent revision ID received from the server, ', Morebits.htmlNode( 'strong', lastrevid ), ', is less than the ID of the displayed revision. This could indicate that the current revision has been deleted, the server is lagging, or that bad data has been received. Will stop proceeding at this point.' ] );
+			Morebits.status.error( 'Error', [ 'Penanda revisi terakhir yang diperoleh dari peladen, ', Morebits.htmlNode( 'strong', lastrevid ), ', kurang dari penanda revisi yang saat ini ditampilkan. Ini menandakan bahwa revisi saat ini sudah dihapus, peladen sedang tersendat, atau data buruk yang diterima. Proses aka dihentikan.' ] );
 			return;
 		}
 		var index = 1;
 		if( self.params.revid !== lastrevid  ) {
-			Morebits.status.warn( 'Warning', [ 'Latest revision ', Morebits.htmlNode( 'strong', lastrevid ), ' doesn\'t equal our revision ', Morebits.htmlNode( 'strong', self.params.revid ) ] );
+			Morebits.status.warn( 'Peringatan', [ 'Revisi terakhir ', Morebits.htmlNode( 'strong', lastrevid ), ' tidak sesuai dengan revisi kami ', Morebits.htmlNode( 'strong', self.params.revid ) ] );
 			if( lastuser === self.params.user ) {
 				switch( self.params.type ) {
 				case 'vand':
-					Morebits.status.info( 'Info', [ 'Latest revision was made by ', Morebits.htmlNode( 'strong', self.params.user ) , '. As we assume vandalism, we continue to revert' ]);
+					Morebits.status.info( 'Informasi', [ 'Revisi terakhir yang dibuat oleh ', Morebits.htmlNode( 'strong', self.params.user ) , '. Karena dianggap sebagai vandalisme, kami lanjutkan pengembaliannya' ]);
 					break;
 				case 'agf':
-					Morebits.status.warn( 'Warning', [ 'Latest revision was made by ', Morebits.htmlNode( 'strong', self.params.user ) , '. As we assume good faith, we stop reverting, as the problem might have been fixed.' ]);
+					Morebits.status.warn( 'Peringatan', [ 'Revisi terakhir yang dibuat oleh ', Morebits.htmlNode( 'strong', self.params.user ) , '. Karena dianggap sebagai niat baik, pengembalian ini dihentikan, di mana masalah mungkin dapat diatasi.' ]);
 					return;
 				default:
-					Morebits.status.warn( 'Notice', [ 'Latest revision was made by ', Morebits.htmlNode( 'strong', self.params.user ) , ', but we will stop reverting anyway.' ] );
+					Morebits.status.warn( 'Pemberitahuan', [ 'Revisi terakhir yang dibuat oleh ', Morebits.htmlNode( 'strong', self.params.user ) , ', namun kami akan menghentikan proses pengembalian.' ] );
 					return;
 				}
 			}
 			else if(self.params.type === 'vand' &&
 					Twinkle.fluff.whiteList.indexOf( top.getAttribute( 'user' ) ) !== -1 && revs.length > 1 &&
 					revs[1].getAttribute( 'pageId' ) === self.params.revid) {
-				Morebits.status.info( 'Info', [ 'Latest revision was made by ', Morebits.htmlNode( 'strong', lastuser ), ', a trusted bot, and the revision before was made by our vandal, so we proceed with the revert.' ] );
+				Morebits.status.info( 'Informasi', [ 'Revisi terakhir yang dibuat oleh ', Morebits.htmlNode( 'strong', lastuser ), ', bot yang dipercaya, dan revisi sebelumnya dibuat oleh pengguna vandalisme, pengembalian dilanjutkan.' ] );
 				index = 2;
 			} else {
-				Morebits.status.error( 'Error', [ 'Latest revision was made by ', Morebits.htmlNode( 'strong', lastuser ), ', so it might have already been reverted, stopping  reverting.'] );
+				Morebits.status.error( 'Galat', [ 'Revisi terakhir yang dibuat oleh ', Morebits.htmlNode( 'strong', lastuser ), ', sehingga mungkin telah dikembalikan, akan menghentikan pengembalian ini.'] );
 				return;
 			}
 
@@ -352,23 +352,23 @@ Twinkle.fluff.callbacks = {
 		if( Twinkle.fluff.whiteList.indexOf( self.params.user ) !== -1  ) {
 			switch( self.params.type ) {
 			case 'vand':
-				Morebits.status.info( 'Info', [ 'Vandalism revert was chosen on ', Morebits.htmlNode( 'strong', self.params.user ), '. As this is a whitelisted bot, we assume you wanted to revert vandalism made by the previous user instead.' ] );
+				Morebits.status.info( 'Informasi', [ 'Pengembalian vandalisme dipilih pada ', Morebits.htmlNode( 'strong', self.params.user ), '. Karena bot ini masuk daftar putih, kami menganggap Anda akan mengembalikan vandalisme yang dibuat oleh pengguna sebelumnya.' ] );
 				index = 2;
 				self.params.user = revs[1].getAttribute( 'user' );
 				break;
 			case 'agf':
-				Morebits.status.warn( 'Notice', [ 'Good faith revert was chosen on ', Morebits.htmlNode( 'strong', self.params.user ), '. This is a whitelisted bot, and since bots have no faith, AGF rollback will not proceed.' ] );
+				Morebits.status.warn( 'Pemberitahuan', [ 'Pengembalian dengan niat baik dipilih pada ', Morebits.htmlNode( 'strong', self.params.user ), '. Ini adalah bot yang masuk daftar putih, dan karena bot tidak punya niat, pengembalian ANB tidak dilanjutkan.' ] );
 				return;
 			case 'norm':
 				/* falls through */
 			default:
-				var cont = confirm( 'Normal revert was chosen, but the most recent edit was made by a whitelisted bot (' + self.params.user + '). Do you want to revert the revision before instead?' );
+				var cont = confirm( 'Pengembalian normal sudah dipilih, namun suntingan terakhir dibuat oleh bot yang masuk daftar putih (' + self.params.user + '). Ingin melanjutkan revisi sebelumnya saja?' );
 				if( cont ) {
-					Morebits.status.info( 'Info', [ 'Normal revert was chosen on ', Morebits.htmlNode( 'strong', self.params.user ), '. This is a whitelisted bot, and per confirmation, we\'ll revert the previous revision instead.' ] );
+					Morebits.status.info( 'Informasi', [ 'Pengembalian normal dipilih pada ', Morebits.htmlNode( 'strong', self.params.user ), '. Ini adalah bot daftar putih, dan dengan konfirmasi, kami akan mengembalikan revisi sebelumnya saja.' ] );
 					index = 2;
 					self.params.user = revs[1].getAttribute( 'user' );
 				} else {
-					Morebits.status.warn( 'Notice', [ 'Normal revert was chosen on ', Morebits.htmlNode( 'strong', self.params.user ), '. This is a whitelisted bot, but per confirmation, revert on top revision will proceed.' ] );
+					Morebits.status.warn( 'Pemberitahuan', [ 'Pengembalian normal dipilih pada ', Morebits.htmlNode( 'strong', self.params.user ), '. Ini adalah bot daftar putih, namun dengan konfirmasi, pengembalian revisi atas akan diproses.' ] );
 				}
 				break;
 			}
@@ -385,12 +385,12 @@ Twinkle.fluff.callbacks = {
 		}
 
 		if( ! found ) {
-			self.statelem.error( [ 'Tidak dapat ditemukan revisi sebelumnya. Bisa jadi ', Morebits.htmlNode( 'strong', self.params.user ), ' adalah satu-satunya penyunting, atau pengguna tersebut telah melakukan ' + Twinkle.getPref('revertMaxRevisions') + ' suntingan berturut-turut.' ] );
+			self.statelem.error( [ 'Tidak dapat ditemukan revisi sebelumnya. Mungkin ', Morebits.htmlNode( 'strong', self.params.user ), ' adalah satu-satunya penyunting, atau pengguna tersebut telah melakukan ' + Twinkle.getPref('revertMaxRevisions') + ' suntingan berturut-turut.' ] );
 			return;
 		}
 
 		if( ! count ) {
-			Morebits.status.error( 'Error', "Tidak bisa membatalkan nol revisi. Ini mungkin dikarenakan revisi tersebut telah dibatalkan namun ID revisi masih tetap sama." );
+			Morebits.status.error( 'Galat', "Tidak bisa membatalkan nol revisi. Ini mungkin dikarenakan revisi tersebut telah dibatalkan namun penanda revisi masih tetap sama." );
 			return;
 		}
 
@@ -398,7 +398,7 @@ Twinkle.fluff.callbacks = {
 		var userHasAlreadyConfirmedAction = false;
 		if (self.params.type !== 'vand' && count > 1) {
 			if ( !confirm( self.params.user + ' telah melakukan ' + count + ' suntingan berturut-turut. Apakah Anda yakin mau membatalkan semuanya?') ) {
-				Morebits.status.info( 'Notice', 'Menghentinkan pembatalan karena input dari pengguna' );
+				Morebits.status.info( 'Notice', 'Menghentikan pembatalan karena masukan dari pengguna' );
 				return;
 			}
 			userHasAlreadyConfirmedAction = true;
@@ -450,7 +450,7 @@ Twinkle.fluff.callbacks = {
 			break;
 		}
 
-		if (Twinkle.getPref('confirmOnFluff') && !userHasAlreadyConfirmedAction && !confirm("Membatalkan halaman: apakah Anda yakin?")) {
+		if (Twinkle.getPref('confirmOnFluff') && !userHasAlreadyConfirmedAction && !confirm("Membatalkan halaman: Anda yakin?")) {
 			self.statelem.error( 'Dibatalkan oleh pengguna.' );
 			return;
 		}
@@ -459,7 +459,7 @@ Twinkle.fluff.callbacks = {
 		if( (!self.params.autoRevert || Twinkle.getPref('openTalkPageOnAutoRevert')) &&
 				Twinkle.getPref('openTalkPage').indexOf( self.params.type ) !== -1 &&
 				mw.config.get('wgUserName') !== self.params.user ) {
-			Morebits.status.info( 'Info', [ 'Membuka halaman penyuntingan halaman pembicaraan pengguna ', Morebits.htmlNode( 'strong', self.params.user ) ] );
+			Morebits.status.info( 'Informasi', [ 'Membuka halaman penyuntingan halaman pembicaraan pengguna ', Morebits.htmlNode( 'strong', self.params.user ) ] );
 
 			query = {
 				'title': 'User talk:' + self.params.user,

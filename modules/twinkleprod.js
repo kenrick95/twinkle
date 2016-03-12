@@ -18,24 +18,24 @@ Twinkle.prod = function twinkleprod() {
 		return;
 	}
 
-	Twinkle.addPortletLink( Twinkle.prod.callback, "PROD", "tw-prod", "Propose deletion via WP:PROD" );
+	Twinkle.addPortletLink( Twinkle.prod.callback, "UP", "tw-prod", "Usulan penghapusan melalui WP:UP" );
 };
 
 Twinkle.prod.callback = function twinkleprodCallback() {
 	Twinkle.prod.defaultReason = Twinkle.getPref('prodReasonDefault');
 
 	var Window = new Morebits.simpleWindow( 800, 410 );
-	Window.setTitle( "Proposed deletion (PROD)" );
+	Window.setTitle( "Usulan Penghapusan (UP)" );
 	Window.setScriptName( "Twinkle" );
-	Window.addFooterLink( "Proposed deletion policy", "WP:PROD" );
-	Window.addFooterLink( "BLP PROD policy", "WP:BLPPROD" );
-	Window.addFooterLink( "Twinkle help", "WP:TW/DOC#prod" );
+	Window.addFooterLink( "Kebijakan usulan penghapusan", "WP:UP" );
+	/* Window.addFooterLink( "BLP PROD policy", "WP:BLPPROD" ); */
+	Window.addFooterLink( "Bantuan Twinkle", "WP:TW/DOC#prod" );
 
 	var form = new Morebits.quickForm( Twinkle.prod.callback.evaluate );
 
 	var field = form.append( {
 			type: 'field',
-			label: 'PROD type'
+			label: 'Jenis UP'
 		} );
 	field.append( {
 			type: 'radio',
@@ -43,15 +43,15 @@ Twinkle.prod.callback = function twinkleprodCallback() {
 			event: Twinkle.prod.callback.prodtypechanged,
 			list: [
 				{
-					label: 'PROD (proposed deletion)',
+					label: 'UP (usulan penghapusan)',
 					value: 'prod',
 					checked: true,
-					tooltip: 'Normal proposed deletion, per [[WP:PROD]]'
+					tooltip: 'Usulan penghapusan normal'
 				},
 				{
-					label: 'BLP PROD (proposed deletion of unsourced BLPs)',
+					label: 'Usulan penghapusan halaman tokoh yang masih hidup tanpa referensi',
 					value: 'prodblp',
-					tooltip: 'Proposed deletion of new, completely unsourced biographies of living persons, per [[WP:BLPPROD]]'
+					tooltip: 'Usulan penghapusan biografi baru dari tokoh yang masih hidup'
 				}
 			]
 		} );
@@ -62,7 +62,7 @@ Twinkle.prod.callback = function twinkleprodCallback() {
 			name: 'work_area'
 		} );
 
-	form.append( { type:'submit', label:'Propose deletion' } );
+	form.append( { type:'submit', label:'Usulkan penghapusan' } );
 
 	var result = form.render();
 	Window.setContent( result );
@@ -88,10 +88,10 @@ Twinkle.prod.callback.prodtypechanged = function(event) {
 					type: 'checkbox',
 					list: [
 						{
-							label: 'Notify page creator if possible',
+							label: 'Beritahukan pembuat halaman jika memungkinkan',
 							value: 'notify',
 							name: 'notify',
-							tooltip: "A notification template will be placed on the creator's talk page if this is true.",
+							tooltip: "Templat pemberitahuan akan dikirimkan ke halaman pembicaraannya jika opsi ini dipilih.",
 							checked: true
 						}
 					]
@@ -100,7 +100,7 @@ Twinkle.prod.callback.prodtypechanged = function(event) {
 			field.append( {
 					type: 'textarea',
 					name: 'reason',
-					label: 'Reason for proposed deletion:',
+					label: 'Alasan:',
 					value: Twinkle.prod.defaultReason
 				} );
 			break;
@@ -115,10 +115,10 @@ Twinkle.prod.callback.prodtypechanged = function(event) {
 					type: 'checkbox',
 					list: [
 						{
-							label: 'Notify page creator if possible',
+							label: 'Beritahukan pembuat halaman jika memungkinkan',
 							value: 'notify',
 							name: 'notify',
-							tooltip: 'Creator of article has to be notified.',
+							tooltip: 'Pembuat halaman harus diberitahukan.',
 							checked: true,
 							disabled: true
 						}
@@ -127,7 +127,7 @@ Twinkle.prod.callback.prodtypechanged = function(event) {
 			);
 			//temp warning, can be removed down the line once BLPPROD is more established. Amalthea, May 2010.
 			var boldtext = document.createElement('b');
-			boldtext.appendChild(document.createTextNode('Please note that only unsourced biographies of living persons are eligible for this tag, narrowly construed.'));
+			boldtext.appendChild(document.createTextNode('Ingatlah bahwa hanya biografi tokoh yang masih hidup tanpa referensi yang cocok untuk tag ini.'));
 			field.append({
 				type: 'div',
 				label: boldtext
@@ -135,7 +135,7 @@ Twinkle.prod.callback.prodtypechanged = function(event) {
 			if (mw.config.get('wgArticleId') < 26596183) {
 				field.append({
 					type: 'header',
-					label: 'It appears that this article was created before March 18, 2010, and is thus ineligible for a BLP PROD. Please make sure that this is not the case, or use normal PROD instead.'
+					label: 'It appears that this article was created before March 18, 2010, and is thus ineligible for a BLP PROD. Please make sure that this is not the case, or use normal PROD instead.' // untuk dilihat kembali
 				});
 			}
 			break;
@@ -152,7 +152,7 @@ Twinkle.prod.callbacks = {
 		var statelem = pageobj.getStatusElement();
 
 		if( !pageobj.exists() ) {
-			statelem.error( "It seems that the page doesn't exist.  Perhaps it has already been deleted." );
+			statelem.error( "Kelihatannya halaman ini tidak ada. Mungkin sudah dihapus." );
 			return;
 		}
 
@@ -161,7 +161,7 @@ Twinkle.prod.callbacks = {
 
 		var tag_re = /(\{\{(?:db-?|delete|[aitcmrs]fd|md1)[^{}]*?\|?[^{}]*?\}\})/i;
 		if( tag_re.test( text ) ) {
-			statelem.warn( 'Page already tagged with a deletion template, aborting procedure' );
+			statelem.warn( 'Halaman sudah ditandai dengan templat hapus. Proses dihentikan.' );
 			return;
 		}
 
@@ -182,27 +182,27 @@ Twinkle.prod.callbacks = {
 				Twinkle.prod.callbacks.addToLog(params);
 			}
 
-			summaryText = "Proposing article for deletion per [[WP:" + (params.blp ? "BLP" : "") + "PROD]].";
+			summaryText = "Usulkan penghapusan artikel per [[WP:" + (params.blp ? "BLP" : "") + "UP]].";
 			text = "{{subst:prod" + (params.blp ? " blp" : ("|1=" + Morebits.string.formatReasonText(params.reason))) + "}}\n" + text;
 		}
 		else {  // already tagged for PROD, so try endorsing it
 			var prod2_re = /\{\{(?:Proposed deletion endorsed|prod-?2).*?\}\}/;
 			if( prod2_re.test( text ) ) {
-				statelem.warn( 'Page already tagged with {{proposed deletion}} and {{proposed deletion endorsed}} templates, aborting procedure' );
+				statelem.warn( 'Halaman sudah ditandai dengan {{proposed deletion}} dan {{proposed deletion endorsed}}, proses dihentikan' );
 				return;
 			}
-			var confirmtext = "A {{proposed deletion}} tag was already found on this article. \nWould you like to add a {{proposed deletion endorsed}} tag with your explanation?";
+			var confirmtext = "Tag {{proposed deletion}} sudah ada di halaman ini. \nApakah Anda ingin menambahkan tag {{proposed deletion endorsed}} disertai alasan Anda?";
 			if (params.blp) {
-				confirmtext = "A non-BLP {{proposed deletion}} tag was found on this article.  \nWould you like to add a {{proposed deletion endorsed}} tag with explanation \"article is a biography of a living person with no sources\"?";
+				confirmtext = "Tag {{proposed deletion}} bukan BOH ditemukan di artikel.  \nApakah Anda ingin menambahkan tag {{proposed deletion endorsed}} dengan alasan \"artikel adalah biografi tokoh yang masih hidup tanpa referensi\"?";
 			}
 			if( !confirm( confirmtext ) ) {
-				statelem.warn( 'Aborted per user request' );
+				statelem.warn( 'Dibatalkan oleh pengguna' );
 				return;
 			}
 
-			summaryText = "Endorsing proposed deletion per [[WP:" + (params.blp ? "BLP" : "") + "PROD]].";
+			summaryText = "Mendukung usulan penghapusan per [[WP:" + (params.blp ? "BLP" : "") + "UP]].";
 			text = text.replace( prod_re, text.match( prod_re ) + "\n{{proposed deletion endorsed|1=" + (params.blp ?
-				"article is a [[WP:BLPPROD|biography of a living person with no sources]]" :
+				"artikel adalah biografi tokoh yang masih hidup tanpa referensi" :
 				Morebits.string.formatReasonText(params.reason)) + "}}\n" );
 
 			if( Twinkle.getPref('logProdPages') ) {
@@ -224,17 +224,17 @@ Twinkle.prod.callbacks = {
 
 		// Disallow warning yourself
 		if (initialContrib === mw.config.get("wgUserName")) {
-			pageobj.getStatusElement().warn("You (" + initialContrib + ") created this page; skipping user notification");
+			pageobj.getStatusElement().warn("Anda (" + initialContrib + ") membuat halaman ini; lewatkan pemberitahuan pengguna");
 			if (Twinkle.getPref("logProdPages")) {
 				Twinkle.prod.callbacks.addToLog(params);
 			}
 			return;
 		}
 
-		var usertalkpage = new Morebits.wiki.page('User talk:' + initialContrib, "Notifying initial contributor (" + initialContrib + ")");
+		var usertalkpage = new Morebits.wiki.page('User talk:' + initialContrib, "Memberitahukan kontributor awal (" + initialContrib + ")");
 		var notifytext = "\n{{subst:prodwarning" + (params.blp ? "BLP" : "") + "|1=" + Morebits.pageNameNorm + "|concern=" + params.reason + "}} ~~~~";
 		usertalkpage.setAppendText(notifytext);
-		usertalkpage.setEditSummary("Notification: proposed deletion of [[" + Morebits.pageNameNorm + "]]." + Twinkle.getPref('summaryAd'));
+		usertalkpage.setEditSummary("Pemberitahuan: usulan penghapusan [[" + Morebits.pageNameNorm + "]]." + Twinkle.getPref('summaryAd'));
 		usertalkpage.setCreateOption('recreate');
 		usertalkpage.setFollowRedirect(true);
 		usertalkpage.append();
@@ -245,7 +245,7 @@ Twinkle.prod.callbacks = {
 	},
 
 	addToLog: function(params) {
-		var wikipedia_page = new Morebits.wiki.page("User:" + mw.config.get('wgUserName') + "/" + Twinkle.getPref('prodLogPageName'), "Adding entry to userspace log");
+		var wikipedia_page = new Morebits.wiki.page("User:" + mw.config.get('wgUserName') + "/" + Twinkle.getPref('prodLogPageName'), "Menambahkan entri ke log di ruang pengguna");
 		wikipedia_page.setCallbackParameters(params);
 		wikipedia_page.load(Twinkle.prod.callbacks.saveLog);
 	},
@@ -257,9 +257,9 @@ Twinkle.prod.callbacks = {
 		// add blurb if log page doesn't exist
 		if (!pageobj.exists()) {
 			text =
-				"This is a log of all [[WP:PROD|proposed deletion]] tags applied or endorsed by this user using [[WP:TW|Twinkle]]'s PROD module.\n\n" +
-				"If you no longer wish to keep this log, you can turn it off using the [[Wikipedia:Twinkle/Preferences|preferences panel]], and " +
-				"nominate this page for speedy deletion under [[WP:CSD#U1|CSD U1]].\n";
+				"Ini merupakan log semua tag [[WP:UP|usulan penghapusan]] yang diberikan atau didukung oleh pengguna ini dengan menggunakan modul UP [[WP:TW|Twinkle]].\n\n" +
+				"Apabila Anda tidak ingin menyimpan log ini, matikan di [[Wikipedia:Twinkle/Preferences|preferences panel]], dan " +
+				"usulkan penghapusan cepat halaman ini dengan kriteria [[WP:KPC#U1|KPC U1]].\n";
 		}
 
 		// create monthly header
@@ -271,21 +271,21 @@ Twinkle.prod.callbacks = {
 
 		var summarytext;
 		if (params.logEndorsing) {
-			text += "\n# [[" + Morebits.pageNameNorm + "]]: endorsed " + (params.blp ? "BLP " : "") + "PROD. ~~~~~";
+			text += "\n# [[" + Morebits.pageNameNorm + "]]: mendukung " + (params.blp ? "BLP " : "") + "UP. ~~~~~";
 			if (params.reason) {
-				text += "\n#* '''Reason''': " + params.reason + "\n";
+				text += "\n#* '''Alasan''': " + params.reason + "\n";
 			}
-			summarytext = "Logging endorsement of PROD nomination of [[" + Morebits.pageNameNorm + "]].";
+			summarytext = "Mencatat dukungan nominasi penghapusan [[" + Morebits.pageNameNorm + "]].";
 		} else {
-			text += "\n# [[" + Morebits.pageNameNorm + "]]: " + (params.blp ? "BLP " : "") + "PROD";
+			text += "\n# [[" + Morebits.pageNameNorm + "]]: " + (params.blp ? "BLP " : "") + "UP";
 			if (params.logInitialContrib) {
-				text += "; notified {{user|" + params.logInitialContrib + "}}";
+				text += "; memberitahukan {{user|" + params.logInitialContrib + "}}";
 			}
 			text += " ~~~~~\n";
 			if (!params.blp) {
-				text += "#* '''Reason''': " + params.reason + "\n";
+				text += "#* '''Alasan''': " + params.reason + "\n";
 			}
-			summarytext = "Logging PROD nomination of [[" + Morebits.pageNameNorm + "]].";
+			summarytext = "Mencatat nominasi UP dari [[" + Morebits.pageNameNorm + "]].";
 		}
 
 		pageobj.setPageText(text);
@@ -318,16 +318,17 @@ Twinkle.prod.callback.evaluate = function twinkleprodCallbackEvaluate(e) {
 	Morebits.status.init( form );
 
 	if (prodtype === 'prodblp' && mw.config.get('wgArticleId') < 26596183) {
-		if (!confirm( "It appears that this article was created before March 18, 2010, and is thus ineligible for a BLP PROD. Do you want to continue tagging it?" )) {
-			Morebits.status.warn( 'Notice', 'Aborting per user input.' );
+		if (!confirm( "It appears that this article was created before March 18, 2010, and is thus ineligible for a BLP PROD. Do you want to continue tagging it?" )) // sesuaikan kembali dengan kebijakan idwiki
+		{
+			Morebits.status.warn( 'Perhatian', 'Dibatalkan oleh pengguna.' );
 			return;
 		}
 	}
 
 	Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
-	Morebits.wiki.actionCompleted.notice = "Tagging complete";
+	Morebits.wiki.actionCompleted.notice = "Penandaan selesai";
 
-	var wikipedia_page = new Morebits.wiki.page(mw.config.get('wgPageName'), "Tagging page");
+	var wikipedia_page = new Morebits.wiki.page(mw.config.get('wgPageName'), "Menandai halaman");
 	wikipedia_page.setFollowRedirect(true);  // for NPP, and also because redirects are ineligible for PROD
 	wikipedia_page.setCallbackParameters(params);
 	wikipedia_page.load(Twinkle.prod.callbacks.main);
