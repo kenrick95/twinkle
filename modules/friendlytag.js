@@ -20,7 +20,7 @@ Twinkle.tag = function friendlytag() {
 	// redirect tagging
 	if( Morebits.wiki.isPageRedirect() ) {
 		Twinkle.tag.mode = 'redirect';
-		Twinkle.addPortletLink( Twinkle.tag.callback, "Tag", "friendly-tag", "Tag redirect" );
+		Twinkle.addPortletLink( Twinkle.tag.callback, "Tag", "tag ramah pengguna", "Tag pengalihan" );
 	}
 	// file tagging
 	else if( mw.config.get('wgNamespaceNumber') === 6 && !document.getElementById("mw-sharedupload") && document.getElementById("mw-imagepage-section-filehistory") ) {
@@ -130,7 +130,7 @@ Twinkle.tag.callback = function friendlytagCallback() {
 			break;
 
 		default:
-			alert("Twinkle.tag: unknown mode " + Twinkle.tag.mode);
+			alert("Twinkle.tag: moda tak dikenal " + Twinkle.tag.mode);
 			break;
 	}
 
@@ -208,16 +208,16 @@ Twinkle.tag.updateSortOrder = function(e) {
 					type: 'select',
 					list: [
 						{ label: "{{globalize}}: artikel mungkin tidak mewakili keseluruhan subjek yang dibahas", value: "globalize" },
-						{
-							label: "Region-specific {{globalize}} subtemplates",
+						/* {
+							label: "Subtemplat {{globalize}} mengenai wilayah",
 							list: [
-								{ label: "{{globalize/Australia}}: article deals primarily with the Australian viewpoint", value: "globalize/Australia" },
-								{ label: "{{globalize/Canada}}: article deals primarily with the Canadian viewpoint", value: "globalize/Canada" },
-								{ label: "{{globalize/China}}: article deals primarily with the Chinese viewpoint", value: "globalize/China" },
-								{ label: "{{globalize/Common law}}: article deals primarily with the viewpoint of common law countries", value: "globalize/Common law" },
-								{ label: "{{globalize/Eng}}: article deals primarily with the English-speaking viewpoint", value: "globalize/Eng" },
-								{ label: "{{globalize/Europe}}: article deals primarily with the European viewpoint", value: "globalize/Europe" },
-								{ label: "{{globalize/France}}: article deals primarily with the French viewpoint", value: "globalize/France" },
+								{ label: "{{globalize/Australia}}: artikel berisi konten yang dibuat terutama dalam sudut pandang masyarakat Australia", value: "globalize/Australia" },
+								{ label: "{{globalize/Canada}}: artikel berisi konten yang dibuat terutama dalam sudut pandang masyarakat Kanada", value: "globalize/Canada" },
+								{ label: "{{globalize/China}}: artikel berisi konten yang dibuat terutama dalam sudut pandang masyarakat Tiongkok", value: "globalize/China" },
+								{ label: "{{globalize/Common law}}: artikel berisi konten yang dibuat terutama dalam sudut pandang hukum secara umum", value: "globalize/Common law" },
+								{ label: "{{globalize/Eng}}: artikel berisi konten yang dibuat terutama dalam sudut pandang pengguna bahasa Inggris", value: "globalize/Eng" },
+								{ label: "{{globalize/Europe}}: artikel berisi konten yang dibuat terutama dalam sudut pandang masyarakat Eropa", value: "globalize/Europe" },
+								{ label: "{{globalize/France}}: artikel berisi konten yang dibuat terutama dalam sudut pandang masyarakat Peranc", value: "globalize/France" },
 								{ label: "{{globalize/Germany}}: article deals primarily with the German viewpoint", value: "globalize/Germany" },
 								{ label: "{{globalize/India}}: article deals primarily with the Indian viewpoint", value: "globalize/India" },
 								{ label: "{{globalize/Middle East}}: article deals primarily with the Middle Eastern viewpoint", value: "globalize/Middle East" },
@@ -230,7 +230,7 @@ Twinkle.tag.updateSortOrder = function(e) {
 								{ label: "{{globalize/US}}: article deals primarily with the USA viewpoint", value: "globalize/US" },
 								{ label: "{{globalize/West}}: article deals primarily with the viewpoint of Western countries", value: "globalize/West" }
 							]
-						}
+						} */
 					]
 				};
 				break;
@@ -276,17 +276,17 @@ Twinkle.tag.updateSortOrder = function(e) {
 					});
 				}
 				break;
-			case "not English":
+			case "not Indonesian":
 			case "rough translation":
 				checkbox.subgroup = [
 					{
 						name: 'translationLanguage',
 						type: 'input',
 						label: 'Bahasa artikel (jika diketahui): ',
-						tooltip: 'Consider looking at [[WP:LRC]] for help. If listing the article at PNT, please try to avoid leaving this box blank, unless you are completely unsure.'
+						tooltip: 'Baca pedoman penerjemahan artikel untuk informasi lebih lanjut.'
 					}
 				];
-				if (tag === "not English") {
+				if (tag === "not Indonesian") {
 					checkbox.subgroup.push({
 						name: 'translationNotify',
 						type: 'checkbox',
@@ -335,7 +335,7 @@ Twinkle.tag.updateSortOrder = function(e) {
 						{ label: "{{notability|Products}}: pedoman kelayakan untuk produk dan layanan", value: "Products" },
 						{ label: "{{notability|Sport}}: pedoman kelayakan untuk olahraga", value: "Sport" },
 						{ label: "{{notability|Web}}: pedoman kelayakan untuk isi situs", value: "Web" }
-					] 
+					]
 				};
 				break;
 			default:
@@ -492,6 +492,7 @@ Twinkle.tag.article.tags = {
 	"third-party": "artikel terlalu mengandalkan sumber kedua, dan butuh sumber ketiga",
 	"tone": "gaya penulisan tak sesuai",
 	"too few opinions": "artikel tidak mengandung keseluruhan sudut pandang yang penting",
+    "tugas sekolah": "artikel yang sedang digunakan untuk penilaian di sekolah/universitas",
 	"uncategorized": "artikel tidak ada kategori",
 	"under construction": "artikel sedang dalam tahap pengembangan",
 	"underlinked": "artikel perlu lebih banyak pranala wiki",
@@ -595,7 +596,7 @@ Twinkle.tag.article.tagCategories = {
 	},
 	"Masalah konten tertentu": {
 		"Bahasa": [
-			/ "not English",  // has a subgroup with several options
+			/ "not Indonesian",  // has a subgroup with several options
 			"rough translation",  // has a subgroup with several options
 			"expand language"
 		],
@@ -625,6 +626,7 @@ Twinkle.tag.article.tagCategories = {
 		"GOCEinuse",
 		"in use",
 		"new unreviewed article",
+        "tugas sekolah",
 		"under construction"
 	]
 };
@@ -680,82 +682,82 @@ Twinkle.tag.spellingList = [
 
 Twinkle.tag.alternativeList = [
 	{
-		label: '{{R from alternative name}}: redirect from a title that is another name, a pseudonym, a nickname, or a synonym',
+		label: '{{R from alternative name}}: pengalihan dari judul dari suatu judul lain, nama lain, atau sinonim',
 		value: 'R from alternative name'
 	},
 	{
-		label: '{{R from long name}}: redirect from a title that is a complete or more complete name',
+		label: '{{R from long name}}: pengalihan dari sebuah judul yang lebih lengkap',
 		value: 'R from long name'
 	},
 	{
-		label: '{{R from surname}}: redirect from a title that is a surname',
+		label: '{{R from surname}}: pengalihan dari sebuah judul yang merupakan nama belakang',
 		value: 'R from surname'
 	},
 	{
-		label: '{{R from historic name}}: redirect from another name with a significant historic past as a region, state, city or such, but which is no longer known by that title or name',
+		label: '{{R from historic name}}: pengalihan dari nama lain dengan sejarah yang penting mengenai sebuah wilayah, provinsi, kota, atau lainnya, yang saat ini tidak lagi dikenal dengan nama tersebut',
 		value: 'R from historic name'
 	},
 	{
-		label: '{{R from phrase}}: redirect from a phrase to a more general relevant article covering the topic',
+		label: '{{R from phrase}}: pengalihan dari sebuah frasa ke artikel yang lebih umum yang mencakup semua topik',
 		value: 'R from phrase'
 	},
 	{
-		label: '{{R from scientific name}}: redirect from the scientific name to the common name',
+		label: '{{R from scientific name}}: pengalihan dari nama ilmiah ke nama yang umum',
 		value: 'R from scientific name'
 	},
 	{
-		label: '{{R to scientific name}}: redirect from the common name to the scientific name',
+		label: '{{R to scientific name}}: pengalihan dari nama yang umum ke nama ilmiah',
 		value: 'R to scientific name'
 	},
 	{
-		label: '{{R from name and country}}: redirect from the specific name to the briefer name',
+		label: '{{R from name and country}}: pengalihan dari nama khusus ke nama yang lebih ringkas',
 		value: 'R from name and country'
 	},
 	{
-		label: '{{R from alternative language}}: redirect from an English name to a name in another language, or vice-versa',
+		label: '{{R from alternative language}}: pengalihan dari nama bahasa Inggris ke nama dalam bahasa lain, atau sebaliknya',
 		value: 'R from alternative language'
 	},
 	{
-		label: '{{R from ASCII}}: redirect from a title in basic ASCII to the formal article title, with differences that are not diacritical marks (accents, umlauts, etc.)',
+		label: '{{R from ASCII}}: pengalihan dari sebuah judul dalam ASCII dasar ke judul artikel yang formal, dengan perbedaan yang bukan berupa tanda diakritik',
 		value: 'R from ASCII'
 	},
 	{
-		label: '{{R to diacritics}}: redirect to the article title with diacritical marks (accents, umlauts, etc.)',
+		label: '{{R to diacritics}}: pengalihan ke judul dengan disertai tanda diakritik',
 		value: 'R to diacritics'
 	}
 ];
 
 Twinkle.tag.administrativeList = [
 	{
-		label: '{{R from merge}}: redirect from a merged page in order to preserve its edit history',
+		label: '{{R from merge}}: pengalihan dari halaman yang digabung untuk menyimpan sejarah suntingannya',
 		value: 'R from merge'
 	},
 	{
-		label: '{{R to disambiguation page}}: redirect to a disambiguation page',
+		label: '{{R to disambiguation page}}: pengalihan ke halaman disambiguasi',
 		value: 'R to disambiguation page'
 	},
 	{
-		label: '{{R from duplicated article}}: redirect to a similar article in order to preserve its edit history',
+		label: '{{R from duplicated article}}: pengalihan ke artikel serupa untuk menyimpan sejarah suntingannya',
 		value: 'R from duplicated article'
 	},
 	{
-		label: '{{R to decade}}: redirect from a year to the decade article',
+		label: '{{R to decade}}: pengalihan dari suatu tahun ke artikel dekade',
 		value: 'R to decade'
 	},
 	{
-		label: '{{R from shortcut}}: redirect from a Wikipedia shortcut',
+		label: '{{R from shortcut}}: pengalihan dari pintasan Wikipedia',
 		value: 'R from shortcut'
 	},
 	{
-		label: '{{R from CamelCase}}: redirect from a CamelCase title',
+		label: '{{R from CamelCase}}: pengalihan dari judul CamelCase',
 		value: 'R from CamelCase'
 	},
 	{
-		label: '{{R from EXIF}}: redirect of a wikilink created from JPEG EXIF information (i.e. the \"metadata\" section on some image description pages)',
+		label: '{{R from EXIF}}: pengalihan pranala wiki yang dibuat dari informasi EXIF JPEG',
 		value: 'R from EXIF'
 	},
 	{
-		label: '{{R from school}}: redirect from a school article that had very little information',
+		label: '{{R from school}}: pengalihan dari artikel sekolah yang mengandung sedikit informasi',
 		value: 'R from school'
 	}
 ];
@@ -765,62 +767,62 @@ Twinkle.tag.administrativeList = [
 Twinkle.tag.file = {};
 
 Twinkle.tag.file.licenseList = [
-	{ label: '{{Bsr}}: source info consists of bare image URL/generic base URL only', value: 'Bsr' },
-	{ label: '{{Non-free reduce}}: non-low-resolution fair use image (or too-long audio clip, etc)', value: 'Non-free reduce' },
-	{ label: '{{Orphaned non-free revisions}}: fair use media with old revisions that need to be deleted', value: 'subst:orfurrev' }
+	{ label: '{{Bsr}}: informasi sumber terdiri dari URL kasar', value: 'Bsr' },
+	{ label: '{{Non-free reduce}}: gambar penggunaan wajar yang beresolusi tinggi (atau klip suara yang panjang, dsb.)', value: 'Non-free reduce' },
+	{ label: '{{Orphaned non-free revisions}}: media penggunaan wajar dengan revisi lama yang perlu dihapus', value: 'subst:orfurrev' }
 ];
 
 Twinkle.tag.file.commonsList = [
-	{ label: '{{Copy to Commons}}: free media that should be copied to Commons', value: 'Copy to Commons' },
-	{ label: '{{Do not move to Commons}} (PD issue): file is PD in the US but not in country of origin', value: 'Do not move to Commons' },
-	{ label: '{{Do not move to Commons}} (other reason)', value: 'Do not move to Commons_reason' },
-	{ label: '{{Keep local}}: request to keep local copy of a Commons file', value: 'Keep local' },
-	{ label: '{{Now Commons}}: file has been copied to Commons', value: 'subst:ncd' }
+	{ label: '{{Copy to Commons}}: media bebas yang perlu dipindahkan ke Commons', value: 'Copy to Commons' },
+	{ label: '{{Do not move to Commons}} (masalah DP): berkas berlisensi DP di AS namun tidak dengan negara asalnya', value: 'Do not move to Commons' },
+	{ label: '{{Do not move to Commons}} (alasan lain)', value: 'Jangan pindahkan ke Commons Commons_reason' },
+	{ label: '{{Keep local}}: permintaan untuk menyimpan salinan lokal dari berkas Commons', value: 'Keep local' },
+	{ label: '{{Now Commons}}: berkas sudah dipindahkan ke Commons', value: 'subst:ncd' }
 ];
 
 Twinkle.tag.file.cleanupList = [
-	{ label: '{{Artifacts}}: PNG contains residual compression artifacts', value: 'Artifacts' },
-	{ label: '{{Bad font}}: SVG uses fonts not available on the thumbnail server', value: 'Bad font' },
-	{ label: '{{Bad format}}: PDF/DOC/... file should be converted to a more useful format', value: 'Bad format' },
-	{ label: '{{Bad GIF}}: GIF that should be PNG, JPEG, or SVG', value: 'Bad GIF' },
-	{ label: '{{Bad JPEG}}: JPEG that should be PNG or SVG', value: 'Bad JPEG' },
-	{ label: '{{Bad trace}}: auto-traced SVG requiring cleanup', value: 'Bad trace' },
-	{ label: '{{Cleanup image}}: general cleanup', value: 'Cleanup image' },
-	{ label: '{{Cleanup SVG}}: SVG needing code and/or appearance cleanup', value: 'Cleanup SVG' },
-	{ label: '{{ClearType}}: image (not screenshot) with ClearType anti-aliasing', value: 'ClearType' },
-	{ label: '{{Imagewatermark}}: image contains visible or invisible watermarking', value: 'Imagewatermark' },
-	{ label: '{{NoCoins}}: image using coins to indicate scale', value: 'NoCoins' },
-	{ label: '{{Overcompressed JPEG}}: JPEG with high levels of artifacts', value: 'Overcompressed JPEG' },
-	{ label: '{{Opaque}}: opaque background should be transparent', value: 'Opaque' },
-	{ label: '{{Remove border}}: unneeded border, white space, etc.', value: 'Remove border' },
-	{ label: '{{Rename media}}: file should be renamed according to the criteria at [[WP:FMV]]', value: 'Rename media' },
-	{ label: '{{Should be PNG}}: GIF or JPEG should be lossless', value: 'Should be PNG' },
+	{ label: '{{Artifacts}}: PNG mengandung artefak sisa kompresi', value: 'Artifacts' },
+	{ label: '{{Bad font}}: SVG menggunakan huruf yang tidak tersedia di peladen miniatur', value: 'Bad font' },
+	{ label: '{{Bad format}}: berkas PDF/DOC/... harus diubah ke format yang lebih umum/berguna', value: 'Bad format' },
+	{ label: '{{Bad GIF}}: GIF yang harus diganti dengan PNG, JPEG, atau SVG', value: 'Bad GIF' },
+	{ label: '{{Bad JPEG}}: JPEG yang harus diganti dengan PNG atau SVG', value: 'Bad JPEG' },
+	{ label: '{{Bad trace}}: sisa SVG yang perlu dibersihkan', value: 'Bad trace' },
+	{ label: '{{Cleanup image}}: perapian umum', value: 'Cleanup image' },
+	{ label: '{{Cleanup SVG}}: perapian SVG yang memerlukan kode dan/atau tampilan', value: 'Cleanup SVG' },
+	{ label: '{{ClearType}}: gambar (selain tangkapan layar) dengan anti-aliasing ClearType', value: 'ClearType' },
+	{ label: '{{Imagewatermark}}: gambar mengandung tanda air yang tampak', value: 'Imagewatermark' },
+	{ label: '{{NoCoins}}: gambar menggunakan koin untuk mengindikasikan skala', value: 'NoCoins' },
+	{ label: '{{Overcompressed JPEG}}: JPEG dengan artefak tingkat tinggi', value: 'Overcompressed JPEG' },
+	{ label: '{{Opaque}}: latar belakang yang perlu dibuat transparan', value: 'Opaque' },
+	{ label: '{{Remove border}}: garis pinggir, bagian putih, dsb. yang tak diperlukan', value: 'Remove border' },
+	{ label: '{{Rename media}}: nama berkas perlu diubah' value: 'Rename media' },
+	{ label: '{{Should be PNG}}: GIF atau JPEG harus berbentuk "lossless"', value: 'Should be PNG' },
 	{
-		label: '{{Should be SVG}}: PNG, GIF or JPEG should be vector graphics', value: 'Should be SVG',
+		label: '{{Should be SVG}}: PNG, GIF atau JPEG harus berupa grafik vektor', value: 'Should be SVG',
 		subgroup: {
 			name: 'svgCategory',
 			type: 'select',
 			list: [
 				{ label: '{{Should be SVG|other}}', value: 'other' },
-				{ label: '{{Should be SVG|alphabet}}: character images, font examples, etc.', value: 'alphabet' },
-				{ label: '{{Should be SVG|chemical}}: chemical diagrams, etc.', value: 'chemical' },
-				{ label: '{{Should be SVG|circuit}}: electronic circuit diagrams, etc.', value: 'circuit' },
-				{ label: '{{Should be SVG|coat of arms}}: coats of arms', value: 'coat of arms' },
-				{ label: '{{Should be SVG|diagram}}: diagrams that do not fit any other subcategory', value: 'diagram' },
-				{ label: '{{Should be SVG|emblem}}: emblems, free/libre logos, insignias, etc.', value: 'emblem' },
-				{ label: '{{Should be SVG|fair use}}: fair-use images, fair-use logos', value: 'fair use' },
-				{ label: '{{Should be SVG|flag}}: flags', value: 'flag' },
-				{ label: '{{Should be SVG|graph}}: visual plots of data', value: 'graph' },
-				{ label: '{{Should be SVG|logo}}: logos', value: 'logo' },
-				{ label: '{{Should be SVG|map}}: maps', value: 'map' },
-				{ label: '{{Should be SVG|music}}: musical scales, notes, etc.', value: 'music' },
-				{ label: '{{Should be SVG|physical}}: "realistic" images of physical objects, people, etc.', value: 'physical' },
-				{ label: '{{Should be SVG|symbol}}: miscellaneous symbols, icons, etc.', value: 'symbol' }
+				{ label: '{{Should be SVG|alphabet}}: gambar karakter, contoh huruf, dsb.', value: 'alphabet' },
+				{ label: '{{Should be SVG|chemical}}: diagram kimia, dsb.', value: 'chemical' },
+				{ label: '{{Should be SVG|circuit}}: diagram sirkuit elektronik, dsb.', value: 'circuit' },
+				{ label: '{{Should be SVG|coat of arms}}: lambang negara', value: 'coat of arms' },
+				{ label: '{{Should be SVG|diagram}}: diagram yang tidak sesuai dengan subkategori lain', value: 'diagram' },
+				{ label: '{{Should be SVG|emblem}}: emblem, logo bebas, dsb.', value: 'emblem' },
+				{ label: '{{Should be SVG|fair use}}: gambar atau logo untuk penggunaan wajar', value: 'fair use' },
+				{ label: '{{Should be SVG|flag}}: bendera', value: 'flag' },
+				{ label: '{{Should be SVG|graph}}: plot visual data', value: 'graph' },
+				{ label: '{{Should be SVG|logo}}: logo', value: 'logo' },
+				{ label: '{{Should be SVG|map}}: peta', value: 'map' },
+				{ label: '{{Should be SVG|music}}: notasi musik, dsb.', value: 'music' },
+				{ label: '{{Should be SVG|physical}}: gambar "realistis" dari objek fisik, manusia, dsb.', value: 'physical' },
+				{ label: '{{Should be SVG|symbol}}: simbol, ikon lainnya, dsb.', value: 'symbol' }
 			]
 		}
 	},
-	{ label: '{{Should be text}}: image should be represented as text, tables, or math markup', value: 'Should be text' },
-	{ label: '{{Split media}}: there are two different images in the upload log which need to be split', value: 'Split media' }
+	{ label: '{{Should be text}}: gambar harus diganti dengan teks, tabel, atau kode matematika', value: 'Should be text' },
+	{ label: '{{Split media}}: terdapat dua gambar berbeda in log pengunggahan yang perlu dipisahkan', value: 'Split media' }
 ];
 
 Twinkle.tag.file.qualityList = [
@@ -828,12 +830,12 @@ Twinkle.tag.file.qualityList = [
 	{ label: '{{Image-out-of-focus}}', value: 'Image-out-of-focus' },
 	{ label: '{{Image-Poor-Quality}}', value: 'Image-Poor-Quality' },
 	{ label: '{{Image-underexposure}}', value: 'Image-underexposure' },
-	{ label: '{{Low quality chem}}: disputed chemical structures', value: 'Low quality chem' }
+	{ label: '{{Low quality chem}}: struktur kimia yang dipertentangkan', value: 'Low quality chem' }
 ];
 
 Twinkle.tag.file.replacementList = [
-	{ label: '{{Duplicate}}: exact duplicate of another file, but not yet orphaned', value: 'Duplicate' },
-	{ label: '{{Obsolete}}: improved version available', value: 'Obsolete' },
+	{ label: '{{Duplicate}}: berkas duplikat, namun masih dipakai dalam artikel', value: 'Duplicate' },
+	{ label: '{{Obsolete}}: berkas baru telah tersedia', value: 'Obsolete' },
 	{ label: '{{PNG version available}}', value: 'PNG version available' },
 	{ label: '{{Vector version available}}', value: 'Vector version available' }
 ];
@@ -850,7 +852,7 @@ Twinkle.tag.multipleIssuesExceptions = [
 	'merge from',
 	'merge to',
 	'new unreviewed article',
-	'not English',
+	'not Indonesian',
 	'rough translation',
 	'uncategorized',
 	'under construction'
@@ -901,18 +903,18 @@ Twinkle.tag.callbacks = {
 						break;
 					case 'expand language':
 						currentTag += '|topic=';
-						var langcode = prompt('Please enter the language code of the other wiki (e.g. "fr", "roa-rup").  \n' +
-							"This information is required.  To skip the {{expand language}} tag, click Cancel.", "");
+						var langcode = prompt('Masukkan kode bahasa dari wiki lainnya (contohnya "en").  \n' +
+							"Informasi ini diperlukan. Untuk melewatinya, klik Cancel.", "");
 						if (langcode === null || langcode === "") {
-							Morebits.status.warn("Notice", "{{expand language}} tag skipped by user");
+							Morebits.status.warn("Perhatian", "tag {{expand language}} dilewatkan oleh pengguna");
 							return true;  // continue to next tag
 						} else {
 							currentTag += '|langcode=' + langcode;
 						}
-						var otherart = prompt('Please enter the name of the article in the other wiki (without interwiki prefix).  \n' +
-							"This information is optional.  To skip the {{expand language}} tag, click Cancel.", "");
+						var otherart = prompt('Masukkan nama artikel dari wiki lainnya tanpa awalan antarwiki.  \n' +
+							"Informasi ini bersifat opsional. Klik Cancel untuk melewatinya.", "");
 						if (otherart === null) {
-							Morebits.status.warn("Notice", "{{expand language}} tag skipped by user");
+							Morebits.status.warn("Perhatian", "tag {{expand language}} dilewatkan oleh pengguna");
 							return true;  // continue to next tag
 						} else {
 							currentTag += '|otherarticle=' + otherart;
@@ -926,7 +928,7 @@ Twinkle.tag.callbacks = {
 					case 'news release':
 						currentTag += '|1=article';
 						break;
-					case 'not English':
+					case 'not Indonesian':
 					case 'rough translation':
 						if (params.translationLanguage) {
 							currentTag += '|1=' + params.translationLanguage;
@@ -951,7 +953,7 @@ Twinkle.tag.callbacks = {
 									params.discussArticle = (tagName === "merge to" ? params.mergeTarget : mw.config.get('wgTitle'));
 									// nonDiscussArticle is the article which won't have the discussion
 									params.nonDiscussArticle = (tagName === "merge to" ? mw.config.get('wgTitle') : params.mergeTarget);
-									params.talkDiscussionTitle = 'Proposed merge with ' + params.nonDiscussArticle;
+									params.talkDiscussionTitle = 'Diusulkan digabung dengan ' + params.nonDiscussArticle;
 								}
 								currentTag += '|discuss=Talk:' + params.discussArticle + '#' + params.talkDiscussionTitle;
 							}
@@ -967,7 +969,7 @@ Twinkle.tag.callbacks = {
 
 			if ( tagIndex > 0 ) {
 				if( tagIndex === (totalTags - 1) ) {
-					summaryText += ' and';
+					summaryText += ' dan';
 				} else if ( tagIndex < (totalTags - 1) ) {
 					summaryText += ',';
 				}
@@ -993,8 +995,8 @@ Twinkle.tag.callbacks = {
 						tags = tags.concat( params.tags[i] );
 					}
 				} else {
-					Morebits.status.warn( 'Info', 'Found {{' + params.tags[i] +
-						'}} on the article already...excluding' );
+					Morebits.status.warn( 'Informasi', 'Ditemukan tag {{' + params.tags[i] +
+						'}} di artikel tersebut... membatalkan...' );
 					// don't do anything else with merge tags
 					if (params.tags[i] === "merge" || params.tags[i] === "merge from" ||
 						params.tags[i] === "merge to") {
@@ -1008,7 +1010,7 @@ Twinkle.tag.callbacks = {
 			var miOldStyleTest = miOldStyleRegex.exec(pageText);
 
 			if( ( miTest || miOldStyleTest ) && groupableTags.length > 0 ) {
-				Morebits.status.info( 'Info', 'Adding supported tags inside existing {{multiple issues}} tag' );
+				Morebits.status.info( 'Informasi', 'Menambah tag yang lain ke dalam tag {{multiple issues}}' );
 
 				groupableTags.sort();
 				tagText = "";
@@ -1018,7 +1020,7 @@ Twinkle.tag.callbacks = {
 
 				summaryText += ' tag' + ( groupableTags.length > 1 ? 's' : '' ) + ' (within {{[[Template:multiple issues|multiple issues]]}})';
 				if( tags.length > 0 ) {
-					summaryText += ', and';
+					summaryText += ', dan';
 				}
 
 				if( miOldStyleTest ) {
@@ -1034,7 +1036,7 @@ Twinkle.tag.callbacks = {
 				}
 				tagText = "";
 			} else if( params.group && groupableTags.length >= 3 ) {
-				Morebits.status.info( 'Info', 'Grouping supported tags inside {{multiple issues}}' );
+				Morebits.status.info( 'Informasi', 'Mengelompokkan tag yang didukung ke dalam {{multiple issues}}' );
 
 				groupableTags.sort();
 				tagText += '{{multiple issues|\n';
@@ -1042,9 +1044,9 @@ Twinkle.tag.callbacks = {
 				totalTags = groupableTags.length;
 				$.each(groupableTags, addTag);
 
-				summaryText += ' tags (within {{[[Template:multiple issues|multiple issues]]}})';
+				summaryText += ' tag (dalam {{[[Template:multiple issues|multiple issues]]}})';
 				if( tags.length > 0 ) {
-					summaryText += ', and';
+					summaryText += ', dan';
 				}
 				tagText += '}}\n';
 			} else {
@@ -1057,8 +1059,8 @@ Twinkle.tag.callbacks = {
 				if( !tagRe.exec( pageText ) ) {
 					tags = tags.concat( params.tags[i] );
 				} else {
-					Morebits.status.warn( 'Info', 'Found {{' + params.tags[i] +
-						'}} on the redirect already...excluding' );
+					Morebits.status.warn( 'Informasi', 'Ditemukan {{' + params.tags[i] +
+						'}} dalam pengalihan... mengabaikan...' );
 				}
 			}
 		}
@@ -1093,13 +1095,13 @@ Twinkle.tag.callbacks = {
 			// special functions for merge tags
 			if (params.mergeReason) {
 				// post the rationale on the talk page (only operates in main namespace)
-				var talkpageText = "\n\n== Proposed merge with [[" + params.nonDiscussArticle + "]] ==\n\n";
+				var talkpageText = "\n\n== Usulan penggabungan dengan [[" + params.nonDiscussArticle + "]] ==\n\n";
 				talkpageText += params.mergeReason.trim() + " ~~~~";
 
-				var talkpage = new Morebits.wiki.page("Talk:" + params.discussArticle, "Posting rationale on talk page");
+				var talkpage = new Morebits.wiki.page("Talk:" + params.discussArticle, "Mengirimkan alasan ke halaman pembicaraan");
 				talkpage.setAppendText(talkpageText);
-				talkpage.setEditSummary('Proposing to merge [[' + params.nonDiscussArticle + ']] ' +
-					(tags.indexOf("merge") !== -1 ? 'with' : 'into') + ' [[' + params.discussArticle + ']]' +
+				talkpage.setEditSummary('Usulkan penggabungan [[' + params.nonDiscussArticle + ']] ' +
+					(tags.indexOf("merge") !== -1 ? 'with' : 'dengan') + ' [[' + params.discussArticle + ']]' +
 					Twinkle.getPref('summaryAd'));
 				talkpage.setWatchlist(Twinkle.getFriendlyPref('watchMergeDiscussions'));
 				talkpage.setCreateOption('recreate');
@@ -1119,7 +1121,7 @@ Twinkle.tag.callbacks = {
 					discussArticle: params.discussArticle,
 					talkDiscussionTitle: params.talkDiscussionTitle
 				};
-				var otherpage = new Morebits.wiki.page(params.mergeTarget, "Tagging other page (" +
+				var otherpage = new Morebits.wiki.page(params.mergeTarget, "Menandai halaman lain (" +
 					params.mergeTarget + ")");
 				otherpage.setCallbackParameters(newParams);
 				otherpage.load(Twinkle.tag.callbacks.main);
@@ -1143,17 +1145,17 @@ Twinkle.tag.callbacks = {
 
 					// Disallow warning yourself
 					if (initialContrib === mw.config.get('wgUserName')) {
-						innerPageobj.getStatusElement().warn("You (" + initialContrib + ") created this page; skipping user notification");
+						innerPageobj.getStatusElement().warn("Anda (" + initialContrib + ") yang membuat halaman ini; lewati pemberitahuan pengguna");
 						return;
 					}
 
 					var userTalkPage = new Morebits.wiki.page('User talk:' + initialContrib,
 						'Notifying initial contributor (' + initialContrib + ')');
-					var notifytext = "\n\n== Your article [[" + Morebits.pageNameNorm + "]]==\n" +
+					var notifytext = "\n\n== Artikel Anda [[" + Morebits.pageNameNorm + "]]==\n" +
 						"{{subst:uw-notenglish|1=" + Morebits.pageNameNorm +
 						(params.translationPostAtPNT ? "" : "|nopnt=yes") + "}} ~~~~";
 					userTalkPage.setAppendText(notifytext);
-					userTalkPage.setEditSummary("Notice: Please use English when contributing to the English Wikipedia." +
+					userTalkPage.setEditSummary("Pemberitahuan: Gunakan bahasa Inggris ketika menulis di Wikipedia bahasa Indonesia." +
 						Twinkle.getPref('summaryAd'));
 					userTalkPage.setCreateOption('recreate');
 					userTalkPage.setFollowRedirect(true);
@@ -1178,15 +1180,15 @@ Twinkle.tag.callbacks = {
 		var text, summary;
 		if (params.template === "duflu") {
 			text = old_text + "\n\n" + templateText;
-			summary = "Translation cleanup requested on ";
+			summary = "Perapian terjemahan telah diminta di ";
 		} else {
 			text = old_text.replace(/\n+(==\s?Translated pages that could still use some cleanup\s?==)/,
 				"\n\n" + templateText + "\n\n$1");
-			summary = "Translation" + (params.lang ? (" from " + params.lang) : "") + " requested on ";
+			summary = "Penerjemahan" + (params.lang ? (" dari " + params.lang) : "") + " telah diminta di ";
 		}
 
 		if (text === old_text) {
-			statelem.error('failed to find target spot for the discussion');
+			statelem.error('gagal menemukan tujuan untuk berdiskusi');
 			return;
 		}
 		pageobj.setPageText(text);
@@ -1198,7 +1200,7 @@ Twinkle.tag.callbacks = {
 	file: function friendlytagCallbacksFile(pageobj) {
 		var text = pageobj.getPageText();
 		var params = pageobj.getCallbackParameters();
-		var summary = "Adding ";
+		var summary = "Menambahkan ";
 
 		// Add maintenance tags
 		if (params.tags.length) {
@@ -1206,15 +1208,15 @@ Twinkle.tag.callbacks = {
 			var tagtext = "", currentTag;
 			$.each(params.tags, function(k, tag) {
 				// when other commons-related tags are placed, remove "move to Commons" tag
-				if (["Keep local", "subst:ncd", "Do not move to Commons_reason", "Do not move to Commons",
+				if (["Keep local", "subst:ncd", "Do not move to Commons_reason", "Jangan pindahkan ke Commons",
 					"Now Commons"].indexOf(tag) !== -1) {
 					text = text.replace(/\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi, "");
 				}
-				if (tag === "Vector version available") {
+				if (tag === "Veri vektor tersedia") {
 					text = text.replace(/\{\{((convert to |convertto|should be |shouldbe|to)?svg|badpng|vectorize)[^}]*\}\}/gi, "");
 				}
 
-				currentTag = "{{" + (tag === "Do not move to Commons_reason" ? "Do not move to Commons" : tag);
+				currentTag = "{{" + (tag === "Jangan pindahkan ke Commons_reason" ? "Jangan pindahkan ke Commons" : tag);
 
 				var input;
 				switch (tag) {
@@ -1222,7 +1224,7 @@ Twinkle.tag.callbacks = {
 						/* falls through */
 					case "Keep local":
 						input = prompt( "{{" + (tag === "subst:ncd" ? "Now Commons" : tag) +
-							"}} - Enter the name of the image on Commons (if different from local name), excluding the File: prefix:", "" );
+							"}} - Berikan nama berkas di Commons, jika berbeda dengan nama berkas lokal. Jangan berikan awalan File:", "" );
 						if (input === null) {
 							return true;  // continue
 						} else if (input !== "") {
@@ -1230,13 +1232,13 @@ Twinkle.tag.callbacks = {
 						}
 						break;
 					case "Rename media":
-						input = prompt( "{{Rename media}} - Enter the new name for the image (optional):", "" );
+						input = prompt( "{{Rename media}} - Berikan nama baru untuk berkas ini (opsional):", "" );
 						if (input === null) {
 							return true;  // continue
 						} else if (input !== "") {
 							currentTag += "|1=" + input;
 						}
-						input = prompt( "{{Rename media}} - Enter the reason for the rename (optional):", "" );
+						input = prompt( "{{Rename media}} - Berikan alasan penggantian nama (opsional):", "" );
 						if (input === null) {
 							return true;  // continue
 						} else if (input !== "") {
@@ -1246,7 +1248,7 @@ Twinkle.tag.callbacks = {
 					case "Cleanup image":
 						/* falls through */
 					case "Cleanup SVG":
-						input = prompt( "{{" + tag + "}} - Enter the reason for cleanup (required). To skip the tag, click Cancel:", "" );
+						input = prompt( "{{" + tag + "}} - Berikan alasan untuk perapian (wajib). Untuk melewatinya, klik Cancel:", "" );
 						if (input === null) {
 							return true;  // continue
 						} else if (input !== "") {
@@ -1254,7 +1256,7 @@ Twinkle.tag.callbacks = {
 						}
 						break;
 					case "Image-Poor-Quality":
-						input = prompt( "{{Image-Poor-Quality}} - Enter the reason why this image is so bad (required). To skip the tag, click Cancel:", "" );
+						input = prompt( "{{Image-Poor-Quality}} - Berikan alasan mengapa berkas ini sebegitu jeleknya (wajib). Klik Cancel untuk melewatinya:", "" );
 						if (input === null) {
 							return true;  // continue
 						} else if (input !== "") {
@@ -1262,7 +1264,7 @@ Twinkle.tag.callbacks = {
 						}
 						break;
 					case "Low quality chem":
-						input = prompt( "{{Low quality chem}} - Enter the reason why the diagram is disputed (required). To skip the tag, click Cancel:", "" );
+						input = prompt( "{{Low quality chem}} - Berikan alasan mengapa diagram ini dipertentangkan (wajib). Klik Cancel untuk melewatinya:", "" );
 						if (input === null) {
 							return true;  // continue
 						} else if (input !== "") {
@@ -1276,7 +1278,7 @@ Twinkle.tag.callbacks = {
 					case "Obsolete":
 						/* falls through */
 					case "Duplicate":
-						input = prompt( "{{" + tag + "}} - Enter the name of the file which replaces this one (required). To skip the tag, click Cancel:", "" );
+						input = prompt( "{{" + tag + "}} - Berikan nama berkas pengganti (wajib). Klik Cancel untuk melewatinya:", "" );
 						if (input === null) {
 							return true;  // continue
 						} else if (input !== "") {
@@ -1284,7 +1286,7 @@ Twinkle.tag.callbacks = {
 						}
 						break;
 					case "Do not move to Commons_reason":
-						input = prompt( "{{Do not move to Commons}} - Enter the reason why this image should not be moved to Commons (required). To skip the tag, click Cancel:", "" );
+						input = prompt( "{{Do not move to Commons}} - Berikan alasan mengapa berkas ini tidak boleh dipindahkan ke Commons (wajib). Klik Cancel untuk melewatinya:", "" );
 						if (input === null) {
 							return true;  // continue
 						} else if (input !== "") {
@@ -1316,7 +1318,7 @@ Twinkle.tag.callbacks = {
 			});
 
 			if (!tagtext) {
-				pageobj.getStatusElement().warn("User canceled operation; nothing to do");
+				pageobj.getStatusElement().warn("Tindakan pengguna dibatalkan; tugas tidak dilanjutkan");
 				return;
 			}
 
@@ -1373,30 +1375,30 @@ Twinkle.tag.callback.evaluate = function friendlytagCallbackEvaluate(e) {
 			params.tags = form.getChecked( 'redirectTags' );
 			break;
 		default:
-			alert("Twinkle.tag: unknown mode " + Twinkle.tag.mode);
+			alert("Twinkle.tag: moda tak dikenal " + Twinkle.tag.mode);
 			break;
 	}
 
 	// form validation
 	if( !params.tags.length ) {
-		alert( 'You must select at least one tag!' );
+		alert( 'Setidaknya Anda harus memiliki satu tag!' );
 		return;
 	}
 	if( ((params.tags.indexOf("merge") !== -1) + (params.tags.indexOf("merge from") !== -1) +
 		(params.tags.indexOf("merge to") !== -1)) > 1 ) {
-		alert( 'Please select only one of {{merge}}, {{merge from}}, and {{merge to}}. If several merges are required, use {{merge}} and separate the article names with pipes (although in this case Twinkle cannot tag the other articles automatically).' );
+		alert( 'Pilihlah salah satu {{merge}}, {{merge from}}, dan {{merge to}}. Jika memerlukan penggabungan lebih dari satu, gunakan {{merge}} dan pisahkan nama artikel dengan karakter pipa (walau dalam kasus ini Twinkle tak dapat menandai artikel lain secara otomatis).' );
 		return;
 	}
-	if( (params.tags.indexOf("not English") !== -1) && (params.tags.indexOf("rough translation") !== -1) ) {
-		alert( 'Please select only one of {{not English}} and {{rough translation}}.' );
+	if( (params.tags.indexOf("not Indonesian") !== -1) && (params.tags.indexOf("rough translation") !== -1) ) {
+		alert( 'Pilihlah hanya satu dari {{not Indonesian}} dari {{rough translation}}.' );
 		return;
 	}
 	if( (params.mergeTagOther || params.mergeReason) && params.mergeTarget.indexOf('|') !== -1 ) {
-		alert( 'Tagging multiple articles in a merge, and starting a discussion for multiple articles, is not supported at the moment. Please turn off "tag other article", and/or clear out the "reason" box, and try again.' );
+		alert( 'Tandai beberapa artikel dalam sebuah penggabungan, dan mulai diskusi untuk beberapa artikel, tidak didukung saat ini. Matikan opsi "tandai artikel lain", dan/atau kosongkan kotak "alasan" box, dan coba kembali.' );
 		return;
 	}
 	if( params.tags.indexOf('cleanup') !== -1 && params.tagParameters.cleanup.trim && params.tagParameters.cleanup.trim() === "") {
-		alert( 'You must specify a reason for the {{cleanup}} tag.' );
+		alert( 'Anda wajib memberikan alasan pemberian tag {{cleanup}}.' );
 		return;
 	}
 
@@ -1404,12 +1406,12 @@ Twinkle.tag.callback.evaluate = function friendlytagCallbackEvaluate(e) {
 	Morebits.status.init( form );
 
 	Morebits.wiki.actionCompleted.redirect = Morebits.pageNameNorm;
-	Morebits.wiki.actionCompleted.notice = "Tagging complete, reloading article in a few seconds";
+	Morebits.wiki.actionCompleted.notice = "Menandai selesai, sedang memuat kembali halaman ini dalam beberapa detik";
 	if (Twinkle.tag.mode === 'redirect') {
 		Morebits.wiki.actionCompleted.followRedirect = false;
 	}
 
-	var wikipedia_page = new Morebits.wiki.page(Morebits.pageNameNorm, "Tagging " + Twinkle.tag.mode);
+	var wikipedia_page = new Morebits.wiki.page(Morebits.pageNameNorm, "Menandai " + Twinkle.tag.mode);
 	wikipedia_page.setCallbackParameters(params);
 	switch (Twinkle.tag.mode) {
 		case 'article':
@@ -1421,7 +1423,7 @@ Twinkle.tag.callback.evaluate = function friendlytagCallbackEvaluate(e) {
 			wikipedia_page.load(Twinkle.tag.callbacks.file);
 			return;
 		default:
-			alert("Twinkle.tag: unknown mode " + Twinkle.tag.mode);
+			alert("Twinkle.tag: moda tak dikenal " + Twinkle.tag.mode);
 			break;
 	}
 };
