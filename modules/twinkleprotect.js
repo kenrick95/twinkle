@@ -1249,19 +1249,19 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 			Morebits.simpleWindow.setButtonsEnabled( false );
 			Morebits.status.init( form );
 
-			var rppName = 'Wikipedia:Requests for page protection';
+			var rppName = 'Wikipedia:Permintaan perhatian pengurus/Perlindungan';
 
 			// Updating data for the action completed event
 			Morebits.wiki.actionCompleted.redirect = rppName;
-			Morebits.wiki.actionCompleted.notice = "Nomination completed, redirecting now to the discussion page";
+			Morebits.wiki.actionCompleted.notice = "Nominasi selesan, membuka halaman diskusi";
 
-			var rppPage = new Morebits.wiki.page( rppName, 'Requesting protection of page');
+			var rppPage = new Morebits.wiki.page( rppName, 'Meminta perlindungan halaman');
 			rppPage.setFollowRedirect( true );
 			rppPage.setCallbackParameters( rppparams );
 			rppPage.load( Twinkle.protect.callbacks.fileRequest );
 			break;
 		default:
-			alert("twinkleprotect: unknown kind of action");
+			alert("twinkleprotect: tindakan tidak diketahui");
 			break;
 	}
 };
@@ -1269,11 +1269,11 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 Twinkle.protect.callbacks = {
 	taggingPageInitial: function( tagparams ) {
 		if (tagparams.tag === 'noop') {
-			Morebits.status.info("Applying protection template", "nothing to do");
+			Morebits.status.info("Terapkan templat perlindungan", "tidak tahu apa yang mau dilakukan");
 			return;
 		}
 
-		var protectedPage = new Morebits.wiki.page( mw.config.get('wgPageName'), 'Tagging page');
+		var protectedPage = new Morebits.wiki.page( mw.config.get('wgPageName'), 'Tandai halaman');
 		protectedPage.setCallbackParameters( tagparams );
 		protectedPage.load( Twinkle.protect.callbacks.taggingPage );
 	},
@@ -1285,7 +1285,7 @@ Twinkle.protect.callbacks = {
 		var oldtag_re = /\s*(?:<noinclude>)?\s*\{\{\s*(pp-[^{}]*?|protected|(?:t|v|s|p-|usertalk-v|usertalk-s|sb|move)protected(?:2)?|protected template|privacy protection)\s*?\}\}\s*(?:<\/noinclude>)?\s*/gi;
 		var re_result = oldtag_re.exec(text);
 		if (re_result) {
-			if (confirm("{{" + re_result[1] + "}} was found on the page. \nClick OK to remove it, or click Cancel to leave it there.")) {
+			if (confirm("{{" + re_result[1] + "}} ditemukan di halaman ini. \nKlik OK untuk menghapusnya, atau Cancel untuk mengabaikan.")) {
 				text = text.replace( oldtag_re, '' );
 			}
 		}
@@ -1304,7 +1304,7 @@ Twinkle.protect.callbacks = {
 		}
 
 		if( params.tag === 'none' ) {
-			summary = 'Removing protection template' + Twinkle.getPref('summaryAd');
+			summary = 'Menghapus templat perlindungan' + Twinkle.getPref('summaryAd');
 		} else {
 			if( params.noinclude ) {
 				text = "<noinclude>{{" + tag + "}}</noinclude>" + text;
@@ -1313,7 +1313,7 @@ Twinkle.protect.callbacks = {
 			} else {
 				text = "{{" + tag + "}}\n" + text;
 			}
-			summary = "Adding {{" + params.tag + "}}" + Twinkle.getPref('summaryAd');
+			summary = "Menambahkan {{" + params.tag + "}}" + Twinkle.getPref('summaryAd');
 		}
 
 		protectedPage.setEditSummary( summary );
@@ -1337,13 +1337,13 @@ Twinkle.protect.callbacks = {
 		rppLink.appendChild(document.createTextNode(rppPage.getPageName()));
 
 		if ( tag ) {
-			statusElement.error( [ 'There is already a protection request for this page at ', rppLink, ', aborting.' ] );
+			statusElement.error( [ 'Sudah ada permintaan perlindungan halaman ini di ', rppLink, ', sedang membatalkan permintaan.' ] );
 			return;
 		}
 
 		var newtag = '=== [[:' + Morebits.pageNameNorm + ']] ===\n';
 		if( ( new RegExp( '^' + RegExp.escape( newtag ).replace( /\s+/g, '\\s*' ), 'm' ) ).test( text ) ) {
-			statusElement.error( [ 'There is already a protection request for this page at ', rppLink, ', aborting.' ] );
+			statusElement.error( [ 'Sudah ada permintaan perlindungan halaman ini di ', rppLink, ', sedang membatalkan permintaan.' ] );
 			return;
 		}
 		newtag += '* {{pagelinks|' + Morebits.pageNameNorm + '}}\n\n';
@@ -1351,10 +1351,10 @@ Twinkle.protect.callbacks = {
 		var words;
 		switch( params.expiry ) {
 		case 'temporary':
-			words = "Temporary ";
+			words = "Sementara ";
 			break;
 		case 'indefinite':
-			words = "Indefinite ";
+			words = "Selamanya ";
 			break;
 		default:
 			words = "";
@@ -1413,13 +1413,13 @@ Twinkle.protect.callbacks = {
 		if (text.length === originalTextLength)
 		{
 			var linknode = document.createElement('a');
-			linknode.setAttribute("href", mw.util.getUrl("Wikipedia:Twinkle/Fixing RPP") );
-			linknode.appendChild(document.createTextNode('How to fix RPP'));
-			statusElement.error( [ 'Could not find relevant heading on WP:RPP. To fix this problem, please see ', linknode, '.' ] );
+			linknode.setAttribute("href", mw.util.getUrl("Wikipedia:Twinkle/Fixing PPH") );
+			linknode.appendChild(document.createTextNode('Bagaimana memperbaiki PPH'));
+			statusElement.error( [ 'Tidak menemukan bagian yang sesuai di WP:RPP. Untuk memperbaiki masalah ini, lihat ', linknode, '.' ] );
 			return;
 		}
-		statusElement.status( 'Adding new request...' );
-		rppPage.setEditSummary( "Requesting " + params.typename + (params.typename === "pending changes" ? ' on [[' : ' of [[') +
+		statusElement.status( 'Menambahkan permintaan baru...' );
+		rppPage.setEditSummary( "Meminta " + params.typename + (params.typename === "perubahan tertunda" ? ' di [[' : ' dari [[') +
 			Morebits.pageNameNorm + ']].' + Twinkle.getPref('summaryAd') );
 		rppPage.setPageText( text );
 		rppPage.setCreateOption( 'recreate' );
