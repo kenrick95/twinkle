@@ -208,6 +208,7 @@ Twinkle.tag.updateSortOrder = function(e) {
 					type: 'select',
 					list: [
 						{ label: "{{globalize}}: artikel mungkin tidak mewakili keseluruhan subjek yang dibahas", value: "globalize" },
+						// daftar di bawah disembunyikan dahulu
 						/* {
 							label: "Subtemplat {{globalize}} mengenai wilayah",
 							list: [
@@ -304,7 +305,7 @@ Twinkle.tag.updateSortOrder = function(e) {
 					type: 'checkbox',
 					list: [
 						{
-							label: 'List this article at Wikipedia:Pages needing translation into English (PNT)',
+							label: 'Daftarkan artikel ini sebagai artikel yang memerlukan penerjemahan ke bahasa Indonesia',
 							checked: true
 						}
 					]
@@ -312,8 +313,8 @@ Twinkle.tag.updateSortOrder = function(e) {
 				checkbox.subgroup.push({
 					name: 'translationComments',
 					type: 'textarea',
-					label: 'Additional comments to post at PNT',
-					tooltip: 'Optional, and only relevant if "List this article ..." above is checked.'
+					label: 'Komentar tembahan',
+					tooltip: 'Opsional.'
 				});
 				break;
 			case "notability":
@@ -492,7 +493,7 @@ Twinkle.tag.article.tags = {
 	"third-party": "artikel terlalu mengandalkan sumber kedua, dan butuh sumber ketiga",
 	"tone": "gaya penulisan tak sesuai",
 	"too few opinions": "artikel tidak mengandung keseluruhan sudut pandang yang penting",
-    "tugas sekolah": "artikel yang sedang digunakan untuk penilaian di sekolah/universitas",
+   "tugas sekolah": "artikel yang sedang digunakan untuk penilaian di sekolah/universitas",
 	"uncategorized": "artikel tidak ada kategori",
 	"under construction": "artikel sedang dalam tahap pengembangan",
 	"underlinked": "artikel perlu lebih banyak pranala wiki",
@@ -626,7 +627,7 @@ Twinkle.tag.article.tagCategories = {
 		"GOCEinuse",
 		"in use",
 		"new unreviewed article",
-        "tugas sekolah",
+      "tugas sekolah",
 		"under construction"
 	]
 };
@@ -643,7 +644,7 @@ Twinkle.tag.spellingList = [
 		value: 'R from acronym'
 	},
 	{
-		label: '{{R to list entry}}: mengalihkan ke artikel berbentuk \¨entitas kecil\¨ yang mengandung pemerian ringkas subjek yang tidak cukup layak untuk dipisahkan artikelnya',
+		label: '{{R to list entry}}: mengalihkan ke artikel berbentuk \"entitas kecil\" yang mengandung pemerian ringkas subjek yang tidak cukup layak untuk dipisahkan artikelnya',
 		value: 'R to list entry'
 	},
 	{
