@@ -1253,7 +1253,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 
 			// Updating data for the action completed event
 			Morebits.wiki.actionCompleted.redirect = rppName;
-			Morebits.wiki.actionCompleted.notice = "Nominasi selesan, membuka halaman diskusi";
+			Morebits.wiki.actionCompleted.notice = "Nominasi selesai, membuka halaman diskusi";
 
 			var rppPage = new Morebits.wiki.page( rppName, 'Meminta perlindungan halaman');
 			rppPage.setFollowRedirect( true );

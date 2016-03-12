@@ -171,7 +171,7 @@ Twinkle.config.sections = [
 		{
 			name: "deletionSummaryAd",
 			label: "Iklan ringkasan yang digunakan untuk ringkasan penghapusan",
-			helptip: "Biasanya sama deengan iklan ringkasan suntingan di atas.",
+			helptip: "Biasanya sama dengan iklan ringkasan suntingan di atas.",
 			adminOnly: true,
 			type: "string"
 		},
@@ -360,7 +360,7 @@ Twinkle.config.sections = [
 			name: "showRollbackLinks",
 			label: "Tampilkan tautan-tautan pengembalian pada halaman ini",
 			type: "set",
-			setValues: { diff: "Diff pages", others: "Contributions pages of other users", mine: "My contributions page" }
+			setValues: { diff: "Halaman Diff", others: "Halaman kontribusi pengguna lain", mine: "Halaman kontribusi saya" }
 		}
 	]
 },
@@ -560,22 +560,22 @@ Twinkle.config.sections = [
 },
 
 {
-	title: "Talkback",
+	title: "Balasan pembicaraan",
 	inFriendlyConfig: true,
 	preferences: [
 		{
 			name: "markTalkbackAsMinor",
-			label: "Tandai talkback sebagai suntingan kecil",
+			label: "Tandai balasan pembicaraan sebagai suntingan kecil",
 			type: "boolean"
 		},
 		{
 			name: "insertTalkbackSignature",
-			label: "Tambahkan tanda tangan di dalam talkback",
+			label: "Tambahkan tanda tangan di dalam balasan pembicaraan",
 			type: "boolean"
 		},
 		{
 			name: "talkbackHeading",
-			label: "Judul bagian yang digunakan untuk talkback",
+			label: "Judul bagian yang digunakan untuk balasan pembicaraan",
 			type: "string"
 		},
 		{
@@ -593,7 +593,7 @@ Twinkle.config.sections = [
 },
 
 {
-	title: "Unlink",
+	title: "Hapus tautan",
 	preferences: [
 		// TwinkleConfig.unlinkNamespaces (array)
 		// In what namespaces unlink should happen, default in 0 (article) and 100 (portal)
@@ -715,14 +715,14 @@ Twinkle.config.sections = [
 },
 
 {
-	title: "XFD (deletion discussions)",
+	title: "XFD (diskusi penghapusan)",
 	preferences: [
 		// TwinkleConfig.xfdWatchPage (string)
 		// The watchlist setting of the page being nominated for XfD. Either "yes" (add to watchlist), "no" (don't
 		// add to watchlist), or "default" (use setting from preferences). Default is "default" (duh).
 		{
 			name: "xfdWatchPage",
-			label: "Add the nominated page to watchlist",
+			label: "Tambahkan halaman nominasi itu ke daftar pantauan",
 			type: "enum",
 			enumValues: Twinkle.config.commonEnums.watchlist
 		},
@@ -733,8 +733,8 @@ Twinkle.config.sections = [
 		// Either "yes" (add to watchlist), "no" (don't add to watchlist), or "default" (use setting from preferences). Default is "default" (duh).
 		{
 			name: "xfdWatchDiscussion",
-			label: "Add the deletion discussion page to watchlist",
-			helptip: "This refers to the discussion subpage (for AfD and MfD) or the daily log page (for TfD, CfD, RfD and FfD)",
+			label: "Tambahkan halaman diskusi penghapusan ke daftar pantauan",
+			helptip: "Ini merujuk ke subhalaman diskusi (untuk AfD dan MfD) atau halaman log harian (untuk TfD, CfD, RfD dan FfD)",
 			type: "enum",
 			enumValues: Twinkle.config.commonEnums.watchlist
 		},
@@ -745,8 +745,8 @@ Twinkle.config.sections = [
 		// Sorry in advance for any false positives.).
 		{
 			name: "xfdWatchList",
-			label: "Add the daily log/list page to the watchlist (where applicable)",
-			helptip: "This only applies for AfD and MfD, where the discussions are transcluded onto a daily log page (for AfD) or the main MfD page (for MfD).",
+			label: "Tambahkan log harian/daftar halaman ke daftar pantauan (jika memungkinkan)",
+			helptip: "Ini hanya berlaku untuk AfD dan MfD, di mana diskusinya ditransklusikan ke halaman log harian (untuk AfD) atau halaman utama MfD (untuk MfD).",
 			type: "enum",
 			enumValues: Twinkle.config.commonEnums.watchlist
 		},
@@ -756,7 +756,7 @@ Twinkle.config.sections = [
 		// add to watchlist), or "default" (use setting from preferences). Default is "default" (duh).
 		{
 			name: "xfdWatchUser",
-			label: "Add the user talk page to watchlist (when notifying)",
+			label: "Tambahkan halaman pembicaraan pengguna ke daftar pantauan (ketika memberitahukan)",
 			type: "enum",
 			enumValues: Twinkle.config.commonEnums.watchlist
 		}
@@ -764,7 +764,7 @@ Twinkle.config.sections = [
 },
 
 {
-	title: "Hidden",
+	title: "Disembunyikan",
 	hidden: true,
 	preferences: [
 		// twinkle.header.js: portlet setup
@@ -866,7 +866,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 		// (settings in that file will still work, but they will be overwritten by twinkleoptions.js settings)
 		var contentnotice = document.createElement("p");
 		// I hate innerHTML, but this is one thing it *is* good for...
-		contentnotice.innerHTML = "<b>Before modifying your preferences here,</b> make sure you have removed any old <code>TwinkleConfig</code> and <code>FriendlyConfig</code> settings from your <a href=\"" + mw.util.getUrl("Special:MyPage/skin.js") + "\" title=\"Special:MyPage/skin.js\">user JavaScript file</a>.";
+		contentnotice.innerHTML = "<b>Sebelum mengubah preferensi Anda di sini,</b> pastikan <code>TwinkleConfig</code> lama dan pengaturan <code>FriendlyConfig</code> dari <a href=\"" + mw.util.getUrl("Special:MyPage/skin.js") + "\" title=\"Special:MyPage/skin.js\">user berkas JavaScript</a> sudah dihapus.";
 		contentdiv.appendChild(contentnotice);
 
 		// look and see if the user does in fact have any old settings in their skin JS file
@@ -1239,8 +1239,8 @@ Twinkle.config.legacyPrefsNotice = function twinkleconfigLegacyPrefsNotice(pageo
 	if (text.indexOf("TwinkleConfig") !== -1 || text.indexOf("FriendlyConfig") !== -1) {
 		contentnotice.innerHTML = '<table class="plainlinks ombox ombox-content"><tr><td class="mbox-image">' +
 			'<img alt="" src="http://upload.wikimedia.org/wikipedia/en/3/38/Imbox_content.png" /></td>' +
-			'<td class="mbox-text"><p><big><b>Before modifying your settings here,</b> you must remove your old Twinkle and Friendly settings from your personal skin JavaScript.</big></p>' +
-			'<p>To do this, you can <a href="' + mw.config.get("wgScript") + '?title=User:' + encodeURIComponent(mw.config.get("wgUserName")) + '/' + mw.config.get("skin") + '.js&action=edit" target="_blank"><b>edit your personal JavaScript</b></a>, removing all lines of code that refer to <code>TwinkleConfig</code> and <code>FriendlyConfig</code>.</p>' +
+			'<td class="mbox-text"><p><big><b>Sebelum mengubah pengaturan Anda di sini,,</b> Anda perlu menghapus pengaturan Twinkle lama Anda dan pengaturan Ramah dari kulit JavaScript pribadi.</big></p>' +
+			'<p>To do this, you can <a href="' + mw.config.get("wgScript") + '?title=User:' + encodeURIComponent(mw.config.get("wgUserName")) + '/' + mw.config.get("skin") + '.js&action=edit" target="_blank"><b>sunting JavaScript pribadi</b></a>, menghapus semua baris kode yang merujuk kepada <code>TwinkleConfig</code> dan <code>FriendlyConfig</code>.</p>' +
 			'</td></tr></table>';
 	} else {
 		$(contentnotice).remove();
@@ -1258,7 +1258,7 @@ Twinkle.config.listDialog.addRow = function twinkleconfigListDialogAddRow(dlgtab
 	var removeButton = document.createElement("button");
 	removeButton.setAttribute("type", "button");
 	removeButton.addEventListener("click", function() { $(contenttr).remove(); }, false);
-	removeButton.textContent = "Remove";
+	removeButton.textContent = "Hapus";
 	contenttd.appendChild(removeButton);
 	contenttr.appendChild(contenttd);
 
@@ -1296,7 +1296,7 @@ Twinkle.config.listDialog.display = function twinkleconfigListDialogDisplay(e) {
 
 	var dialog = new Morebits.simpleWindow(720, 400);
 	dialog.setTitle(curpref.label);
-	dialog.setScriptName("Twinkle preferences");
+	dialog.setScriptName("Preferensi Twinkle");
 
 	var dialogcontent = document.createElement("div");
 	var dlgtable = document.createElement("table");
@@ -1346,7 +1346,7 @@ Twinkle.config.listDialog.display = function twinkleconfigListDialogDisplay(e) {
 	addButton.addEventListener("click", function(e) {
 		Twinkle.config.listDialog.addRow(dlgtbody);
 	}, false);
-	addButton.textContent = "Add";
+	addButton.textContent = "Tambah";
 	dlgtd.appendChild(addButton);
 	dlgtr.appendChild(dlgtd);
 	dlgtfoot.appendChild(dlgtr);
@@ -1481,7 +1481,7 @@ Twinkle.config.resetPref = function twinkleconfigResetPref(pref, inFriendlyConfi
 			break;
 
 		default:
-			alert("twinkleconfig: unknown data type for preference " + pref.name);
+			alert("twinkleconfig: jenis data untuk preferensi tak diketahui " + pref.name);
 			break;
 	}
 };
@@ -1505,7 +1505,7 @@ Twinkle.config.resetAllPrefs = function twinkleconfigResetAllPrefs() {
 Twinkle.config.save = function twinkleconfigSave(e) {
 	Morebits.status.init( document.getElementById("twinkle-config-content") );
 
-	Morebits.wiki.actionCompleted.notice = "Save";
+	Morebits.wiki.actionCompleted.notice = "Menyimpan";
 
 	var userjs = mw.config.get("wgFormattedNamespaces")[mw.config.get("wgNamespaceIds").user] + ":" + mw.config.get("wgUserName") + "/twinkleoptions.js";
 	var wikipedia_page = new Morebits.wiki.page(userjs, "Menyimpan preferensi ke " + userjs);
@@ -1587,7 +1587,7 @@ if (!JSON) {
 			gap = mind;
 			return v;
 		default:
-			throw new Error( "JSON.stringify: unknown data type" );
+			throw new Error( "JSON.stringify: jenis data tak diketahui" );
 		}
 	}
 
@@ -1696,7 +1696,7 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 						break;
 
 					default:
-						alert("twinkleconfig: unknown data type for preference " + pref.name);
+						alert("twinkleconfig: jenis data untuk preferensi tak diketahui " + pref.name);
 						break;
 				}
 			}
