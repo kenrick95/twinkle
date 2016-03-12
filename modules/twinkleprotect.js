@@ -673,7 +673,7 @@ Twinkle.protect.protectionTypes = [
 			{ label: 'Vandalisme berulang (semi)', selected: true, value: 'pp-semi-vandalism' },
 			{ label: 'Suntingan merusak (semi)', value: 'pp-semi-disruptive' },
 			{ label: 'Penambahan isi tanpa sumber (semi)', value: 'pp-semi-unsourced' },
-			{ label: 'Penyalahgunaan kebijakan BLP (semi)', value: 'pp-semi-blp' },
+			{ label: 'Melanggar kebijakan BLP (semi)', value: 'pp-semi-blp' },
 			{ label: 'Penggunaan akun boneka (semi)', value: 'pp-semi-sock' },
 			{ label: 'Pembicaraan pengguna yang diblokir (semi)', value: 'pp-semi-usertalk' }
 		]
@@ -764,12 +764,12 @@ Twinkle.protect.protectionPresetsInfo = {
 	},
 	'pp-semi-unsourced': {
 		edit: 'autoconfirmed',
-		reason: 'Penambahakan isi halaman tanpa sumber',
+		reason: 'Penambahan isi halaman tanpa sumber',
 		template: 'pp-protected'
 	},
 	'pp-semi-blp': {
 		edit: 'autoconfirmed',
-		reason: 'Penyalahgunaan kebijakan tokoh yang masih hidup',
+		reason: 'Melanggar kebijakan tokoh yang masih hidup',
 		template: 'pp-blp'
 	},
 	'pp-semi-usertalk': {
@@ -811,7 +811,7 @@ Twinkle.protect.protectionPresetsInfo = {
 	},
 	'pp-pc-blp': {
 		stabilize: 'autoconfirmed',
-		reason: 'Penyalahgunaan kebijakan tokoh yang masih hidup',
+		reason: 'Melanggar kebijakan tokoh yang masih hidup',
 		template: 'pp-pc1'
 	},
 	'pp-pc-protected': {
@@ -845,15 +845,15 @@ Twinkle.protect.protectionPresetsInfo = {
 	},
 	'pp-create-offensive': {
 		create: 'sysop',
-		reason: '[[WP:SALT|Offensive name]]'
+		reason: 'Nama yang menghasut'
 	},
 	'pp-create-salt': {
 		create: 'sysop',
-		reason: '[[WP:SALT|Repeatedly recreated]]'
+		reason: 'Halaman yang berulang kali dibuat dalam waktu dekat'
 	},
 	'pp-create-blp': {
 		create: 'sysop',
-		reason: '[[WP:BLPDEL|Recently deleted BLP]]'
+		reason: 'Halaman tokoh hidup yang dibuat kembali'
 	},
 	'pp-create': {
 		create: 'sysop',
@@ -863,39 +863,39 @@ Twinkle.protect.protectionPresetsInfo = {
 
 Twinkle.protect.protectionTags = [
 	{
-		label: 'None (remove existing protection templates)',
+		label: 'Tidak ada (hapus templat perlindungan yang ada)',
 		value: 'none'
 	},
 	{
-		label: 'None (do not remove existing protection templates)',
+		label: 'Tidak ada (jangan hapus templat perlindungan yang ada)',
 		value: 'noop'
 	},
 	{
-		label: 'Edit protection templates',
+		label: 'Sunting templat perlindungan',
 		list: [
-			{ label: '{{pp-vandalism}}: vandalism', value: 'pp-vandalism' },
-			{ label: '{{pp-dispute}}: dispute/edit war', value: 'pp-dispute', selected: true },
-			{ label: '{{pp-blp}}: BLP violations', value: 'pp-blp' },
-			{ label: '{{pp-sock}}: sockpuppetry', value: 'pp-sock' },
-			{ label: '{{pp-template}}: high-risk template', value: 'pp-template' },
-			{ label: '{{pp-usertalk}}: blocked user talk', value: 'pp-usertalk' },
-			{ label: '{{pp-protected}}: general protection', value: 'pp-protected' },
-			{ label: '{{pp-semi-indef}}: general long-term semi-protection', value: 'pp-semi-indef' }
+			{ label: '{{pp-vandalism}}: vandalisme', value: 'pp-vandalism' },
+			{ label: '{{pp-dispute}}: perang suntingan', value: 'pp-dispute', selected: true },
+			{ label: '{{pp-blp}}: melanggar kebijakan BLP', value: 'pp-blp' },
+			{ label: '{{pp-sock}}: penyalahgunaan akun boneka', value: 'pp-sock' },
+			{ label: '{{pp-template}}: templat berisiko tinggi', value: 'pp-template' },
+			{ label: '{{pp-usertalk}}: halaman pembicaraan pengguna yang diblokir', value: 'pp-usertalk' },
+			{ label: '{{pp-protected}}: perlindungan umum', value: 'pp-protected' },
+			{ label: '{{pp-semi-indef}}: perlindungan sebagian dalam jangka waktu lama umum', value: 'pp-semi-indef' }
 		]
 	},
 	{
-		label: 'Pending changes templates',
+		label: 'Templat perubahan tertunda',
 		list: [
-			{ label: '{{pp-pc1}}: pending changes level 1', value: 'pp-pc1' }
+			{ label: '{{pp-pc1}}: perubahan tertunda tingkat 1', value: 'pp-pc1' }
 		]
 	},
 	{
-		label: 'Move protection templates',
+		label: 'Templat perlindungan pemindahan',
 		list: [
-			{ label: '{{pp-move-dispute}}: dispute/move war', value: 'pp-move-dispute' },
-			{ label: '{{pp-move-vandalism}}: page-move vandalism', value: 'pp-move-vandalism' },
-			{ label: '{{pp-move-indef}}: general long-term', value: 'pp-move-indef' },
-			{ label: '{{pp-move}}: other', value: 'pp-move' }
+			{ label: '{{pp-move-dispute}}: perang suntingan', value: 'pp-move-dispute' },
+			{ label: '{{pp-move-vandalism}}: vandalisme pemindahan halaman', value: 'pp-move-vandalism' },
+			{ label: '{{pp-move-indef}}: umum dalam jangka waktu lama', value: 'pp-move-indef' },
+			{ label: '{{pp-move}}: lainnya', value: 'pp-move' }
 		]
 	}
 ];
@@ -1022,7 +1022,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 			// protect the page
 
 			Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
-			Morebits.wiki.actionCompleted.notice = "Protection complete";
+			Morebits.wiki.actionCompleted.notice = "Perlindungan selesai";
 
 			var statusInited = false;
 			var thispage;
@@ -1046,7 +1046,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 			}
 
 			var protectIt = function twinkleprotectCallbackProtectIt(next) {
-				thispage = new Morebits.wiki.page(mw.config.get('wgPageName'), "Protecting page");
+				thispage = new Morebits.wiki.page(mw.config.get('wgPageName'), "Sedang melindungi...");
 				if (mw.config.get('wgArticleId')) {
 					if (form.editmodify.checked) {
 						thispage.setEditProtection(form.editlevel.value, form.editexpiry.value);
@@ -1062,7 +1062,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 				if (form.protectReason.value) {
 					thispage.setEditSummary(form.protectReason.value);
 				} else {
-					alert("You must enter a protect reason, which will be inscribed into the protection log.");
+					alert("Berikan alasan perlindungan, yang nantinya akan dimasukkan ke log perlindungan.");
 					return;
 				}
 
@@ -1080,13 +1080,13 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 					thispage.getStatusElement().info("done");
 				}
 
-				thispage = new Morebits.wiki.page(mw.config.get('wgPageName'), "Applying pending changes protection");
+				thispage = new Morebits.wiki.page(mw.config.get('wgPageName'), "Menerapkan perlindungan perubahan tertunda");
 				thispage.setFlaggedRevs(stabilizeValues.pclevel, stabilizeValues.pcexpiry);
 
 				if (stabilizeValues.protectReason) {
 					thispage.setEditSummary(stabilizeValues.protectReason);
 				} else {
-					alert("You must enter a protect reason, which will be inscribed into the protection log.");
+					alert("Berikan alasan perlindungan, yang nantinya akan dimasukkan ke log perlindungan.");
 					return;
 				}
 
@@ -1109,7 +1109,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 			} else if (form.pcmodify && form.pcmodify.checked) {
 				stabilizeIt();
 			} else {
-				alert("Please give Twinkle something to do! \nIf you just want to tag the page, you can choose the 'Tag page with protection template' option at the top.");
+				alert("Berikan tugas kepada Twinkle! \nJika Anda hanya ingin menandai halaman, pilih opsi ¨Tandai halaman dengan templat perlindungan¨ di bagian atas.");
 			}
 
 			break;
@@ -1122,7 +1122,7 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 
 			Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
 			Morebits.wiki.actionCompleted.followRedirect = false;
-			Morebits.wiki.actionCompleted.notice = "Tagging complete";
+			Morebits.wiki.actionCompleted.notice = "Penandaan selesai";
 
 			Twinkle.protect.callbacks.taggingPageInitial(tagparams);
 			break;
@@ -1176,52 +1176,52 @@ Twinkle.protect.callback.evaluate = function twinkleprotectCallbackEvaluate(e) {
 			}
 			switch (form.category.value) {
 				case 'pp-dispute':
-					typereason = 'Content dispute/edit warring';
+					typereason = 'Perang suntingan';
 					break;
 				case 'pp-vandalism':
 				case 'pp-semi-vandalism':
 				case 'pp-pc-vandalism':
-					typereason = 'Persistent vandalism';
+					typereason = 'Vandalisme berulang-ulang';
 					break;
 				case 'pp-semi-disruptive':
 				case 'pp-pc-disruptive':
-					typereason = 'Persistent [[Wikipedia:Disruptive editing|disruptive editing]]';
+					typereason = 'Suntingan tidak berguna berulang-ulang';
 					break;
 				case 'pp-semi-unsourced':
 				case 'pp-pc-unsourced':
-					typereason = 'Persistent addition of [[WP:INTREF|unsourced or poorly sourced content]]';
+					typereason = 'Menambahkan isi yang tidak memiliki sumber';
 					break;
 				case 'pp-template':
-					typereason = 'Highly visible template';
+					typereason = 'Templat yang banyak digunakan';
 					break;
 				case 'pp-usertalk':
 				case 'pp-semi-usertalk':
-					typereason = 'Inappropriate use of user talk page while blocked';
+					typereason = 'Penyalahgunaan halaman pembicaraan pengguna yang sedang diblokir';
 					break;
 				case 'pp-semi-sock':
-					typereason = 'Persistent sockpuppetry';
+					typereason = 'Penggunaan akun boneka berulang-ulang';
 					break;
 				case 'pp-semi-blp':
 				case 'pp-pc-blp':
-					typereason = '[[WP:BLP|BLP]] policy violations';
+					typereason = 'Melanggar kebijakan tokoh yang masih hidup';
 					break;
 				case 'pp-move-dispute':
-					typereason = 'Page title dispute/move warring';
+					typereason = 'Judul halaman yang dipertentangkan/perang pemindahan halaman';
 					break;
 				case 'pp-move-vandalism':
-					typereason = 'Page-move vandalism';
+					typereason = 'Vandalisme pemindahan halaman';
 					break;
 				case 'pp-move-indef':
-					typereason = 'Highly visible page';
+					typereason = 'Halaman yang banyak ditampilkan';
 					break;
 				case 'pp-create-offensive':
-					typereason = 'Offensive name';
+					typereason = 'Nama yang menghasut';
 					break;
 				case 'pp-create-blp':
-					typereason = 'Recently deleted [[WP:BLP|BLP]]';
+					typereason = 'Halaman tokoh yang masih hidup yang baru dihapus';
 					break;
 				case 'pp-create-salt':
-					typereason = 'Repeatedly recreated';
+					typereason = 'Pembuatan halaman berulang-ulang dalam waktu dekat';
 					break;
 				default:
 					typereason = '';
