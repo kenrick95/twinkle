@@ -313,7 +313,7 @@ Twinkle.tag.updateSortOrder = function(e) {
 				checkbox.subgroup.push({
 					name: 'translationComments',
 					type: 'textarea',
-					label: 'Komentar tembahkan',
+					label: 'Komentar tembahan',
 					tooltip: 'Opsional.'
 				});
 				break;
