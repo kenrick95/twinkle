@@ -1696,7 +1696,7 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 						break;
 
 					default:
-						alert("twinkleconfig: unknown data type for preference " + pref.name); pref.name);
+						alert("twinkleconfig: unknown data type for preference " + pref.name);
 						break;
 				}
 			}
