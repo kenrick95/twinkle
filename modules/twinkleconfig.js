@@ -207,7 +207,7 @@ Twinkle.config.sections = [
 },
 
 {
-	title: "ARV",
+	title: "Laporkan pengguna",
 	preferences: [
 		{
 			name: "spiWatchReport",
@@ -307,7 +307,7 @@ Twinkle.config.sections = [
 			name: "openTalkPage",
 			label: "Buka halaman pembicaraan pengguna setelah pengembalian dengan cara ini:",
 			type: "set",
-			setValues: { agf: "AGF rollback", norm: "Normal rollback", vand: "Vandalism rollback", torev: "\"Restore this version\"" }
+			setValues: { agf: "Pengembalian ANB", norm: "Pengembalian normal", vand: "Pengembalian vandalisme", torev: "\"Kembalikan revisi ini\"" }
 		},
 
 		// TwinkleConfig.openTalkPageOnAutoRevert (bool)
@@ -325,7 +325,7 @@ Twinkle.config.sections = [
 			name: "markRevertedPagesAsMinor",
 			label: "Tandai sebagai suntingan kecil pada pengembalian ini",
 			type: "set",
-			setValues: { agf: "AGF rollback", norm: "Normal rollback", vand: "Vandalism rollback", torev: "\"Restore this version\"" }
+			setValues: { agf: "Pengembalian ANB", norm: "Pengembalian normal", vand: "Pengembalian vandalisme", torev: "\"Kembalikan revisi ini\"" }
 		},
 
 		// TwinkleConfig.watchRevertedPages (array)
@@ -334,7 +334,7 @@ Twinkle.config.sections = [
 			name: "watchRevertedPages",
 			label: "Tambahkan halaman ke daftar pantauan pada pengembalian ini",
 			type: "set",
-			setValues: { agf: "AGF rollback", norm: "Normal rollback", vand: "Vandalism rollback", torev: "\"Restore this version\"" }
+			setValues: { agf: "Pengembalian ANB", norm: "Pengembalian normal", vand: "Pengembalian vandalisme", torev: "\"Kembalikan revisi ini\"" }
 		},
 
 		// TwinkleConfig.offerReasonOnNormalRevert (boolean)
@@ -384,7 +384,7 @@ Twinkle.config.sections = [
 			name: "speedySelectionStyle",
 			label: "Kapan eksekusi dilakukan dan menandai/menghapus halaman",
 			type: "enum",
-			enumValues: { "buttonClick": 'When I click "Submit"', "radioClick": "As soon as I click an option" }
+			enumValues: { "buttonClick": 'Ketika saya mengeklik "Submit"', "radioClick": "Setelah saya memilih sebuah opsi" }
 		},
 
 		// TwinkleConfig.watchSpeedyPages (array)
@@ -410,7 +410,7 @@ Twinkle.config.sections = [
 		{
 			name: "notifyUserOnSpeedyDeletionNomination",
 			label: "Beritahu pembuat halaman jika menandai dengan kriteria ini",
-			helptip: "Meskipun Anda memilih untuk memberitahu melalui tampilan KPC, pemberitahuan tersebut hanya akan dilakukan sesuai kriteria yang dipilih di sini.",
+			helptip: "Meskipun Anda memilih untuk memberitahukan melalui tampilan KPC, pemberitahuan tersebut hanya akan dilakukan sesuai kriteria yang dipilih di sini.",
 			type: "set",
 			setValues: Twinkle.config.commonSets.csdCriteriaNotification,
 			setDisplayOrder: Twinkle.config.commonSets.csdCriteriaNotificationDisplayOrder
@@ -599,8 +599,8 @@ Twinkle.config.sections = [
 		// In what namespaces unlink should happen, default in 0 (article) and 100 (portal)
 		{
 			name: "unlinkNamespaces",
-			label: "Hapus tautan dari halaman dalam ruang nama ini",
-			helptip: "Hindari memilih ruang nama pembicaraan apapun, karena Twinkle mungkin akan menghapus tautan dalam arsip pembicaraan.",
+			label: "Hapus tautan dari halaman dalam ruangnama ini",
+			helptip: "Hindari memilih ruangnama pembicaraan apapun, karena Twinkle mungkin akan menghapus tautan dalam arsip pembicaraan.",
 			type: "set",
 			setValues: Twinkle.config.commonSets.namespacesNoSpecial
 		}
@@ -624,7 +624,7 @@ Twinkle.config.sections = [
 				"5": "Tingkat 4im",
 				"6": "Pemberitahuan masalah tunggal",
 				"7": "Peringatan masalah tunggal",
-				"9": "Peringatan khusus"
+				"9": "Peringatan lainnya"
 			}
 		},
 
@@ -702,12 +702,12 @@ Twinkle.config.sections = [
 			label: "Tampilan templat selamat datang kustom",
 			helptip: "Anda dapat menambahkan templat selamat datang lainnya, atau subhalaman pengguna yang merupakan templat selamat datang (diawali dengan \"User:\"). Harap diingat bahwa templat ini disubstitusi ke halaman pembicaraan pengguna.",
 			type: "customList",
-			customListValueTitle: "Template name (no curly brackets)",
-			customListLabelTitle: "Text to show in Welcome dialog"
+			customListValueTitle: "Nama templat (tanpa kurung kurawal)",
+			customListLabelTitle: "Teks yang ditampilkan di kotak dialog Selamat datang"
 		},
 		{
 			name: "customWelcomeSignature",
-			label: "Tandatangani templat selamat datang secara otomatis",
+			label: "Tanda tangani templat selamat datang secara otomatis",
 			helptip: "Jika templat selamat datang kustom Anda telah memuat tanda tangan di dalam templatnya, nonaktifkan opsi ini.",
 			type: "boolean"
 		}
@@ -1118,7 +1118,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 						break;
 
 					default:
-						alert("twinkleconfig: tipe data tak diketahui untuk preferensi " + pref.name);
+						alert("twinkleconfig: unknown data type for preference " + pref.name);
 						break;
 				}
 				row.appendChild(cell);
@@ -1587,7 +1587,7 @@ if (!JSON) {
 			gap = mind;
 			return v;
 		default:
-			throw new Error( "JSON.stringify: jenis data tak diketahui" );
+			throw new Error( "JSON.stringify: unknown data type" );
 		}
 	}
 
@@ -1696,7 +1696,7 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 						break;
 
 					default:
-						alert("twinkleconfig: jenis data untuk preferensi tak diketahui " + pref.name);
+						alert("twinkleconfig: unknown data type for preference " + pref.name); pref.name);
 						break;
 				}
 			}
