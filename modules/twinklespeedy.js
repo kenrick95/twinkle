@@ -1001,7 +1001,7 @@ Twinkle.speedy.generalList = [
 	},
 	{
 		label: 'U11: Iklan atau promosi terang-terangan.',
-		value: 'spam',
+		value: 'iklan',
 		tooltip: 'Yang termasuk di dalamnya: Halaman yang dibuat dengan tujuan utama untuk mempromosikan suatu entitas, dan yang tidak ensiklopedis (yang perlu ditulis ulang agar bersifat ensiklopedis). Yang tidak termasuk di dalamnya: artikel yang memiliki judul suatu nama perusahaan atau produk tidak secara otomatis masuk ke kategori ini.',
 		hideWhenRedirect: true
 	},
