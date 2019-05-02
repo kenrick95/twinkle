@@ -183,13 +183,13 @@ Twinkle.arv.callback.changeCategory = function (e) {
 	case 'username':
 		work_area = new Morebits.quickForm.element( {
 				type: 'field',
-				label: 'Report username violation',
+				label: 'Laporkan pelanggaran nama pengguna',
 				name: 'work_area'
 			} );
 		work_area.append ( {
 				type: 'header',
-				label: 'Type(s) of inappropriate username',
-				tooltip: 'Wikipedia does not allow usernames that are misleading, promotional, offensive or disruptive. Domain names and email addresses are likewise prohibited. These criteria apply to both usernames and signatures. Usernames that are inappropriate in another language, or that represent an inappropriate name with misspellings and substitutions, or do so indirectly or by implication, are still considered inappropriate.'
+				label: 'Jenis pelanggaran nama pengguna',
+				tooltip: 'Wikipedia tidak mengizinkan nama pengguna yang menyesatkan, promosi, menyinggung, atau mengganggu. Nama domain dan alamat email juga dilarang. Kriteria ini berlaku untuk nama pengguna dan tanda tangan. Nama pengguna yang tidak pantas dalam bahasa lain, atau yang mewakili nama yang tidak sesuai dengan kesalahan ejaan dan penggantian, atau melakukannya secara tidak langsung atau dengan implikasi, masih dianggap melanggar kebijakan Wikipedia.'
 			} );
 		work_area.append( {
 				type: 'checkbox',
@@ -225,7 +225,7 @@ Twinkle.arv.callback.changeCategory = function (e) {
 		work_area.append( {
 				type: 'textarea',
 				name: 'reason',
-				label: 'Comment:'
+				label: 'Komentar tambahan:'
 			} );
 		work_area = work_area.render();
 		old_area.parentNode.replaceChild( work_area, old_area );
