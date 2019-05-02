@@ -5,13 +5,13 @@
 
 
 /*
-	****************************************
-	*** twinklearv.js: ARV module
-	****************************************
-	* Mode of invocation:     Tab ("ARV")
-	* Active on:              Existing and non-existing user pages, user talk pages, contributions pages
-	* Config directives in:   TwinkleConfig
-	*/
+ ****************************************
+ *** twinklearv.js: ARV module
+ ****************************************
+ * Mode of invocation:     Tab ("ARV")
+ * Active on:              Existing and non-existing user pages, user talk pages, contributions pages
+ * Config directives in:   TwinkleConfig
+ */
 
 Twinkle.arv = function twinklearv() {
 	var username = mw.config.get('wgRelevantUserName');
