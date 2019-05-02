@@ -5,13 +5,13 @@
 
 
 /*
- ****************************************
- *** twinklearv.js: ARV module
- ****************************************
- * Mode of invocation:     Tab ("ARV")
- * Active on:              Existing and non-existing user pages, user talk pages, contributions pages
- * Config directives in:   TwinkleConfig
- */
+	****************************************
+	*** twinklearv.js: ARV module
+	****************************************
+	* Mode of invocation:     Tab ("ARV")
+	* Active on:              Existing and non-existing user pages, user talk pages, contributions pages
+	* Config directives in:   TwinkleConfig
+	*/
 
 Twinkle.arv = function twinklearv() {
 	var username = mw.config.get('wgRelevantUserName');
@@ -31,43 +31,43 @@ Twinkle.arv.callback = function ( uid ) {
 	}
 
 	var Window = new Morebits.simpleWindow( 600, 500 );
-	Window.setTitle( "Advance Reporting and Vetting" ); //Backronym
+	Window.setTitle( "Pelaporan dan pemeriksaan lanjutan" ); //Backronym
 	Window.setScriptName( "Twinkle" );
-	Window.addFooterLink( "Guide to AIV", "WP:GAIV" );
-	Window.addFooterLink( "UAA instructions", "WP:UAAI" );
-	Window.addFooterLink( "About SPI", "WP:SPI" );
-	Window.addFooterLink( "Twinkle help", "WP:TW/DOC#arv" );
+	Window.addFooterLink( "Pengenalan AIV", "WP:GAIV" );
+	Window.addFooterLink( "Intruksi UAA", "WP:UAAI" );
+	Window.addFooterLink( "Tentang SPI", "WP:SPI" );
+	Window.addFooterLink( "Bantuan Twinkle", "WP:TW/DOC#arv" );
 
 	var form = new Morebits.quickForm( Twinkle.arv.callback.evaluate );
 	var categories = form.append( {
 			type: 'select',
 			name: 'category',
-			label: 'Select report type: ',
+			label: 'Pilih jenis laporan: ',
 			event: Twinkle.arv.callback.changeCategory
 		} );
 	categories.append( {
 			type: 'option',
-			label: 'Vandalism (WP:AIV)',
+			label: 'Vandalisme (WP:AIV)',
 			value: 'aiv'
 		} );
 	categories.append( {
 			type: 'option',
-			label: 'Username (WP:UAA)',
+			label: 'Nama pengguna (WP:UAA)',
 			value: 'username'
 		} );
 	categories.append( {
 			type: 'option',
-			label: 'Sockpuppeteer (WP:SPI)',
+			label: 'Akun boneka (induk) (WP:SPI)',
 			value: 'sock'
 		} );
 	categories.append( {
 			type: 'option',
-			label: 'Sockpuppet (WP:SPI)',
+			label: 'Akun boneka (WP:SPI)',
 			value: 'puppet'
 		} );
 	categories.append( {
 			type: 'option',
-			label: 'Edit warring (WP:AN3)',
+			label: 'Perang suntingan (WP:AN3)',
 			value: 'an3'
 		} );
 	form.append( {
@@ -104,13 +104,13 @@ Twinkle.arv.callback.changeCategory = function (e) {
 	default:
 		work_area = new Morebits.quickForm.element( {
 				type: 'field',
-				label: 'Report user for vandalism',
+				label: 'Laporkan pengguna pelaku vandal',
 				name: 'work_area'
 			} );
 		work_area.append( {
 				type: 'input',
 				name: 'page',
-				label: 'Primary linked page: ',
+				label: 'Pranala ke halaman yang divandal: ',
 				tooltip: 'Leave blank to not link to the page in the report',
 				value: Morebits.queryString.exists( 'vanarticle' ) ? Morebits.queryString.get( 'vanarticle' ) : '',
 				event: function(e) {
@@ -140,7 +140,7 @@ Twinkle.arv.callback.changeCategory = function (e) {
 		work_area.append( {
 				type: 'input',
 				name: 'goodid',
-				label: 'Last good revision ID before vandalism of target page: ',
+				label: 'ID revisi baik terakhir sebelum memvandal halaman target: ',
 				tooltip: 'Leave blank for diff link to previous revision',
 				value: Morebits.queryString.exists( 'vanarticlegoodrevid' ) ? Morebits.queryString.get( 'vanarticlegoodrevid' ) : '',
 				disabled: !Morebits.queryString.exists( 'vanarticle' ) || Morebits.queryString.exists( 'vanarticlerevid' )
@@ -150,7 +150,7 @@ Twinkle.arv.callback.changeCategory = function (e) {
 				name: 'arvtype',
 				list: [
 					{
-						label: 'Vandalism after final (level 4 or 4im) warning given',
+						label: 'Vandalisme setelah peringatan akhir (level 4 atau 4im) diberikan',
 						value: 'final'
 					},
 					{
@@ -175,7 +175,7 @@ Twinkle.arv.callback.changeCategory = function (e) {
 		work_area.append( {
 				type: 'textarea',
 				name: 'reason',
-				label: 'Comment: '
+				label: 'Komentar: '
 			} );
 		work_area = work_area.render();
 		old_area.parentNode.replaceChild( work_area, old_area );
@@ -304,7 +304,7 @@ Twinkle.arv.callback.changeCategory = function (e) {
 			} );
 		work_area = work_area.render();
 		old_area.parentNode.replaceChild( work_area, old_area );
-        break;
+		break;
 	case 'an3':
 		work_area = new Morebits.quickForm.element( {
 			type: 'field',
