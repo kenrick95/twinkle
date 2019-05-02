@@ -69,7 +69,7 @@ Twinkle.defaultConfig.twinkle = {
 	watchProdPages: true,
 	prodReasonDefault: "",
 	logProdPages: false,
-	prodLogPageName: "PROD log",
+	prodLogPageName: "Log PROD",
 	 // CSD
 	speedySelectionStyle: "buttonClick",
 	watchSpeedyPages: [ "u3", "u5", "u10", "u11", "u12" ],
@@ -85,7 +85,7 @@ Twinkle.defaultConfig.twinkle = {
 	speedyWindowHeight: 500,
 	speedyWindowWidth: 800,
 	logSpeedyNominations: false,
-	speedyLogPageName: "CSD log",
+	speedyLogPageName: "Log KPC",
 	noLogOnSpeedyNomination: [ "h1" ],
 	 // Unlink
 	unlinkNamespaces: [ "0", "10", "100", "118" ],
