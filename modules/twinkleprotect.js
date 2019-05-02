@@ -189,7 +189,7 @@ Twinkle.protect.callback.showLogAndCurrentProtectInfo = function twinkleprotectC
 		});
 		statusLevel = 'warn';
 	} else {
-		protectionNode.push($("<b>no protection</b>")[0]);
+		protectionNode.push($("<b>tidak ada perlindungan</b>")[0]);
 	}
 
 	Morebits.status[statusLevel]("Tingkat perlindungan saat ini", protectionNode);
@@ -740,7 +740,7 @@ Twinkle.protect.protectionPresetsInfo = {
 	'pp-vandalism': {
 		edit: 'sysop',
 		move: 'sysop',
-		reason: '[[WP:VANDAL|vandalisme]] yang berulang-ulang'
+		reason: '[[WP:VANDAL|Vandalisme]] yang berulang-ulang'
 	},
 	'pp-usertalk': {
 		edit: 'sysop',
@@ -754,7 +754,7 @@ Twinkle.protect.protectionPresetsInfo = {
 	},
 	'pp-semi-vandalism': {
 		edit: 'autoconfirmed',
-		reason: '[[WP:VANDAL|vandalisme]] berulang-ulang',
+		reason: '[[WP:VANDAL|Vandalisme]] berulang-ulang',
 		template: 'pp-vandalism'
 	},
 	'pp-semi-disruptive': {
@@ -796,7 +796,7 @@ Twinkle.protect.protectionPresetsInfo = {
 	},
 	'pp-pc-vandalism': {
 		stabilize: 'autoconfirmed',  // stabilize = Pending Changes
-		reason: '[[WP:VANDAL|vandalisme]] berulang-ulang',
+		reason: '[[WP:VANDAL|Vandalisme]] berulang-ulang',
 		template: 'pp-pc1'
 	},
 	'pp-pc-disruptive': {
