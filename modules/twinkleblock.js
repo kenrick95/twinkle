@@ -76,7 +76,7 @@ Twinkle.block.callback = function twinkleblockCallback() {
 	result.root = result;
 
 	Twinkle.block.fetchUserInfo(function() {
-		// clean up preset data (defaults, etc.), done exactly once, must be before Twinkle.block.callback.change_action is called
+		// clean up preset data (defaults, etc.), done exactly once, must be before Twinkle.block.callback.change_action is called
 		Twinkle.block.transformBlockPresets();
 
 		// init the controls after user and block info have been fetched
@@ -236,6 +236,40 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 				value: Twinkle.block.field_block_options.reason
 			});
 
+		field_block_options.append({
+				type: 'div',
+				name: 'filerlog_label',
+				label: 'See also:',
+				style: 'display:inline-block;font-style:normal !important',
+				tooltip: 'Insert a "see also" message to indicate whether the filter log or deleted contributions played a role in the decision to block.'
+			});
+		field_block_options.append({
+				type: 'checkbox',
+				name: 'filter_see_also',
+				event: Twinkle.block.callback.toggle_see_alsos,
+				style: 'display:inline-block; margin-right:5px',
+				list: [
+					{
+						label: 'Filter log',
+						checked: false,
+						value: 'filter log'
+					}
+				]
+			} );
+		field_block_options.append({
+				type: 'checkbox',
+				name: 'deleted_see_also',
+				event: Twinkle.block.callback.toggle_see_alsos,
+				style: 'display:inline-block',
+				list: [
+					{
+						label: 'Deleted contribs',
+						checked: false,
+						value: 'deleted contribs'
+					}
+				]
+			} );
+
 		if (Twinkle.block.currentBlockInfo) {
 			field_block_options.append( { type: 'hidden', name: 'reblock', value: '1' } );
 		}
@@ -255,9 +289,9 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 				type: 'input',
 				name: 'article',
 				display: 'none',
-				label: 'Artikel yang berkaitan',
+				label: 'Halaman yang berkaitan',
 				value: '',
-				tooltip: 'Suatu artikel dapat ditautkan dengan pemberitahuan, yang mungkin yang menjadi sasaran perusakan. Kosongkan jika tidak ada.'
+				tooltip: 'Suatu halaman dapat ditautkan dengan pemberitahuan, yang mungkin yang menjadi sasaran perusakan. Kosongkan jika tidak ada.'
 			} );
 		if (!$form.find('[name=actiontype][value=block]').is(':checked')) {
 			field_template_options.append( {
@@ -286,7 +320,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 					{
 						label: 'Jangan masukkan jangka waktu pemblokiran dalam templat',
 						checked: Twinkle.block.field_template_options.blank_duration,
-						tooltip: 'Jangka waktu pemblokiran tidak dimasukkan ke dalam templat, jadi hanya menginformasikan \"Anda sudah diblokir dari penyuntingan sementara ini selama...\"'
+						tooltip: 'Jangka waktu pemblokiran tidak dimasukkan ke dalam templat, jadi hanya menginformasikan "Anda sudah diblokir dari penyuntingan sementara ini selama..."'
 					}
 				]
 			} );
@@ -356,35 +390,35 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 };
 
 /*
-	* Keep alphabetized by key name, Twinkle.block.blockGroups establishes
-	*    the order they will appear in the interface
-	*
-	* Block preset format, all keys accept only 'true' (omit for false) except where noted:
-	* <title of block template> : {
-	*   autoblock: <autoblock any IP addresses used (for registered users only)>
-	*   disabletalk: <disable user from editing their own talk page while blocked>
-	*   expiry: <string - expiry timestamp, can include relative times like "5 months", "2 weeks" etc, use "infinity" for indefinite>
-	*   forAnonOnly: <show block option in the interface only if the relevant user is an IP>
-	*   forRegisteredOnly: <show block option in the interface only if the relevant user is registered>
-	*   label: <string - label for the option of the dropdown in the interface (keep brief)>
-	*   noemail: prevent the user from sending email through Special:Emailuser
-	*   pageParam: <set if the associated block template accepts a page parameter>
-	*   prependReason: <string - prepends the value of 'reason' to the end of the existing reason, namely for when revoking talk page access>
-	*   nocreate: <block account creation from the user's IP (for anonymous users only)>
-	*   nonstandard: <template does not conform to stewardship of WikiProject User Warnings and may not accept standard parameters>
-	*   reason: <string - block rationale, as would appear in the block log,
-	*            and the edit summary for when adding block template, unless 'summary' is set>
-	*   reasonParam: <set if the associated block template accepts a reason parameter>
-	*   sig: <string - set to ~~~~ if block template does not accept "true" as the value, or set null to omit sig param altogether>
-	*   summary: <string - edit summary for when adding block template to user's talk page, if not set, 'reason' is used>
-	*   suppressArticleInSummary: <set to suppress showing the article name in the edit summary, as with attack pages>
-	*   templateName: <string - name of template to use (instead of key name), entry will be omitted from the Templates list.
-	*                  (e.g. use another template but with different block options)>
-	*   useInitialOptions: <when preset is chosen, only change given block options, leave others as they were>
-	*
-	* WARNING: 'anononly' and 'allowusertalk' are enabled by default.
-	*   To disable, set 'hardblock' and 'disabletalk', respectively
-	*/
+ * Keep alphabetized by key name, Twinkle.block.blockGroups establishes
+ *    the order they will appear in the interface
+ *
+ * Block preset format, all keys accept only 'true' (omit for false) except where noted:
+ * <title of block template> : {
+ *   autoblock: <autoblock any IP addresses used (for registered users only)>
+ *   disabletalk: <disable user from editing their own talk page while blocked>
+ *   expiry: <string - expiry timestamp, can include relative times like "5 months", "2 weeks" etc>
+ *   forAnonOnly: <show block option in the interface only if the relevant user is an IP>
+ *   forRegisteredOnly: <show block option in the interface only if the relevant user is registered>
+ *   label: <string - label for the option of the dropdown in the interface (keep brief)>
+ *   noemail: prevent the user from sending email through Special:Emailuser
+ *   pageParam: <set if the associated block template accepts a page parameter>
+ *   prependReason: <string - prepends the value of 'reason' to the end of the existing reason, namely for when revoking talk page access>
+ *   nocreate: <block account creation from the user's IP (for anonymous users only)>
+ *   nonstandard: <template does not conform to stewardship of WikiProject User Warnings and may not accept standard parameters>
+ *   reason: <string - block rationale, as would appear in the block log,
+ *            and the edit summary for when adding block template, unless 'summary' is set>
+ *   reasonParam: <set if the associated block template accepts a reason parameter>
+ *   sig: <string - set to ~~~~ if block template does not accept "true" as the value, or set null to omit sig param altogether>
+ *   summary: <string - edit summary for when adding block template to user's talk page, if not set, 'reason' is used>
+ *   suppressArticleInSummary: <set to suppress showing the article name in the edit summary, as with attack pages>
+ *   templateName: <string - name of template to use (instead of key name), entry will be omitted from the Templates list.
+ *                  (e.g. use another template but with different block options)>
+ *   useInitialOptions: <when preset is chosen, only change given block options, leave others as they were>
+ *
+ * WARNING: 'anononly' and 'allowusertalk' are enabled by default.
+ *   To disable, set 'hardblock' and 'disabletalk', respectively
+ */
 Twinkle.block.blockPresetsInfo = {
 	'anonblock' : {
 		expiry: '31 hours',
@@ -408,20 +442,30 @@ Twinkle.block.blockPresetsInfo = {
 		forAnonOnly: true,
 		nocreate: true,
 		nonstandard: true,
+		hardblock: true,
 		reason: '{{blocked proxy}}',
 		sig: null
 	},
 	'CheckUser block' : {
+		expiry: '1 week',
+		forAnonOnly: true,
+		nocreate: true,
 		nonstandard: true,
 		reason: '{{CheckUser block}}',
 		sig: '~~~~'
 	},
 	'checkuserblock-account' : {
+		autoblock: true,
+		expiry: 'infinity',
+		forRegisteredOnly: true,
+		nocreate: true,
 		nonstandard: true,
 		reason: '{{checkuserblock-account}}',
 		sig: '~~~~'
 	},
 	'checkuserblock-wide' : {
+		forAnonOnly: true,
+		nocreate: true,
 		nonstandard: true,
 		reason: '{{checkuserblock-wide}}',
 		sig: '~~~~'
@@ -434,6 +478,9 @@ Twinkle.block.blockPresetsInfo = {
 		sig: null
 	},
 	'oversightblock' : {
+		autoblock: true,
+		expiry: 'infinity',
+		nocreate: true,
 		nonstandard: true,
 		reason: '{{OversightBlock}}',
 		sig: '~~~~'
@@ -444,6 +491,13 @@ Twinkle.block.blockPresetsInfo = {
 		nonstandard: true,
 		reason: '{{school block}}',
 		sig: '~~~~'
+	},
+	'spamblacklistblock' : {
+		forAnonOnly: true,
+		expiry: '1 month',
+		disabletalk: true,
+		nocreate: true,
+		reason: '{{spamblacklistblock}} <!-- editor only attempts to add blacklisted links, see [[Special:Log/spamblacklist]] -->'
 	},
 	// Placeholder for when we add support for rangeblocks
 	// 'rangeblock' : {
@@ -616,12 +670,6 @@ Twinkle.block.blockPresetsInfo = {
 		reason: 'Membuat ancaman hukum',
 		summary: 'Anda diblokir karena mencoba membuat ancaman hukum'
 	},
-	'uw-memorialblock': {
-		forRegisteredOnly: true,
-		expiry: 'infinity',
-		reason: 'Nama pengguna terkesan sebagai penghormatan kepada seseorang (pemblokiran lunak)',
-		summary: 'Anda diblokir karena nama pengguna Anda dianggap digunakan untuk menghormati seseorang'
-	},
 	'uw-myblock': {
 		autoblock: true,
 		nocreate: true,
@@ -715,6 +763,14 @@ Twinkle.block.blockPresetsInfo = {
 		reason: 'Nama pengguna mirip dengan pengguna lain (pemblokiran lunak)',
 		summary: 'Anda diblokir karena nama pengguna Anda sangat mirip dengan pengguna lain'
 	},
+	'uw-ucblock' : {
+		autoblock: true,
+		expiry: '31 hours',
+		nocreate: true,
+		pageParam: true,
+		reason: 'Persistent addition of [[WP:INTREF|unsourced content]]',
+		summary: 'You have been blocked from editing for persistent addition of [[WP:INTREF|unsourced content]]'
+	},
 	'uw-uhblock' : {
 		autoblock: true,
 		expiry: 'infinity',
@@ -763,6 +819,14 @@ Twinkle.block.blockPresetsInfo = {
 		pageParam: true,
 		reason: 'Akun vandalisme semata-mata',
 		summary: 'Anda diblokir selamanya karena semata-mata melakukan [[WP:VANDAL|vandalisme]]'
+	},
+	'zombie proxy' : {
+		expiry: '1 month',
+		forAnonOnly: true,
+		nocreate: true,
+		nonstandard: true,
+		reason: '{{zombie proxy}}',
+		sig: null
 	}
 };
 
@@ -772,7 +836,7 @@ Twinkle.block.transformBlockPresets = function twinkleblockTransformBlockPresets
 		settings.summary = settings.summary || settings.reason;
 		settings.sig = settings.sig !== undefined ? settings.sig : 'yes';
 		// despite this it's preferred that you use 'infinity' as the value for expiry
-		settings.indefinite = settings.indefinite || settings.expiry === 'infinity' || settings.expiry === 'indefinite' || settings.expiry === 'never';
+		settings.indefinite = settings.indefinite || settings.expiry === 'infinity' || settings.expiry === 'infinite' || settings.expiry === 'indefinite' || settings.expiry === 'never';
 
 		if (!Twinkle.block.isRegistered && settings.indefinite) {
 			settings.expiry = '31 hours';
@@ -800,6 +864,7 @@ Twinkle.block.blockGroups = [
 			{ label: 'Suntingan mengganggu', value: 'uw-disruptblock' },
 			{ label: 'Penyalahgunaan halaman pembicaraan pengguna selama diblokir', value: 'uw-talkrevoked' },
 			{ label: 'Tidak ingin mengembangkan ensiklopedia', value: 'uw-nothereblock' },
+			{ label: 'Isi tanpa sumber', value: 'uw-ucblock' },
 			{ label: 'Vandalisme', value: 'uw-vblock' },
 			{ label: 'Akun vandalisme semata-mata', value: 'uw-voablock' }
 		],
@@ -834,7 +899,6 @@ Twinkle.block.blockGroups = [
 		label: 'Pelanggaran nama pengguna',
 		list: [
 			{ label: 'Nama pengguna bot', value: 'uw-botublock' },
-			{ label: 'Nama pengguna penghormatan kepada seseorang, soft block', value: 'uw-memorialblock' },
 			{ label: 'Nama pengguna promosi, pemblokiran rumit', value: 'uw-spamublock' },
 			{ label: 'Nama pengguna promosi, pemblokiran lunak', value: 'uw-softerblock' },
 			{ label: 'Nama pengguna yang mirip, pemblokiran lunak', value: 'uw-ublock-double' },
@@ -856,8 +920,10 @@ Twinkle.block.blockGroups = [
 			{ label: 'colocationwebhost', value: 'colocationwebhost' },
 			{ label: 'oversightblock', value: 'oversightblock' },
 			// { label: 'rangeblock', value: 'rangeblock' }, // placeholder for when we add support for rangeblocks
+			{ label: 'spamblacklistblock', value: 'spamblacklistblock' },
 			{ label: 'tor', value: 'tor' },
-			{ label: 'webhostblock', value: 'webhostblock' }
+			{ label: 'webhostblock', value: 'webhostblock' },
+			{ label: 'zombie proxy', value: 'zombie proxy' }
 		]
 	}
 ];
@@ -906,6 +972,28 @@ Twinkle.block.callback.change_expiry = function twinkleblockCallbackChangeExpiry
 	} else {
 		Morebits.quickForm.setElementVisibility(expiry.parentNode, false);
 		expiry.value = e.target.value;
+	}
+};
+
+Twinkle.block.seeAlsos = [];
+Twinkle.block.callback.toggle_see_alsos = function twinkleblockCallbackToggleSeeAlso() {
+	var reason = this.form.reason.value.replace(
+		new RegExp('( <!--|;) ' + 'see also ' + Twinkle.block.seeAlsos.join(' and ') + '( -->)?'), ''
+	);
+
+	Twinkle.block.seeAlsos = Twinkle.block.seeAlsos.filter(function(el) {
+		return el !== this.value;
+	}.bind(this));
+
+	if (this.checked) Twinkle.block.seeAlsos.push(this.value);
+	var seeAlsoMessage = Twinkle.block.seeAlsos.join(' and ');
+
+	if (!Twinkle.block.seeAlsos.length) {
+		this.form.reason.value = reason;
+	} else if (reason.indexOf('{{') !== -1) {
+		this.form.reason.value = reason + ' <!-- see also ' + seeAlsoMessage + ' -->';
+	} else {
+		this.form.reason.value = reason + '; see also ' + seeAlsoMessage;
 	}
 };
 
@@ -996,14 +1084,14 @@ Twinkle.block.callback.preview = function twinkleblockcallbackPreview(form) {
 		disabletalk: form.disabletalk.checked || (form.notalk ? form.notalk.checked : false),
 		expiry: form.template_expiry ? form.template_expiry.value : form.expiry.value,
 		hardblock: Twinkle.block.isRegistered ? form.autoblock.checked : form.hardblock.checked,
-		indefinite: (/indef|infinity|never|\*|max/).test( form.template_expiry ? form.template_expiry.value : form.expiry.value ),
+		indefinite: (/indef|infinit|never|\*|max/).test( form.template_expiry ? form.template_expiry.value : form.expiry.value ),
 		reason: form.block_reason.value,
 		template: form.template.value
 	};
 
 	var templateText = Twinkle.block.callback.getBlockNoticeWikitext(params);
 
-	form.previewer.beginRender(templateText);
+	form.previewer.beginRender(templateText, 'User_talk:' + mw.config.get('wgRelevantUserName')); // Force wikitext/correct username
 };
 
 Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
@@ -1040,14 +1128,11 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 		blockoptions.anononly = blockoptions.hardblock ? undefined : true;
 		blockoptions.allowusertalk = blockoptions.disabletalk ? undefined : true;
 
-		// fix for bug with block API, see [[phab:T68646]]
-		if (blockoptions.expiry === 'infinity') blockoptions.expiry = 'infinite';
-
 		// execute block
 		api.getToken('block').then(function(token) {
 			statusElement.status('Sedang menjalankan...');
 			blockoptions.token = token;
-			var mbApi = new Morebits.wiki.api( 'Executing block', blockoptions, function(data) {
+			var mbApi = new Morebits.wiki.api( 'Executing block', blockoptions, function() {
 				statusElement.info('Selesai');
 				if (toWarn) Twinkle.block.callback.issue_template(templateoptions);
 			});
@@ -1134,7 +1219,7 @@ Twinkle.block.callback.main = function twinkleblockcallbackMain( pageobj ) {
 		text += '\n\n';
 	}
 
-	params.indefinite = (/indef|infinity|never|\*|max/).test( params.expiry );
+	params.indefinite = (/indef|infinit|never|\*|max/).test( params.expiry );
 
 	if ( Twinkle.getPref('blankTalkpageOnIndefBlock') && params.template !== 'uw-lblock' && params.indefinite ) {
 		Morebits.status.info( 'Info', 'Menghapus isi halaman pembicaraan berdasarkan preferensi dan membuat bagian tingkat 2 untuk tanggal' );
@@ -1151,7 +1236,7 @@ Twinkle.block.callback.main = function twinkleblockcallbackMain( pageobj ) {
 	// build the edit summary
 	var summary = messageData.summary;
 	if ( messageData.suppressArticleInSummary !== true && params.article ) {
-		summary += ' di [[' + params.article + ']]';
+		summary += ' di [[:' + params.article + ']]';
 	}
 	summary += '.' + Twinkle.getPref('summaryAd');
 
@@ -1162,5 +1247,6 @@ Twinkle.block.callback.main = function twinkleblockcallbackMain( pageobj ) {
 };
 
 })(jQuery);
+
 
 //</nowiki>

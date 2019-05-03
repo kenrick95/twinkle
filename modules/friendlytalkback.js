@@ -84,21 +84,15 @@ Twinkle.talkback.callback = function( ) {
 	result.tbtarget[0].dispatchEvent( evt );
 
 	// Check whether the user has opted out from talkback
-	// TODO: wgCategories is only set on action=view (bug 45033)
-	var wgcat = mw.config.get("wgCategories");
-	if (wgcat.length && wgcat.indexOf("Pengguna yang tidak mau menerima balasan percakapan") === -1) {
-		Twinkle.talkback.optout = false;
-	} else {
-		var query = {
-			action: 'query',
-			prop: 'extlinks',
-			titles: mw.config.get('wgPageName'),
-			elquery: 'userjs.invalid/noTalkback',
-			ellimit: '1'
-		};
-		var wpapi = new Morebits.wiki.api("Fetching talkback opt-out status", query, Twinkle.talkback.callback.optoutStatus);
-		wpapi.post();
-	}
+	var query = {
+		action: 'query',
+		prop: 'extlinks',
+		titles: mw.config.get('wgPageName'),
+		elquery: 'userjs.invalid/noTalkback',
+		ellimit: '1'
+	};
+	var wpapi = new Morebits.wiki.api("Fetching talkback opt-out status", query, Twinkle.talkback.callback.optoutStatus);
+	wpapi.post();
 };
 
 Twinkle.talkback.optout = null;
@@ -428,7 +422,7 @@ var callback_evaluate = function( e ) {
 			text += "#" + section;
 		}
 		text += "|more=" + message.trim() + "}}";
-		talkpage.setEditSummary("Please check the discussion at [[" + tbPageName +
+		talkpage.setEditSummary("Please check the discussion at [[:" + tbPageName +
 			(section ? ("#" + section) : "") + "]]" + Twinkle.getPref("summaryAd"));
 
 	} else {  // tbtarget one of mytalk, usertalk, other
@@ -448,7 +442,7 @@ var callback_evaluate = function( e ) {
 			text += "\n~~~~";
 		}
 
-		var editSummary = "Talkback ([[";
+		var editSummary = "Talkback ([[:";
 		if (tbtarget !== "other" && !/^\s*user talk:/i.test(tbPageName)) {
 			editSummary += "User talk:";
 		}

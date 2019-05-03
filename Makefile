@@ -8,7 +8,6 @@ modules = modules/twinkleprod.js \
 		  modules/friendlyshared.js \
 		  modules/twinklediff.js \
 		  modules/twinkleunlink.js \
-		  modules/twinkledelimages.js \
 		  modules/friendlytag.js \
 		  modules/twinkledeprod.js \
 		  modules/friendlywelcome.js \
@@ -19,9 +18,10 @@ modules = modules/twinkleprod.js \
 		  modules/twinklefluff.js \
 		  modules/twinkleprotect.js \
 		  modules/twinklearv.js \
-		  modules/friendlytalkback.js
+		  modules/friendlytalkback.js \
+		  modules/twinkleblock.js
 
-deploy: twinkle.js morebits.js morebits.css $(modules)
+deploy: twinkle.js twinkle.css twinkle-pagestyles.css morebits.js morebits.css $(modules)
 	./sync.pl ${ARGS} --deploy $^
 
 .PHONY: deploy all

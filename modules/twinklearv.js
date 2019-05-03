@@ -19,7 +19,7 @@ Twinkle.arv = function twinklearv() {
 		return;
 	}
 
-	var title = Morebits.isIPAddress( username ) ? 'Laporkan IP kepada pengurus' : 'Laporkan kepada pengurus';
+	var title = mw.util.isIPAddress( username ) ? 'Laporkan IP kepada pengurus' : 'Laporkan kepada pengurus';
 
 	Twinkle.addPortletLink( function(){ Twinkle.arv.callback(username); }, "ARV", "tw-arv", title );
 };
@@ -160,7 +160,7 @@ Twinkle.arv.callback.changeCategory = function (e) {
 					{
 						label: 'Evidently a vandalism-only account',
 						value: 'vandalonly',
-						disabled: Morebits.isIPAddress( root.uid.value )
+						disabled: mw.util.isIPAddress( root.uid.value )
 					},
 					{
 						label: 'Account is evidently a spambot or a compromised account',
@@ -365,7 +365,7 @@ Twinkle.arv.callback.changeCategory = function (e) {
 						$entry.append('<span>"'+rev.parsedcomment+'" at <a href="'+mw.config.get('wgScript')+'?diff='+rev.revid+'">'+moment(rev.timestamp).calendar()+'</a></span>').appendTo($diffs);
 					}
 				}).fail(function(data){
-					console.log( 'API failed :(', data );
+					console.log( 'API failed :(', data ); // eslint-disable-line no-console
 				});
 				var $warnings = $(root).find('[name=warnings]');
 				$warnings.find('.entry').remove();
@@ -402,7 +402,7 @@ Twinkle.arv.callback.changeCategory = function (e) {
 						$entry.append('<span>"'+rev.parsedcomment+'" at <a href="'+mw.config.get('wgScript')+'?diff='+rev.revid+'">'+moment(rev.timestamp).calendar()+'</a></span>').appendTo($warnings);
 					}
 				}).fail(function(data){
-					console.log( 'API failed :(', data );
+					console.log( 'API failed :(', data ); // eslint-disable-line no-console
 				});
 
 				var $resolves = $(root).find('[name=resolves]');
@@ -460,7 +460,7 @@ Twinkle.arv.callback.changeCategory = function (e) {
 					$free_entry.append($free_label).append($free_input).appendTo($resolves);
 
 				}).fail(function(data){
-					console.log( 'API failed :(', data );
+					console.log( 'API failed :(', data ); // eslint-disable-line no-console
 				});
 			}
 		} );
@@ -580,7 +580,7 @@ Twinkle.arv.callback.evaluate = function(e) {
 				}
 				aivPage.getStatusElement().status( 'Adding new report...' );
 				aivPage.setEditSummary( 'Reporting [[Special:Contributions/' + uid + '|' + uid + ']].' + Twinkle.getPref('summaryAd') );
-				aivPage.setAppendText( '\n*{{' + ( Morebits.isIPAddress( uid ) ? 'IPvandal' : 'vandal' ) + '|' + (/\=/.test( uid ) ? '1=' : '' ) + uid + '}} &ndash; ' + reason );
+				aivPage.setAppendText( '\n*{{' + ( mw.util.isIPAddress( uid ) ? 'IPvandal' : 'vandal' ) + '|' + (/=/.test( uid ) ? '1=' : '' ) + uid + '}} &ndash; ' + reason );
 				aivPage.append();
 			} );
 			break;
@@ -634,7 +634,7 @@ Twinkle.arv.callback.evaluate = function(e) {
 				}
 				uaaPage.getStatusElement().status( 'Adding new report...' );
 				uaaPage.setEditSummary( 'Reporting [[Special:Contributions/' + uid + '|' + uid + ']].'+ Twinkle.getPref('summaryAd') );
-				uaaPage.setPageText( text + "\n\n" + reason );
+				uaaPage.setPageText( text + "\n" + reason );
 				uaaPage.save();
 			} );
 			break;
@@ -651,10 +651,11 @@ Twinkle.arv.callback.evaluate = function(e) {
 
 			var puppetReport = form.category.value === "puppet";
 			if (puppetReport && !(form.sockmaster.value.trim())) {
-				if (!confirm("You have not entered a sockmaster account for this puppet. Do you want to report this account as a sockpuppeteer instead?")) {
-					return;
-				}
-				puppetReport = false;
+				alert("You have not entered a sockmaster account for this puppet. Consider reporting this account as a sockpuppeteer instead.");
+				return;
+			} else if (!puppetReport && !(form.sockpuppet[0].value.trim())) {
+				alert("You have not entered any sockpuppet account(s) for this sockmaster. Consider reporting this account as a sockpuppet instead.");
+				return;
 			}
 
 			sockParameters.uid = puppetReport ? form.sockmaster.value.trim() : uid;
@@ -716,7 +717,7 @@ Twinkle.arv.callback.evaluate = function(e) {
 					var page = data.query.pages[pageid];
 					an3_next(page);
 				}).fail(function(data){
-					console.log( 'API failed :(', data );
+					console.log( 'API failed :(', data ); // eslint-disable-line no-console
 				});
 			} else {
 				an3_next();
@@ -770,7 +771,7 @@ Twinkle.arv.processSock = function( params ) {
 	// prepare the SPI report
 	var text = "\n\n{{subst:SPI report|socksraw=" +
 		params.sockpuppets.map( function(v) {
-				return "* {{" + ( Morebits.isIPAddress( v ) ? "checkip" : "checkuser" ) + "|1=" + v + "}}";
+				return "* {{" + ( mw.util.isIPAddress( v ) ? "checkip" : "checkuser" ) + "|1=" + v + "}}";
 			} ).join( "\n" ) + "\n|evidence=" + params.evidence + " \n";
 
 	if ( params.checkuser ) {
@@ -859,7 +860,7 @@ Twinkle.arv.processAN3 = function( params ) {
 			grouped_diffs[lastid].push(cur);
 		}
 
-		var difftext = $.map(grouped_diffs, function(sub, index){
+		var difftext = $.map(grouped_diffs, function(sub) {
 			var ret = "";
 			if(sub.length >= 2) {
 				var last = sub[0];
@@ -916,7 +917,7 @@ Twinkle.arv.processAN3 = function( params ) {
 		talkPage.append();
 		Morebits.wiki.removeCheckpoint();  // all page updates have been started
 	}).fail(function(data){
-		console.log( 'API failed :(', data );
+		console.log( 'API failed :(', data ); // eslint-disable-line no-console
 	});
 };
 })(jQuery);
