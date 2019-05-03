@@ -9,7 +9,8 @@
  *** friendlywelcome.js: Welcome module
  ****************************************
  * Mode of invocation:     Tab ("Wel"), or from links on diff pages
- * Active on:              Existing user talk pages, diff pages
+ * Active on:              Any page with relevant user name (userspace,
+ *                         contribs, etc.) and diff pages
  * Config directives in:   FriendlyConfig
  */
 
@@ -35,7 +36,7 @@ Twinkle.welcome.auto = function() {
 };
 
 Twinkle.welcome.semiauto = function() {
-	Twinkle.welcome.callback( mw.config.get( 'wgTitle' ).split( '/' )[0].replace( /\"/, "\\\"") );
+	Twinkle.welcome.callback( mw.config.get( 'wgRelevantUserName' ) );
 };
 
 Twinkle.welcome.normal = function() {
@@ -84,9 +85,8 @@ Twinkle.welcome.normal = function() {
 			}
 		}
 	}
-	if( mw.config.get( 'wgNamespaceNumber' ) === 3 ) {
-		var username = mw.config.get( 'wgTitle' ).split( '/' )[0].replace( /\"/, "\\\""); // only first part before any slashes
-		Twinkle.addPortletLink( function(){ Twinkle.welcome.callback(username); }, "Wel", "friendly-welcome", "Sambut pengguna" );
+	if( mw.config.get( 'wgRelevantUserName' ) ) {
+		Twinkle.addPortletLink( function(){ Twinkle.welcome.callback(mw.config.get( 'wgRelevantUserName' )); }, "Wel", "friendly-welcome", "Sambut pengguna" );
 	}
 };
 
@@ -100,10 +100,11 @@ Twinkle.welcome.welcomeUser = function welcomeUser() {
 		mode: 'auto'
 	};
 
-	Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
+	var userTalkPage = mw.config.get('wgFormattedNamespaces')[3] + ':' + mw.config.get('wgRelevantUserName');
+	Morebits.wiki.actionCompleted.redirect = userTalkPage;
 	Morebits.wiki.actionCompleted.notice = "Penyambutan selesai, halaman akan dimuat ulang beberapa saat lagi";
 
-	var wikipedia_page = new Morebits.wiki.page(mw.config.get('wgPageName'), "Mengubah halaman pembicaraan pengguna");
+	var wikipedia_page = new Morebits.wiki.page(userTalkPage, "Mengubah halaman pembicaraan pengguna");
 	wikipedia_page.setFollowRedirect(true);
 	wikipedia_page.setCallbackParameters(params);
 	wikipedia_page.load(Twinkle.welcome.callbacks.main);
@@ -128,8 +129,8 @@ Twinkle.welcome.callback = function friendlywelcomeCallback( uid ) {
 			label: 'Type of welcome: ',
 			event: Twinkle.welcome.populateWelcomeList,
 			list: [
-				{ type: 'option', value: 'standard', label: 'Penyambutan biasa', selected: !Morebits.isIPAddress(mw.config.get('wgTitle')) },
-				{ type: 'option', value: 'anonymous', label: 'Penyambutan pengguna beralamat IP', selected: Morebits.isIPAddress(mw.config.get('wgTitle')) },
+				{ type: 'option', value: 'standard', label: 'Penyambutan biasa', selected: !mw.util.isIPAddress(mw.config.get('wgRelevantUserName')) },
+				{ type: 'option', value: 'anonymous', label: 'Penyambutan pengguna beralamat IP', selected: mw.util.isIPAddress(mw.config.get('wgRelevantUserName')) },
 				{ type: 'option', value: 'wikiProject', label: 'Penyambutan WikiProject' },
 				{ type: 'option', value: 'nonEnglish', label: 'Penyambutan pengguna non-bahasa Inggris' }
 			]
@@ -247,6 +248,8 @@ Twinkle.welcome.populateWelcomeList = function(e) {
 		case "wikiProject":
 			container.append({ type: 'header', label: 'Templat penyambutan WikiProject tertentu' });
 			appendTemplates([
+				"welcome-anatomy",
+				"welcome-athletics",
 				"welcome-au",
 				"welcome-bd",
 				"welcome-bio",
@@ -276,6 +279,7 @@ Twinkle.welcome.populateWelcomeList = function(e) {
 		case "nonEnglish":
 			container.append({ type: 'header', label: 'Templat penyambutan pengguna bukan pengguna bahasa Inggris' });
 			appendTemplates([
+				"welcomeen",
 				"welcomeen-sq",
 				"welcomeen-ar",
 				"welcomeen-zh",
@@ -286,10 +290,11 @@ Twinkle.welcome.populateWelcomeList = function(e) {
 				"welcomeen-he",
 				"welcomeen-ja",
 				"welcomeen-ko",
-				"welcomeen-mr",
 				"welcomeen-ml",
+				"welcomeen-mr",
 				"welcomeen-or",
 				"welcomeen-pt",
+				"welcomeen-ro",
 				"welcomeen-ru",
 				"welcomeen-es",
 				"welcomeen-sv",
@@ -354,7 +359,7 @@ Twinkle.welcome.templates = {
 	"welcome-screen": {
 		description: "pesan sambutan dengan tabel bertanda dan jelas dengan 10 pranala",
 		linkedArticle: false,
-		syntax: "$HEADER$ {{subst:welcome-screen|static=true}}"
+		syntax: "$HEADER$ {{subst:welcome-screen}}"
 	},
 	"welcome-belated": {
 		description: "sambutan untuk pengguna dengan kontribusi berguna",
@@ -465,6 +470,16 @@ Twinkle.welcome.templates = {
 
 	// WIKIPROJECT-SPECIFIC WELCOMES
 
+	"welcome-anatomy": {
+		description: "welcome for users with an apparent interest in anatomy topics",
+		linkedArticle: false,
+		syntax: "{{subst:welcome-anatomy}} ~~~~"
+	},
+	"welcome-athletics": {
+		description: "welcome for users with an apparent interest in athletics (track and field) topics",
+		linkedArticle: false,
+		syntax: "{{subst:welcome-athletics}}"
+	},
 	"welcome-au": {
 		description: "welcome for users with an apparent interest in Australia topics",
 		linkedArticle: false,
@@ -583,11 +598,16 @@ Twinkle.welcome.templates = {
 	"TWA invite": {
 		description: "invite the user to The Wikipedia Adventure (not a welcome template)",
 		linkedArticle: false,
-		syntax: "{{WP:TWA/Invite|signature=~~~~}}"
+		syntax: "{{WP:TWA/InviteTW|signature=~~~~}}"
 	},
 
 	// NON-ENGLISH WELCOMES
 
+	"welcomeen": {
+		description: "welcome for users whose first language is not listed here",
+		linkedArticle: false,
+		syntax: "{{subst:welcomeen}}"
+	},
 	"welcomeen-ar": {
 		description: "welcome for users whose first language appears to be Arabic",
 		linkedArticle: false,
@@ -638,15 +658,15 @@ Twinkle.welcome.templates = {
 		linkedArticle: false,
 		syntax: "{{subst:welcomeen-ko}}"
 	},
-	"welcomeen-mr": {
-		description: "welcome for users whose first language appears to be Marathi",
-		linkedArticle: false,
-		syntax: "{{subst:welcomeen-mr}}"
-	},
 	"welcomeen-ml": {
 		description: "welcome for users whose first language appears to be Malayalam",
 		linkedArticle: false,
 		syntax: "{{subst:welcomeen-ml}}"
+	},
+	"welcomeen-mr": {
+		description: "welcome for users whose first language appears to be Marathi",
+		linkedArticle: false,
+		syntax: "{{subst:welcomeen-mr}}"
 	},
 	"welcomeen-or": {
 		description: "welcome for users whose first language appears to be Oriya (Odia)",
@@ -657,6 +677,11 @@ Twinkle.welcome.templates = {
 		description: "welcome for users whose first language appears to be Portuguese",
 		linkedArticle: false,
 		syntax: "{{subst:welcomeen-pt}}"
+	},
+	"welcomeen-ro": {
+		description: "welcome for users whose first language appears to be Romanian",
+		linkedArticle: false,
+		syntax: "{{subst:welcomeen-ro}}"
 	},
 	"welcomeen-ru": {
 		description: "welcome for users whose first language appears to be Russian",
@@ -707,7 +732,7 @@ Twinkle.welcome.callbacks = {
 		previewDialog.setContent(previewdiv);
 
 		var previewer = new Morebits.wiki.preview(previewdiv);
-		previewer.beginRender(Twinkle.welcome.getTemplateWikitext(form.getChecked("template"), form.article.value));
+		previewer.beginRender(Twinkle.welcome.getTemplateWikitext(form.getChecked("template"), form.article.value), 'User talk:' + mw.config.get('wgRelevantUserName')); // Force wikitext/correct username
 
 		var submit = document.createElement("input");
 		submit.setAttribute("type", "submit");
@@ -716,7 +741,7 @@ Twinkle.welcome.callbacks = {
 
 		previewDialog.display();
 
-		$(submit).click(function(e) {
+		$(submit).click(function() {
 			previewDialog.close();
 		});
 	},
@@ -760,10 +785,11 @@ Twinkle.welcome.callback.evaluate = function friendlywelcomeCallbackEvaluate(e) 
 	Morebits.simpleWindow.setButtonsEnabled( false );
 	Morebits.status.init( form );
 
-	Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
+	var userTalkPage = mw.config.get('wgFormattedNamespaces')[3] + ':' + mw.config.get('wgRelevantUserName');
+	Morebits.wiki.actionCompleted.redirect = userTalkPage;
 	Morebits.wiki.actionCompleted.notice = "Welcoming complete, reloading talk page in a few seconds";
 
-	var wikipedia_page = new Morebits.wiki.page(mw.config.get('wgPageName'), "User talk page modification");
+	var wikipedia_page = new Morebits.wiki.page(userTalkPage, "User talk page modification");
 	wikipedia_page.setFollowRedirect(true);
 	wikipedia_page.setCallbackParameters(params);
 	wikipedia_page.load(Twinkle.welcome.callbacks.main);

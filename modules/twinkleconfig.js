@@ -9,7 +9,7 @@
  *** twinkleconfig.js: Preferences module
  ****************************************
  * Mode of invocation:     Adds configuration form to Wikipedia:Twinkle/Preferences and user
-                           subpages named "/Twinkle preferences", and adds ad box to the top of user
+                           subpages named "/Twinkle preferences", and adds an ad box to the top of user
                            subpages belonging to the currently logged-in user which end in '.js'
  * Active on:              What I just said.  Yeah.
  * Config directives in:   TwinkleConfig
@@ -36,7 +36,7 @@ Twinkle.config.commonSets = {
 		b1: "B1", b2: "B2", b3: "B3", b7: "B7", b8: "B8", b9: "B9", b10: "B10",
 		k1: "K1",
 		t2: "T2", t3: "T3",
-		r2: "R2", r3: "R3",
+		r2: "R2", r3: "R3", r4: "R4",
 		p1: "P1", p2: "P2"
 	},
 	csdCriteriaDisplayOrder: [
@@ -47,7 +47,7 @@ Twinkle.config.commonSets = {
 		"b1", "b2", "b3", "b7", "b8", "b9", "b10",
 		"k1",
 		"t2", "t3",
-		"r2", "r3",
+		"r2", "r3", "r4",
 		"p1", "p2"
 	],
 	csdCriteriaNotification: {
@@ -59,7 +59,7 @@ Twinkle.config.commonSets = {
 		b1: "B1", b2: "B2", b3: "B3", b7: "B7", b8: "B8", b9: "B9", b10: "B10",
 		k1: "K1",
 		t2: "T2", t3: "T3",
-		r2: "R2", r3: "R3",
+		r2: "R2", r3: "R3", r4: "R4",
 		p1: "P1", p2: "P2"
 	},
 	csdCriteriaNotificationDisplayOrder: [
@@ -70,7 +70,7 @@ Twinkle.config.commonSets = {
 		"b1", "b2", "b3", "b7", "b9", "b10",
 		"c1",
 		"t2", "t3",
-		"r2", "r3",
+		"r2", "r3", "r4",
 		"p1", "p2"
 	],
 	csdAndDICriteria: {
@@ -81,7 +81,7 @@ Twinkle.config.commonSets = {
 		b1: "B1", b2: "B2", b3: "B3", b4: "B4", b5: "B5", b6: "B6", b7: "B7", b8: "B8", b9: "B9", b10: "B10", b11: "B11",
 		k1: "K1",
 		t2: "T2", t3: "T3",
-		r2: "R2", r3: "R3",
+		r2: "R2", r3: "R3", r4: "R4",
 		p1: "P1", p2: "P2"
 	},
 	csdAndDICriteriaDisplayOrder: [
@@ -92,36 +92,36 @@ Twinkle.config.commonSets = {
 		"b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "b9", "b10", "b11",
 		"k1",
 		"t2", "t3",
-		"r2", "r3",
+		"r2", "r3", "r4",
 		"p1", "p2"
 	],
-	namespacesNoSpecial: {
-  	'0':   'Artikel',
-  	'1':   'Pembicaraan (artikel)',
-  	'2':   'Pengguna',
-  	'3':   'Pembicaraan Pengguna',
-  	'4':   'Wikipedia',
-  	'5':   'Pembicaraan Wikipedia',
-  	'6':   'Berkas',
-  	'7':   'Pembicaraan Berkas',
-  	'8':   'MediaWiki',
-  	'9':   'Pembicaraan MediaWiki',
-  	'10':  'Templat',
-  	'11':  'Pembicaraan Templat',
-  	'12':  'Bantuan',
-  	'13':  'Pembicaraan Bantuan',
-  	'14':  'Kategori',
-  	'15':  'Pembicaraan Kategori',
-  	'100': 'Portal',
-  	'101': 'Pembicaraan Portal',
-  	'108': 'Buku',
-  	'109': 'Pembicaraan Buku',
-  	'118': 'Draf',
-  	'119': 'Pembicaraan Draf',
-  	'710': 'TimedText',
-  	'711': 'Pembicaraan TimedText',
-  	'828': 'Modul',
-  	'829': 'Pembicaraan Modul'
+	namespacesNoSpecial: {	
+		'0':   'Artikel',	
+		'1':   'Pembicaraan (artikel)',	
+		'2':   'Pengguna',	
+		'3':   'Pembicaraan Pengguna',	
+		'4':   'Wikipedia',	
+		'5':   'Pembicaraan Wikipedia',	
+		'6':   'Berkas',	
+		'7':   'Pembicaraan Berkas',	
+		'8':   'MediaWiki',	
+		'9':   'Pembicaraan MediaWiki',	
+		'10':  'Templat',	
+		'11':  'Pembicaraan Templat',	
+		'12':  'Bantuan',	
+		'13':  'Pembicaraan Bantuan',	
+		'14':  'Kategori',	
+		'15':  'Pembicaraan Kategori',	
+		'100': 'Portal',	
+		'101': 'Pembicaraan Portal',	
+		'108': 'Buku',	
+		'109': 'Pembicaraan Buku',	
+		'118': 'Draf',	
+		'119': 'Pembicaraan Draf',	
+		'710': 'TimedText',	
+		'711': 'Pembicaraan TimedText',	
+		'828': 'Modul',	
+		'829': 'Pembicaraan Modul'
 	}
 };
 
@@ -223,7 +223,7 @@ Twinkle.config.sections = [
 	adminOnly: true,
 	preferences: [
 		// TwinkleConfig.blankTalkpageOnIndefBlock (boolean)
-		// if true, blank the talk page when issuing an indef block notice (per [[WP:UW#Indefinitely blocked users]])
+		// if true, blank the talk page when issuing an indef block notice (per [[WP:UWUL#Indefinitely blocked users]])
 		{
 			name: "blankTalkpageOnIndefBlock",
 			label: "Kosongkan halaman pembicaraan saat memblokir pengguna untuk selamanya",
@@ -301,6 +301,15 @@ Twinkle.config.sections = [
 {
 	title: "Pengembalian dan pembatalan",  // twinklefluff module
 	preferences: [
+		// TwinkleConfig.autoMenuAfterRollback (bool)
+		// Option to automatically open the warning menu if the user talk page is opened post-reversion
+		{
+			name: "autoMenuAfterRollback",
+			label: "Automatically open the Twinkle warn menu on a user talk page after Twinkle rollback",
+			helptip: "Only operates if the relevant box is checked below.",
+			type: "boolean"
+		},
+
 		// TwinkleConfig.openTalkPage (array)
 		// What types of actions that should result in opening of talk page
 		{
@@ -555,6 +564,22 @@ Twinkle.config.sections = [
 			type: "customList",
 			customListValueTitle: "Nama templat (tanpa tanda kurung kurawal)",
 			customListLabelTitle: "Teks yang ditampilkan di dialog Tag "
+		},
+		{
+			name: "customFileTagList",
+			label: "Tampilan tag pemeliharaan berkas kustom",
+			helptip: "Tag tambahan untuk berkas.",
+			type: "customList",
+			customListValueTitle: "Nama templat (tanpa tanda kurung kurawal)",
+			customListLabelTitle: "Teks yang ditampilkan di dialog Tag "
+		},
+		{
+			name: "customRedirectTagList",
+			label: "Tampilan tag pemeliharaan halaman pengalihan kustom",
+			helptip: "Tag tambahan untuk pengalihan.",
+			type: "customList",
+			customListValueTitle: "Nama templat (tanpa tanda kurung kurawal)",
+			customListLabelTitle: "Teks yang ditampilkan di dialog Tag "
 		}
 	]
 },
@@ -653,12 +678,6 @@ Twinkle.config.sections = [
 			type: "customList",
 			customListValueTitle: "Nama templat (tanpa tanda kurung kurawal)",
 			customListLabelTitle: "Teks yang ditampilkan di daftar peringatan (juga di ringkasan suntingan)"
-		},
-
-		{
-			name: "markXfdPagesAsPatrolled",
-			label: "Tandai halaman sebagai sudah dipatroli setelah nominasi AFD (jika mungkin)",
-			type: "boolean"
 		}
 	]
 },
@@ -752,13 +771,30 @@ Twinkle.config.sections = [
 		},
 
 		// TwinkleConfig.xfdWatchUser (string)
-		// The watchlist setting of the user if he receives a notification. Either "yes" (add to watchlist), "no" (don't
+		// The watchlist setting of the user talk page if they receive a notification. Either "yes" (add to watchlist), "no" (don't
 		// add to watchlist), or "default" (use setting from preferences). Default is "default" (duh).
 		{
 			name: "xfdWatchUser",
 			label: "Tambahkan halaman pembicaraan pengguna ke daftar pantauan (ketika memberitahukan)",
 			type: "enum",
 			enumValues: Twinkle.config.commonEnums.watchlist
+		},
+
+		// TwinkleConfig.xfdWatchRelated (string)
+		// The watchlist setting of the target of a redirect being nominated for RfD. Either "yes" (add to watchlist), "no" (don't
+		// add to watchlist), or "default" (use setting from preferences). Default is "default" (duh).
+		{
+			name: "xfdWatchRelated",
+			label: "Tambahkan halaman target pengalihan ke daftar pantauan (ketika memberitahukan)",
+			helptip: "Ini hanya berlaku untuk RfD, ketika memberitahukan di halaman pembicaraan target dari halaman pengalihan",
+			type: "enum",
+			enumValues: Twinkle.config.commonEnums.watchlist
+		},
+
+		{
+			name: "markXfdPagesAsPatrolled",
+			label: "Tandai halaman sebagai sudah dipatroli setelah nominasi AFD (jika mungkin)",
+			type: "boolean"
 		}
 	]
 },
@@ -1180,7 +1216,7 @@ Twinkle.config.init = function twinkleconfigInit() {
 
 		// since all the section headers exist now, we can try going to the requested anchor
 		if (location.hash) {
-			location.hash = location.hash;
+			window.location.hash = location.hash;
 		}
 
 	} else if (mw.config.get("wgNamespaceNumber") === mw.config.get("wgNamespaceIds").user &&
@@ -1343,7 +1379,7 @@ Twinkle.config.listDialog.display = function twinkleconfigListDialogDisplay(e) {
 	var addButton = document.createElement("button");
 	addButton.style.minWidth = "8em";
 	addButton.setAttribute("type", "button");
-	addButton.addEventListener("click", function(e) {
+	addButton.addEventListener("click", function() {
 		Twinkle.config.listDialog.addRow(dlgtbody);
 	}, false);
 	addButton.textContent = "Tambah";
@@ -1358,7 +1394,7 @@ Twinkle.config.listDialog.display = function twinkleconfigListDialogDisplay(e) {
 	// buttonpane buttons: [Save changes] [Reset] [Cancel]
 	var button = document.createElement("button");
 	button.setAttribute("type", "submit");  // so Morebits.simpleWindow puts the button in the button pane
-	button.addEventListener("click", function(e) {
+	button.addEventListener("click", function() {
 		Twinkle.config.listDialog.save($prefbutton, dlgtbody);
 		dialog.close();
 	}, false);
@@ -1366,14 +1402,14 @@ Twinkle.config.listDialog.display = function twinkleconfigListDialogDisplay(e) {
 	dialogcontent.appendChild(button);
 	button = document.createElement("button");
 	button.setAttribute("type", "submit");  // so Morebits.simpleWindow puts the button in the button pane
-	button.addEventListener("click", function(e) {
+	button.addEventListener("click", function() {
 		Twinkle.config.listDialog.reset($prefbutton, dlgtbody);
 	}, false);
 	button.textContent = "Setel ulang";
 	dialogcontent.appendChild(button);
 	button = document.createElement("button");
 	button.setAttribute("type", "submit");  // so Morebits.simpleWindow puts the button in the button pane
-	button.addEventListener("click", function(e) {
+	button.addEventListener("click", function() {
 		dialog.close();  // the event parameter on this function seems to be broken
 	}, false);
 	button.textContent = "Batal";
@@ -1467,7 +1503,7 @@ Twinkle.config.resetPref = function twinkleconfigResetPref(pref, inFriendlyConfi
 			break;
 
 		case "set":
-			$.each(pref.setValues, function(itemkey, itemvalue) {
+			$.each(pref.setValues, function(itemkey) {
 				if (document.getElementById(pref.name + "_" + itemkey)) {
 					document.getElementById(pref.name + "_" + itemkey).checked = ((inFriendlyConfig ?
 						Twinkle.defaultConfig.friendly[pref.name] : Twinkle.defaultConfig.twinkle[pref.name]).indexOf(itemkey) !== -1);
@@ -1515,94 +1551,8 @@ Twinkle.config.save = function twinkleconfigSave(e) {
 	return false;
 };
 
-// The JSON stringify method in the following code was excerpted from
-// http://www.JSON.org/json2.js
-// version of 2011-02-23
-
-// Douglas Crockford, the code's author, has released it into the Public Domain.
-// See http://www.JSON.org/js.html
-
-var JSON;
-if (!JSON) {
-	JSON = {};
-}
-
-(function() {
-	var escapable = /[\\\"\x00-\x1f\x7f-\x9f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g,
-		gap,
-		indent = '  ',  // hardcoded indent
-		meta = { '\b': '\\b', '\t': '\\t', '\n': '\\n', '\f': '\\f', '\r': '\\r', '"' : '\\"', '\\': '\\\\' };
-
-	function quote(string) {
-		escapable.lastIndex = 0;
-		return escapable.test(string) ? '"' + string.replace(escapable, function (a) {
-			var c = meta[a];
-			return typeof c === 'string' ? c :	'\\u' + ('0000' + a.charCodeAt(0).toString(16)).slice(-4);
-		}) + '"' : '"' + string + '"';
-	}
-
-	function str(key, holder) {
-		var i, k, v, length, mind = gap, partial, value = holder[key];
-
-		if (value && typeof value === 'object' && $.isFunction(value.toJSON)) {
-			value = value.toJSON(key);
-		}
-
-		switch (typeof value) {
-		case 'string':
-			return quote(value);
-		case 'number':
-			return isFinite(value) ? String(value) : 'null';
-		case 'boolean':
-		case 'null':
-			return String(value);
-		case 'object':
-			if (!value) {
-				return 'null';
-			}
-			gap += indent;
-			partial = [];
-			if ($.isArray(value)) {
-				length = value.length;
-				for (i = 0; i < length; ++i) {
-					partial[i] = str(i, value) || 'null';
-				}
-				v = partial.length === 0 ? '[]' : gap ?
-					'[\n' + gap + partial.join(',\n' + gap) + '\n' + mind + ']' :
-					'[' + partial.join(',') + ']';
-				gap = mind;
-				return v;
-			}
-			for (k in value) {
-				if (Object.prototype.hasOwnProperty.call(value, k)) {
-					v = str(k, value);
-					if (v) {
-						partial.push(quote(k) + (gap ? ': ' : ':') + v);
-					}
-				}
-			}
-			v = partial.length === 0 ? '{}' : gap ?
-				'{\n' + gap + partial.join(',\n' + gap) + '\n' + mind + '}' :
-				'{' + partial.join(',') + '}';
-			gap = mind;
-			return v;
-		default:
-			throw new Error( "JSON.stringify: unknown data type" );
-		}
-	}
-
-	if (!$.isFunction(JSON.stringify)) {
-		JSON.stringify = function (value, ignoredParam1, ignoredParam2) {
-			ignoredParam1 = ignoredParam2;  // boredom
-			gap = '';
-			return str('', {'': value});
-		};
-	}
-}());
-
 Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 	var form = pageobj.getCallbackParameters();
-	var statelem = pageobj.getStatusElement();
 
 	// this is the object which gets serialized into JSON
 	var newConfig = {
@@ -1622,7 +1572,7 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 	// and it is not very robust: e.g. compare([2], ["2"]) === true, and
 	// compare({}, {}) === false, but it's good enough for our purposes here
 	var compare = function(a, b) {
-		if ($.isArray(a)) {
+		if (Array.isArray(a)) {
 			if (a.length !== b.length) {
 				return false;
 			}
@@ -1683,7 +1633,7 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 							});
 						} else {
 							// read all the keys in the list of values
-							$.each(pref.setValues, function(itemkey, itemvalue) {
+							$.each(pref.setValues, function(itemkey) {
 								if (form[pref.name + "_" + itemkey].checked) {
 									userValue.push(itemkey);
 								}
@@ -1739,12 +1689,14 @@ Twinkle.config.writePrefs = function twinkleconfigWritePrefs(pageobj) {
 		"// changing the configuration parameters in a valid-JavaScript way) will be\n" +
 		"// overwritten the next time you click \"save\" in the Twinkle preferences\n" +
 		"// panel.  If modifying this file, make sure to use correct JavaScript.\n" +
+		"// <no" + "wiki>\n" +
 		"\n" +
 		"window.Twinkle.prefs = ";
 	text += JSON.stringify(newConfig, null, 2);
 	text +=
 		";\n" +
 		"\n" +
+		"// </no" + "wiki>\n" + 
 		"// End of twinkleoptions.js\n";
 
 	pageobj.setPageText(text);
