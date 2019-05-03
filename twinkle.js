@@ -77,7 +77,7 @@ Twinkle.defaultConfig.twinkle = {
 	logProdPages: false,
 	prodLogPageName: "Log PROD",
 
-	 // CSD
+	// CSD
 	speedySelectionStyle: "buttonClick",
 	watchSpeedyPages: [ "u3", "u5", "u10", "u11", "u12" ],
 	markSpeedyPagesAsPatrolled: true,
