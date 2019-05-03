@@ -1,5 +1,9 @@
-Twinkle [![Build Status](https://travis-ci.org/azatoth/twinkle.svg?branch=master)](https://travis-ci.org/azatoth/twinkle)
+Twinkle [![Build Status](https://travis-ci.org/kenrick95/twinkle.svg?branch=master)](https://travis-ci.org/kenrick95/twinkle)
 =======
+
+Note: This is a fork of [AzaToth's Twinkle](https://github.com/azatoth/twinkle/) for usage in Indonesian Wikipedia. Messages are being translated to Indonesian language and some logics are adapted to Indonesian Wikipedia's use case.
+
+----
 
 Twinkle is a JavaScript library and application that gives Wikipedians a quick way of performing common maintenance tasks, such as nominating pages for deletion and cleaning up vandalism.
 
@@ -68,7 +72,7 @@ There is a synchronization script called `sync.pl`, which can be used to pull an
 
 The program depends on a few modules, namely [`MediaWiki::API`][MediaWiki::API], [`Git::Repository`][Git::Repository], [`File::Slurper`][File::Slurper], and [`Getopt::Long::Descriptive`][Getopt::Long::Descriptive]. These can be installed easily using [`App::cpanminus`][App::cpanminus]:
 
-    cpanm --sudo install MediaWiki::API Git::Repository File::Slurper Getopt::Long::Descriptive
+    cpanm --sudo install MediaWiki::API Git::Repository File::Slurper Getopt::Long::Descriptive Config::General
 
 You may prefer to install them through your operating system's packaing tool (e.g. `apt-get install libgetopt-long-descriptive-perl`) although you can install them through cpanm too.
 
