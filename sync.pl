@@ -18,7 +18,7 @@ use File::Slurper qw(read_text write_text);
 # lang = en
 # etc.
 my %conf;
-my $config_file = "$ENV{HOME}/.twinklerc";
+my $config_file = ".twinklerc";
 %conf = ParseConfig($config_file) if -e -f -r $config_file;
 
 my ($opt, $usage) = describe_options(
