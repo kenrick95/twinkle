@@ -261,19 +261,6 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 	dialog.display();
 
 	Twinkle.speedy.callback.modeChanged( result );
-
-	// if sysop, check if CSD is already on the page and fill in custom rationale
-	if (Morebits.userIsInGroup('sysop') && $("#delete-reason").length) {
-		var customOption = $("input[name=csd][value=reason]")[0];
-
-		if (Twinkle.getPref('speedySelectionStyle') !== 'radioClick') {
-			// force listeners to re-init
-			customOption.click();
-			customOption.parentNode.appendChild(customOption.subgroup);
-		}
-
-		customOption.subgroup.querySelector('input').value = decodeURIComponent($("#delete-reason").text()).replace(/\+/g, ' ');
-	}
 };
 
 Twinkle.speedy.callback.getMode = function twinklespeedyCallbackGetMode(form) {
@@ -359,7 +346,7 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 			case 2:  // user
 			case 3:  // user talk
 				work_area.append( { type: 'header', label: 'Halaman pengguna' } );
-				work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.userList, mode) } );
+				work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.userAllList.concat(Twinkle.speedy.userNonRedirectList), mode) } );
 				break;
 
 			case 6:  // file
@@ -392,23 +379,39 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 			default:
 				break;
 		}
+	} else {
+		if (namespace == 2 || namespace == 3) {
+			work_area.append( { type: 'header', label: 'User pages' } );
+			work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.userAllList, mode) } );
+		}
+		work_area.append( { type: 'header', label: 'Redirects' } );
+		work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.redirectList, mode) } );
 	}
 
-	// custom rationale lives under general criteria when tagging
 	var generalCriteria = Twinkle.speedy.generalList;
+
+	// custom rationale lives under general criteria when tagging
 	if(!Twinkle.speedy.mode.isSysop(mode)) {
 		generalCriteria = Twinkle.speedy.customRationale.concat(generalCriteria);
 	}
 	work_area.append( { type: 'header', label: 'Kriteria umum' } );
 	work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(generalCriteria, mode) });
 
-	if(mw.config.get('wgIsRedirect')) {
-		work_area.append( { type: 'header', label: 'Pengalihan' } );
-		work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.redirectList, mode) } );
-	}
-
 	var old_area = Morebits.quickForm.getElements(form, "work_area")[0];
 	form.replaceChild(work_area.render(), old_area);
+
+	// if sysop, check if CSD is already on the page and fill in custom rationale
+	if (Twinkle.speedy.mode.isSysop(mode) && $("#delete-reason").length) {
+		var customOption = $("input[name=csd][value=reason]")[0];
+		if (customOption) {
+			if (Twinkle.getPref('speedySelectionStyle') !== 'radioClick') {
+				// force listeners to re-init
+				customOption.click();
+				customOption.parentNode.appendChild(customOption.subgroup);
+			}
+			customOption.subgroup.querySelector('input').value = decodeURIComponent($("#delete-reason").text()).replace(/\+/g, ' ');
+		}
+	}
 };
 
 Twinkle.speedy.generateCsdList = function twinklespeedyGenerateCsdList(list, mode) {
@@ -469,9 +472,15 @@ Twinkle.speedy.generateCsdList = function twinklespeedyGenerateCsdList(list, mod
 			return null;
 		}
 
+		if (criterion.showInNamespaces && criterion.showInNamespaces.indexOf(mw.config.get('wgNamespaceNumber')) < 0) {
+			return null;
+		} else if (criterion.hideInNamespaces && criterion.hideInNamespaces.indexOf(mw.config.get('wgNamespaceNumber')) > -1) {
+			return null;
+		}
+
 		if (criterion.subgroup && !hasSubmitButton) {
-			if ($.isArray(criterion.subgroup)) {
-				criterion.subgroup.push({
+			if (Array.isArray(criterion.subgroup)) {
+				criterion.subgroup = criterion.subgroup.concat({
 					type: 'button',
 					name: 'submit',
 					label: 'Kirim permintaan',
@@ -530,8 +539,7 @@ Twinkle.speedy.talkList = [
 	{
 		label: 'U8: Halaman pembicaraan yatim',
 		value: 'talk',
-		tooltip: 'Ini tidak termasuk halaman yang berguna untuk proyek, khususnya halaman pembicaraan pengguna, arsip pembicaraan pengguna, dan halaman pembicaraan untuk halaman berkas yang ada di Commons.',
-		hideWhenRedirect: true
+		tooltip: 'Ini tidak termasuk halaman yang berguna untuk proyek, khususnya halaman pembicaraan pengguna, arsip pembicaraan pengguna, dan halaman pembicaraan untuk halaman berkas yang ada di Commons.'
 	}
 ];
 
@@ -565,7 +573,7 @@ Twinkle.speedy.fileList = [
 	},
 	{
 		label: 'B5: Berkas tak bebas yang tak digunakan.',
-		value: 'unfree',
+		value: 'b5',
 		tooltip: 'Berkas dan media yang tidak memiliki lisensi bebas atau domain publik, yang tidak digunakan di artikel manapun, dapat dihapus setelah diidentifikasi sebagai berkas tak bebas yang tak digunakan selama tujuh hari. Perkecualian dapat diberikan kepada berkas yang akan digunakan untuk artikel yang sedang ditulis/dipersiapkan.',
 		hideWhenUser: true
 	},
@@ -580,7 +588,7 @@ Twinkle.speedy.fileList = [
 		value: 'badfairuse',  // same as below
 		tooltip: 'Berkas atau media tak bebas dengan templat penggunaan wajar yang jelas-jelas tidak sah (seperti tag {{Logo}} pada sebuah foto maskot) dapat dihapus dengan segera.',
 		subgroup: {
-			name: 'badfairuse_reason',
+			name: 'badfairuse_rationale',
 			type: 'input',
 			label: 'Penjelasan (opsional): ',
 			size: 60
@@ -591,7 +599,7 @@ Twinkle.speedy.fileList = [
 		value: 'badfairuse',  // same as above
 		tooltip: 'Non-free images or media from a commercial source (e.g., Associated Press, Getty), where the file itself is not the subject of sourced commentary, are considered an invalid claim of fair use and fail the strict requirements of WP:NFCC.',
 		subgroup: {
-			name: 'badfairuse_reason',
+			name: 'badfairuse_rationale',
 			type: 'input',
 			label: 'Optional explanation: ',
 			size: 60
@@ -600,10 +608,10 @@ Twinkle.speedy.fileList = [
 	},*/
 	{
 		label: 'B8: Berkas yang sama persis tersedia di Wikimedia Commons',
-		value: 'nowcommons',
+		value: 'commons',
 		tooltip: 'Syarat: (1) Versi di Commons memiliki format yang sama dan memiliki kualitas/resolusi yang sama atau lebih tinggi. (2) Lisensi dan sumber tidak diragukan lagi, dan lisensi yang digunakan merupakan lisensi Commons yang berterima. (2) Semua informasi pada berkas lokal juga ada di Commons, termasuk sejarah pemuatan yang lengkap dengan pranala ke halaman pengguna pemuat lokal. (3) Jika nama yang digunakan di Commons berbeda dengan di lokal, semua penggunaan berkas di lokal harus disesuaikan (diganti) sesuai dengan nama yang terdapat di Commons.(4) Berkas tidak dilindungi. JANGAN MENGHAPUS BERKAS YANG DILINDUNGI, meskipun ada duplikatnya di Commons. Berkas seperti itu biasanya dimuat di wiki lokal dan dilindungi karena digunakan pada antar muka atau templat yang beresiko tinggi.',
 		subgroup: {
-			name: 'nowcommons_filename',
+			name: 'commons_filename',
 			type: 'input',
 			label: 'Nama berkas di Commons: ',
 			value: Morebits.pageNameNorm,
@@ -615,12 +623,20 @@ Twinkle.speedy.fileList = [
 		label: 'B9: Terang-terangan melanggar hak cipta',
 		value: 'imgcopyvio',
 		tooltip: 'Yang termasuk di dalamnya: berkas atau media yang diklaim sebagai berkas berlisensi bebas padahal sebenarnya bukan. Sebuah URL atau indikasi lokasi sumber harus disediakan. Yang tidak termasuk di dalamnya: berkas dengan klaim penggunaan bebas, atau berkas dengan klaim yang dapat dipercaya dari pemiliknya yang telah melepasnya di bawah lisensi bebas yang kompatibel dengan lisensi Wikipedia. Ini termasuk gambar-gambar dari perpustakaan foto stok seperti Getty Images dan Corbis.',
-		subgroup: {
-			name: 'imgcopyvio_url',
-			type: 'input',
-			label: 'URL sumber konten, termasuk "http://". Jika tidak dapat memberikan URL, mohon tidak menggunakan KPC B9. (Pengecualian: copyvio untuk bahan non-Internet, biarkan kosong.) ',
-			size: 60
-		}
+		subgroup: [
+			{
+				name: 'imgcopyvio_url',
+				type: 'input',
+				label: 'URL sumber konten, termasuk "http://". Jika tidak dapat memberikan URL, mohon tidak menggunakan KPC B9. ',
+				size: 60
+			},
+			{
+				name: 'imgcopyvio_rationale',
+				type: 'input',
+				label: 'Alasan penghapusan untuk copyvio non-internet: ',
+				size: 60
+			}
+		]
 	},
 	{
 		label: 'B10: Berkas media yang tidak berguna',
@@ -665,7 +681,13 @@ Twinkle.speedy.articleList = [
 	{
 		label: 'A5: Artikel transwiki',
 		value: 'transwiki',
-		tooltip: 'Yang termasuk di dalamnya: Artikel yang telah dipindahkan ke wiki lain dan ada catatan pemindahannya (termasuk informasi tentang pembuat artikel) yang jelas. Artikel yang dipindahkan dapat berupa sebuah definisi kata yang telah dipindahkan ke KamusWiki, sumber bahan yang telah dipindahkan ke WikiSource, atau artikel lainnya yang telah didiskusikan dan disetujui untuk dipindahkan ke wiki lain.'
+		tooltip: 'Yang termasuk di dalamnya: Artikel yang telah dipindahkan ke wiki lain dan ada catatan pemindahannya (termasuk informasi tentang pembuat artikel) yang jelas. Artikel yang dipindahkan dapat berupa sebuah definisi kata yang telah dipindahkan ke KamusWiki, sumber bahan yang telah dipindahkan ke WikiSource, atau artikel lainnya yang telah didiskusikan dan disetujui untuk dipindahkan ke wiki lain.',
+		subgroup: {
+			name: 'transwiki_location',
+			type: 'input',
+			label: 'Link to where the page has been transwikied: ',
+			tooltip: 'For example, https://en.wiktionary.org/wiki/twinkle or [[wikt:twinkle]]'
+		}
 	},
 	{
 		label: 'A7: Tidak mengindikasikan kepentingan (tokoh, organisasi, isi situs)',
@@ -741,7 +763,7 @@ Twinkle.speedy.categoryList = [
 	{
 		label: 'K1: Kategori tanpa isi',
 		value: 'catempty',
-		tooltip: 'Kategori tanpa isi yang selama paling tidak empat hari masih tidak memiliki isi. Yang tidak termasuk di dalamnya: kategori disambiguasi, pengalihan kategori, kategori topik pilihan, atau kategori yang menurut naturnya dapat menjadi kosong sewaktu-waktu (mis. kategori yang ditransklusikan oleh kotak pengguna.)'
+		tooltip: 'Kategori tanpa isi yang selama paling tidak empat hari masih tidak memiliki isi. Yang tidak termasuk di dalamnya: kategori disambiguasi, pengalihan kategori (isi sudah dipindahkan ke kategori lain), kategori topik pilihan, duplikat dengan kategori lain, atau kategori yang menurut naturnya dapat menjadi kosong sewaktu-waktu (mis. kategori yang ditransklusikan oleh kotak pengguna.) Bubuhkan {{kategori kosong}} di bagian atas kategori kosong untuk menghindari agar kategori tersebut tidak dihapus.)'
 	},
 	{
 		label: 'K2: Kategori yang namanya telah diganti',
@@ -755,7 +777,7 @@ Twinkle.speedy.categoryList = [
 	}
 ];
 
-Twinkle.speedy.userList = [
+Twinkle.speedy.userAllList = [
 	{
 		label: 'H1: Permintaan pengguna',
 		value: 'userreq',
@@ -772,40 +794,49 @@ Twinkle.speedy.userList = [
 	{
 		label: 'H2: Pengguna yang tidak ada',
 		value: 'nouser',
-		tooltip: 'Yang termasuk di dalamya: halaman pengguna seorang pengguna yang tidak eksis (cek lewat Istimewa:Daftar pengguna), tidak termasuk alamat IP.'
-	},
+		tooltip: 'Yang termasuk di dalamya: halaman pengguna seorang pengguna yang tidak eksis (cek lewat Istimewa:Daftar pengguna), tidak termasuk alamat IP'
+	}
+];
+
+Twinkle.speedy.userNonRedirectList = [
 	{
 		label: 'H3: Galeri tak bebas',
 		value: 'gallery',
 		tooltip: 'Galeri di ruangnama pengguna yang terdiri lebih dari separuhnya gambar-gambar tak bebas atau "penggunaan wajar". Kebijakan Wikipedia melarang penggunaan berkas-berkas tak bebas di ruangnama pengguna, walaupun yang memuat adalah pengguna itu sendiri; penggunaan berkas-berkas yang berada di bawah domain umum atau lisensi bebas diperkenankan.'
 	},
-	// {
-	// 	label: 'U5: Blatant WP:NOTWEBHOST violations',
-	// 	value: 'notwebhost',
-	// 	tooltip: 'Pages in userspace consisting of writings, information, discussions, and/or activities not closely related to Wikipedia\'s goals, where the owner has made few or no edits outside of userspace, with the exception of plausible drafts, pages adhering to WP:UPYES, and résumé-style pages.'
-	// },
 	{
-		label: 'U6: Draf kosong',
-		value: 'blankdraft',
-		tooltip: 'Draf di ruangnama pengguna berisi hanya teks baku dari Wisaya Artikel, dan penulis halaman telah nonaktif selama lebih dari satu tahun.',
-		hideWhenMultiple: true
+		label: 'H4: Penyalahgunaan halaman pengguna sebagai penginangan webs',
+		value: 'notwebhost',
+		tooltip: 'Penyalahgunaan halaman pengguna sebagai penginangan web. Yang termasuk di dalamnya adalah tulisan, informasi, atau aktivitas yang tidak terkait dengan Wikipedia, yang penggunanya telah menyunting beberapa halaman di luar halaman penggunanya dengan pengecualian halaman draf dan halaman yang sesuai dengan apa-apa yang dapat dicantumkan di halaman pengguna..'
 	},
 	{
-    label: 'U11: Halaman pengguna yang berisi iklan, dengan menggunakan nama pengguna berkesan iklan',
+		label: 'U11: Halaman pengguna untuk promosi, dengan nama pengguna untuk tujuan promosi',
 		value: 'spamuser',
 		tooltip: 'Halaman pengguna untuk promosi, dengan nama pengguna untuk tujuan promosi. Perhatikan pula bahwa dengan adanya halaman mengenai perusahaan pada halaman pengguna tidak termasuk dalam kriteria ini. Jika halaman pengguna adalah spam, dan nama penggunanya tidak, tandai dengan U11 saja.',
 		hideWhenMultiple: true
-	}
+	}//,
+	// {
+	// 	label: 'G13: AfC draft submission or a blank draft, stale by over 6 months',
+	// 	value: 'afc',
+	// 	tooltip: 'Any rejected or unsubmitted AfC draft submission or a blank draft, that has not been edited in over 6 months (excluding bot edits).',
+	// 	hideWhenMultiple: true
+	// }
 ];
 
 Twinkle.speedy.templateList = [
 	{
-		label: 'T2: Templat yang merupakan penyimpangan terang-terangan dari kebijakan yang ada',
+		label: 'T3: Templat yang merupakan penyimpangan terang-terangan dari kebijakan yang ada',
 		value: 'policy',
-		tooltip: 'Templat yang merupakan penyimpangan terang-terangan dari kebijakan yang ada.'
+		tooltip: 'Templat yang merupakan penyimpangan terang-terangan dari kebijakan yang ada.',
+		subgroup: {
+			name: 'policy_rationale',
+			type: 'input',
+			label: 'Penjelasan lanjut: ',
+			size: 60
+		}
 	},
 	{
-		label: 'T3: Templat yang tidak digunakan selayaknya dan/atau duplikat templat lain',
+		label: 'T4: Templat yang tidak digunakan selayaknya dan/atau duplikat templat lain',
 		value: 'duplicatetemplate',
 		tooltip: 'Templat yang tidak digunakan selayaknya, dan yang berupa: duplikat templat lain, atau memiliki fungsi yang sama yang dapat disediakan oleh templat lain dapat dihapuskan setelah diberi tanda penghapusan cepat selama tujuh hari.',
 		subgroup: {
@@ -824,8 +855,8 @@ Twinkle.speedy.portalList = [
 		value: 'p1',
 		tooltip: 'Harus menyebutkan KPC yang berlaku untuk kasus ini (A1, A3, A7, atau A10).',
 		subgroup: {
-			name: 'p1_1',
-			type: 'select',
+			name: 'p1_criterion',
+			type: 'input',
 			label: 'Pilih kriteria yang berlaku: '
 		},
 		hideWhenMultiple: true
@@ -839,15 +870,16 @@ Twinkle.speedy.portalList = [
 
 Twinkle.speedy.generalList = [
 	{
-    label: 'U1: Tulisan ngawur. Yang termasuk di dalamnya: Halaman-halaman yang isinya hanyalah ujaran tak keruan, tanpa makna dan isi.',
-    value: 'nonsense',
-    tooltip: 'Yang tidak termasuk di dalamnya: penulisan yang buruk, terjemahan buruk, vandalisme, materi fiktif, materi berbahasa selain bahasa Indonesia, dan materi palsu.',
-		hideWhenRedirect: true
+		label: 'U1: Tulisan ngawur. Yang termasuk di dalamnya: Halaman-halaman yang isinya hanyalah ujaran tak keruan, tanpa makna dan isi.',
+		value: 'nonsense',
+		tooltip: 'Yang tidak termasuk di dalamnya: penulisan yang buruk, terjemahan buruk, vandalisme, materi fiktif, materi berbahasa selain bahasa Indonesia, pemberitaan palsu; namun demikian, beberapa di antara yang disebutkan dapat dihapus dengan dasar vandalisme.',
+		hideInNamespaces: [ 2 ]		// Not applicable in userspace
 	},
 	{
 		label: 'U2: Uji coba',
 		value: 'test',
-		tooltip: 'Halaman yang dibuat untuk mencoba kode-kode wiki. Yang tidak termasuk di dalamnya: penyuntingan di halaman-halaman bernama "bak pasir" dan ruangnama pengguna.'
+		tooltip: 'Halaman yang dibuat untuk mencoba kode-kode wiki. Yang tidak termasuk di dalamnya: penyuntingan di halaman-halaman bernama "bak pasir" dan ruangnama pengguna.',
+		hideInNamespaces: [ 2 ]		// Not applicable in userspace
 	},
 	{
 		label: 'U3: Vandalisme murni/terang-terangan.',
@@ -865,7 +897,7 @@ Twinkle.speedy.generalList = [
 		value: 'repost',
 		tooltip: 'Yang termasuk di dalamnya: Salinan dari halaman yang dihapus melalui sebuah diskusi, baik melalui Wikipedia:Usulan penghapusan maupun di halaman pembicaraannya. Yang tidak termasuk di dalamnya: Pemulihan artikel melalui evaluasi penghapusan dan halaman yang dihapus tanpa melalui diskusi.',
 		subgroup: {
-			name: 'repost_1',
+			name: 'repost_xfd',
 			type: 'input',
 			label: 'Halaman yang memuat diskusi penghapusan: ',
 			tooltip: 'Harus dimulai dengan awalan "Wikipedia:"',
@@ -878,7 +910,7 @@ Twinkle.speedy.generalList = [
 		value: 'banned',
 		tooltip: 'Halaman-halaman yang dibuat oleh pengguna yang sedang diblokir atau dilarang, termasuk yang terbukti membuat akun siluman, yang melanggar ketentuan pemblokiran atau peringatan kepada mereka.',
 		subgroup: {
-			name: 'banned_1',
+			name: 'banned_user',
 			type: 'input',
 			label: 'Nama pengguna (jika ada): ',
 			tooltip: 'Jangan dimulai dengan "Pengguna:"'
@@ -886,28 +918,17 @@ Twinkle.speedy.generalList = [
 		hideSubgroupWhenMultiple: true
 	},
 	{
-		label: 'U6: Penggabungan riwayat halaman',
-		value: 'histmerge',
-		tooltip: 'Hapus sementara sebuah halaman untuk menggabungkan sejarah halaman.',
-		subgroup: {
-			name: 'histmerge_1',
-			type: 'input',
-			label: 'Halaman akan digabungkan dengan: '
-		},
-		hideWhenMultiple: true
-	},
-	{
-		label: 'U6: Pemindahan',
+		label: 'G6: Move',
 		value: 'move',
 		tooltip: 'Memberi tempat untuk pemindahan.',
 		subgroup: [
 			{
-				name: 'move_1',
+				name: 'move_page',
 				type: 'input',
 				label: 'Halaman yang akan dipindahkan ke sini: '
 			},
 			{
-				name: 'move_2',
+				name: 'move_reason',
 				type: 'input',
 				label: 'Alasan: ',
 				size: 60
@@ -916,7 +937,7 @@ Twinkle.speedy.generalList = [
 		hideWhenMultiple: true
 	},
 	// {
-	// 	label: 'U6: XfD',
+	// 	label: 'G6: XfD',
 	// 	value: 'xfd',
 	// 	tooltip: 'An admin has closed a deletion discussion (at AfD, FfD, RfD, TfD, CfD, or MfD) as "delete", but they didn\'t actually delete the page.',
 	// 	subgroup: {
@@ -927,7 +948,7 @@ Twinkle.speedy.generalList = [
 	// 	},
 	// 	hideWhenMultiple: true
 	// },
-	{
+	{ // NOTE: en.wikipedia changes this to G14. id.wikipedia still uses U6!
 		label: 'U6: Halaman disambiguasi yang tak perlu',
 		value: 'disambig',
 		tooltip: 'Untuk halaman disambiguasi yatim yang: (1) mendisambiguasi kurang dari dua halaman Wikipedia untuk yang judulnya berakhiran "(disambiguasi)"; atau (2) mendisambiguasi tidak ada halaman.',
@@ -939,12 +960,11 @@ Twinkle.speedy.generalList = [
 		value: 'copypaste',
 		tooltip: 'Pemindahan salin-tempel halaman lain yang perlu dihapus sementara untuk membuat tempat agar dapat dipindahkan melalui peralatan Wikipedia.',
 		subgroup: {
-			name: 'copypaste_1',
+			name: 'copypaste_sourcepage',
 			type: 'input',
 			label: 'Halaman asal yang disalin-tempel: '
 		},
-		hideWhenMultiple: true,
-		hideWhenRedirect: true
+		hideWhenMultiple: true
 	},
 	{
 		label: 'U6: Alasan teknis',
@@ -979,14 +999,14 @@ Twinkle.speedy.generalList = [
 			type: 'input',
 			label: 'Penjelasan opsional: ',
 			size: 60
-		},
-		hideWhenRedirect: true
+		}
 	},
 	{
 		label: 'U8: Subhalaman tanpa halaman asal',
 		value: 'subpage',
-		tooltip: 'Tidak termasuk halaman yang berguna untuk dilindungi.',
-		hideWhenMultiple: true
+		tooltip: 'Tidak termasuk halaman yang berguna untuk proyek, terutama: halaman diskusi penghapusan yang tidak tercantum di halaman lainnya, halaman pengguna dan halaman pembicaraan pengguna, arsip halaman pembicaraan, halaman pengalihan yang masuk akal, dan halaman berkas atau pembicaraan berkas yang ada di Commons.',
+		hideWhenMultiple: true,
+		hideInNamespaces: [ 0, 6, 8 ]  // hide in main, file, and mediawiki-spaces
 	},
 	{
 		label: 'U10: Serangan atau olokan terhadap subyek atau entitas lain.',
@@ -1002,8 +1022,7 @@ Twinkle.speedy.generalList = [
 	{
 		label: 'U11: Iklan atau promosi terang-terangan.',
 		value: 'iklan',
-		tooltip: 'Yang termasuk di dalamnya: Halaman yang dibuat dengan tujuan utama untuk mempromosikan suatu entitas, dan yang tidak ensiklopedis (yang perlu ditulis ulang agar bersifat ensiklopedis). Yang tidak termasuk di dalamnya: artikel yang memiliki judul suatu nama perusahaan atau produk tidak secara otomatis masuk ke kategori ini.',
-		hideWhenRedirect: true
+		tooltip: 'Yang termasuk di dalamnya: Halaman yang dibuat dengan tujuan utama untuk mempromosikan suatu entitas, dan yang tidak ensiklopedis (yang perlu ditulis ulang agar bersifat ensiklopedis). Yang tidak termasuk di dalamnya: artikel yang memiliki judul suatu nama perusahaan atau produk tidak secara otomatis masuk ke kategori ini.'
 	},
 	{
 		label: 'U12: Pelanggaran hak cipta terang-terangan',
@@ -1031,27 +1050,41 @@ Twinkle.speedy.generalList = [
 				tooltip: 'Opsional.',
 				size: 60
 			}
-		],
-		hideWhenRedirect: true
+		]
 	},
 	// {
-	// 	label: 'G13: Old, abandoned Articles for Creation submissions',
+	// 	label: 'G13: Page in draft namespace or userspace AfC submission, stale by over 6 months',
 	// 	value: 'afc',
-	// 	tooltip: 'Any rejected or unsubmitted AfC submission that has not been edited for more than 6 months.'
+	// 	tooltip: 'Any rejected or unsubmitted AfC submission in userspace or any page in draft namespace, that has not been edited for more than 6 months. Blank drafts in either namespace are also included.',
+	// 	hideWhenRedirect: true,
+	// 	showInNamespaces: [2, 118]  // user, draft namespaces only
+	// },
+	// {
+	// 	label: 'G14: Unnecessary disambiguation page',
+	// 	value: 'disambig',
+	// 	tooltip: 'This only applies for orphaned disambiguation pages which either: (1) disambiguate only one existing Wikipedia page and whose title ends in "(disambiguation)" (i.e., there is a primary topic); or (2) disambiguate no (zero) existing Wikipedia pages, regardless of its title.',
+	// 	hideWhenRedirect: true
 	// }
 ];
 
 Twinkle.speedy.redirectList = [
 	{
-		label: 'R2: Pengalihan dari ruangnama artikel ke ruangnama lain, kecuali ruangnama Kategori:, Templat:, Wikipedia:, Bantuan:, dan Portal:',
+		label: 'R3: Pengalihan dari ruangnama artikel ke ruangnama lain, kecuali ruangnama Kategori:, Templat:, Wikipedia:, Bantuan:, dan Portal:',
 		value: 'rediruser',
-		tooltip: 'Jika pengalihan ditimbulkan karena pemindahan halaman, tunggu satu atau beberapa hari sebelum menghapus pengalihan. Lihat pula Wikipedia:Pengalihan antar-ruangnama.'
+		tooltip: 'Jika pengalihan ditimbulkan karena pemindahan halaman, tunggu satu atau beberapa hari sebelum menghapus pengalihan. Lihat pula Wikipedia:Pengalihan antar-ruangnama.',
+		showInNamespaces: [ 0 ]
 	},
 	{
-		label: 'R3: Pengalihan yang baru dibuat karena kesalahan ketik atau kesalahan penamaan yang tidak disengaja',
+		label: 'R4: Pengalihan yang baru dibuat karena kesalahan ketik atau kesalahan penamaan yang tidak disengaja',
 		value: 'redirtypo',
 		tooltip: 'Meskipun demikian, pengalihan dari kesalahan umum pengejaan atau penamaan biasanya berguna, seperti halnya pengalihan dari istilah dalam bahasa lain.'
 	},
+	// {
+	// 	label: 'R4: File namespace redirect with name that matches a Commons page',
+	// 	value: 'redircom',
+	// 	tooltip: 'The redirect should have no incoming links (unless the links are cleary intended for the file or redirect at Commons).',
+	// 	showInNamespaces: [ 6 ]
+	// },
 	{
 		label: 'U6: Pengalihan ke halaman disambiguasi yang salah',
 		value: 'movedab',
@@ -1061,8 +1094,9 @@ Twinkle.speedy.redirectList = [
 	{
 		label: 'U8: Pengalihan ke target tidak sah, seperti target yang tidak ada, pengalihan ganda, dan judul yang buruk',
 		value: 'redirnone',
-		tooltip: 'Ini tidak berlaku untuk halaman berguna ke sebuah proyek, dan khususnya: diskusi penghapusan yang tidak dicatat di tempat lain, halaman pengguna dan pembicaraannya, arsip halaman pembicaraan, pengalihan yang dapat diperbaiki, dan halaman berkas dan pembicaraannya yang ada di Commons.'
-	}
+		tooltip: 'Ini tidak berlaku untuk halaman berguna ke sebuah proyek, dan khususnya: diskusi penghapusan yang tidak dicatat di tempat lain, halaman pengguna dan pembicaraannya, arsip halaman pembicaraan, pengalihan yang dapat diperbaiki, dan halaman berkas dan pembicaraannya yang ada di Commons.',
+		hideWhenMultiple: true
+	},
 ];
 
 Twinkle.speedy.normalizeHash = {
@@ -1091,7 +1125,9 @@ Twinkle.speedy.normalizeHash = {
 	'imagepage': 'u8',
 	'attack': 'u10',
 	'negublp': 'u10',
+	'u11': 'u11',
 	'spam': 'u11',
+	'iklan': 'u11',
 	'spamuser': 'u11',
 	'copyvio': 'u12',
 	'afc': 'u13',
@@ -1110,17 +1146,20 @@ Twinkle.speedy.normalizeHash = {
 	'a9': 'a9',
 	'a10': 'a10',
 	'madeup': 'a11',
-	'rediruser': 'r2',
-	'redirtypo': 'r3',
+	'rediruser': 'r3',
+	'redirtypo': 'r4',
+	// 'redircom' : 'r4',
 	'redundantimage': 'b1',
 	'noimage': 'b2',
 	'fpcfail': 'b2',
 	'noncom': 'b3',
 	'unksource': 'b4',
 	'unfree': 'b5',
+	'b5': 'b5',
 	'norat': 'b6',
 	'badfairuse': 'b7',
 	'nowcommons': 'b8',
+	'commons': 'b8',
 	'imgcopyvio': 'b9',
 	'badfiletype': 'b10',
 	'nopermission': 'b11',
@@ -1131,8 +1170,8 @@ Twinkle.speedy.normalizeHash = {
 	'nouser': 'h2',
 	'gallery': 'h3',
 	'notwebhost': 'h5',
-	'policy': 't2',
-	'duplicatetemplate': 't3',
+	'policy': 't3',
+	'duplicatetemplate': 't4',
 	'p1': 'p1',
 	'emptyportal': 'p2',
 	'p2': 'p2'
@@ -1142,7 +1181,7 @@ Twinkle.speedy.callbacks = {
 	getTemplateCodeAndParams: function(params) {
 		var code, parameters, i;
 		if (params.normalizeds.length > 1) {
-			code = "{{db-multiple"; // TODO in id.wikipedia, import this template!
+			code = "{{db-multiple";
 			params.utparams = {};
 			$.each(params.normalizeds, function(index, norm) {
 				code += "|" + norm.toUpperCase();
@@ -1176,6 +1215,7 @@ Twinkle.speedy.callbacks = {
 			prop: "text",
 			pst: "true",
 			text: wikitext,
+			contentmodel: "wikitext",
 			title: mw.config.get("wgPageName")
 		};
 
@@ -1384,7 +1424,8 @@ Twinkle.speedy.callbacks = {
 		main: function(pageobj) {
 			var statelem = pageobj.getStatusElement();
 
-			if (!pageobj.exists()) {
+			// defaults to /doc for lua modules, which may not exist
+			if (!pageobj.exists() && mw.config.get('wgPageContentModel') !== 'Scribunto') {
 				statelem.error( "Sepertinya halaman ini tidak ada; mungkin telah dihapus" );
 				return;
 			}
@@ -1396,13 +1437,13 @@ Twinkle.speedy.callbacks = {
 
 			// check for existing deletion tags
 			var tag = /(?:\{\{\s*(db|delete|hapus|hapus:|penghapusan|db-.*?|speedy deletion-.*?)(?:\s*\||\s*\}\}))/.exec( text );
-			if( tag ) {
-				statelem.error( [ Morebits.htmlNode( 'strong', tag[1] ) , " telah ada di halaman ini." ] );
+			// This won't make use of the db-multiple template but it probably should
+			if( tag && !confirm( "Templat yang berhubungan dengan penghapusan {{" + tag[1] + "}} ditemukan di halaman. Apakah Anda masih ingin menambahkan templat KPC?" ) ) {
 				return;
 			}
 
-			var xfd = /(?:\{\{([rsaiftcm]fd|md1|proposed deletion)[^{}]*?\}\})/i.exec( text );
-			if( xfd && !confirm( "Templat yang berhubungan dengan penghapusan {{" + xfd[1] + "}} ditemukan di halaman. Apakah Anda masih ingin menambahkan templat KPC?" ) ) {
+			var xfd = /\{\{((?:article for deletion|proposed deletion|prod blp|template for discussion)\/dated|[cfm]fd\b)/i.exec( text ) || /#invoke:(RfD)/.exec(text);
+			if( xfd && !confirm( "Templat yang berhubungan dengan penghapusan {{" + xfd[1] + "}} telah ada di halaman ini. Apakah Anda masih ingin menambahkan templat KPC?" ) ) {
 				return;
 			}
 
@@ -1425,7 +1466,7 @@ Twinkle.speedy.callbacks = {
 			}
 
 			// Remove tags that become superfluous with this action
-			text = text.replace(/\{\{\s*([Nn]ew unreviewed article|[Uu]nreviewed|[Uu]serspace draft)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/g, "");
+			text = text.replace(/\{\{\s*([Uu]serspace draft)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/g, "");
 			if (mw.config.get('wgNamespaceNumber') === 6) {
 				// remove "move to Commons" tag - deletion-tagged files cannot be moved to Commons
 				text = text.replace(/\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi, "");
@@ -1441,9 +1482,7 @@ Twinkle.speedy.callbacks = {
 				editsummary = editsummary.substr(0, editsummary.length - 2); // remove trailing comma
 				editsummary += ').';
 			} else if (params.normalizeds[0] === "db") {
-				editsummary = 'Meminta [[WP:KPC|penghapusan cepat]] dengan alasan \"' + parameters["1"] + '\".';
-			} else if (params.values[0] === "histmerge") {
-				editsummary = "Meminta penggabungan riwayat dengan [[" + parameters["1"] + "]] ([[WP:KPC#U6|KPC U6]]).";
+				editsummary = 'Meminta [[WP:KPC|penghapusan cepat]] dengan alasan "' + params.templateParams[0]["1"] + '".';
 			} else {
 				editsummary = "Meminta penghapusan cepat ([[WP:KPC#" + params.normalizeds[0].toUpperCase() + "|KPC " + params.normalizeds[0].toUpperCase() + "]]).";
 			}
@@ -1451,7 +1490,7 @@ Twinkle.speedy.callbacks = {
 			pageobj.setPageText(code + ((params.normalizeds.indexOf('g10') !== -1) ? '' : ("\n" + text) )); // cause attack pages to be blanked
 			pageobj.setEditSummary(editsummary + Twinkle.getPref('summaryAd'));
 			pageobj.setWatchlist(params.watch);
-			pageobj.setCreateOption('nocreate');
+			pageobj.setCreateOption('recreate'); // Module /doc might not exist
 			pageobj.save(Twinkle.speedy.callbacks.user.tagComplete);
 		},
 
@@ -1466,14 +1505,17 @@ Twinkle.speedy.callbacks = {
 					// disallow warning yourself
 					if (initialContrib === mw.config.get('wgUserName')) {
 						Morebits.status.warn("Anda (" + initialContrib + ") membuat halaman ini; lewati pemberitahuan");
+						initialContrib = null;
 
 					// don't notify users when their user talk page is nominated
 					} else if (initialContrib === mw.config.get('wgTitle') && mw.config.get('wgNamespaceNumber') === 3) {
 						Morebits.status.warn("Memberitahu penyunting awal: pengguna ini membuat halaman pembicaraannya sendiri; lewati pemberitahuan");
+						initialContrib = null;
 
 					// quick hack to prevent excessive unwanted notifications, per request. Should actually be configurable on recipient page...
-					} else if ((initialContrib === "Cyberbot I" || initialContrib === "SoxBot") && params.normalizeds[0] === "f2") {
+					} else if ((initialContrib === "Cyberbot I" || initialContrib === "SoxBot" || initialContrib === "Kenrick95Bot") && params.normalizeds[0] === "f2") {
 						Morebits.status.warn("Memberitahu kontributor awal: halaman dibuat oleh bot; lewati pemberitahuan");
+						initialContrib = null;
 
 					} else {
 						var usertalkpage = new Morebits.wiki.page('User talk:' + initialContrib, "Memberitahu penyunting awal (" + initialContrib + ")"),
@@ -1500,8 +1542,8 @@ Twinkle.speedy.callbacks = {
 						notifytext += (params.welcomeuser ? "" : "|nowelcome=yes") + "}} ~~~~";
 
 						var editsummary = "Pemberitahuan: nominasi penghapusan cepat";
-						if (params.normalizeds.indexOf("g10") === -1) {  // no article name in summary for G10 deletions
-							editsummary += " untuk [[" + Morebits.pageNameNorm + "]].";
+						if (params.normalizeds.indexOf("g10") === -1) {  // no article name in summary for G10 taggings
+							editsummary += " untuk [[:" + Morebits.pageNameNorm + "]].";
 						} else {
 							editsummary += " dari halaman serangan.";
 						}
@@ -1510,13 +1552,20 @@ Twinkle.speedy.callbacks = {
 						usertalkpage.setEditSummary(editsummary + Twinkle.getPref('summaryAd'));
 						usertalkpage.setCreateOption('recreate');
 						usertalkpage.setFollowRedirect(true);
-						usertalkpage.append();
+						usertalkpage.append(function onNotifySuccess() {
+							// add this nomination to the user's userspace log, if the user has enabled it
+							if (params.lognomination) {
+								Twinkle.speedy.callbacks.user.addToLog(params, initialContrib);
+							}
+						}, function onNotifyError() {
+							// if user could not be notified, log nomination without mentioning that notification was sent
+							if (params.lognomination) {
+								Twinkle.speedy.callbacks.user.addToLog(params, null);
+							}
+						});
 					}
 
-					// add this nomination to the user's userspace log, if the user has enabled it
-					if (params.lognomination) {
-						Twinkle.speedy.callbacks.user.addToLog(params, initialContrib);
-					}
+
 				};
 				var thispage = new Morebits.wiki.page(Morebits.pageNameNorm);
 				thispage.lookupCreator(callback);
@@ -1562,10 +1611,37 @@ Twinkle.speedy.callbacks = {
 				appendText += "\n\n=== " + date.getUTCMonthName() + " " + date.getUTCFullYear() + " ===";
 			}
 
-			appendText += "\n# [[:" + Morebits.pageNameNorm + "]]: ";
+			var formatParamLog = function(normalize, csdparam, input) {
+				return ' [' + normalize + ' ' + csdparam + ': ' + input + ']';
+			};
+
+			var extraInfo = '';
+
+			// If a logged file is deleted but exists on commons, the wikilink will be blue, so provide a link to the log
+			var fileLogLink = mw.config.get('wgNamespaceNumber') === 6 ? ' ([' + mw.config.get('wgServer') + mw.util.getUrl('Special:Log', {action: 'view', page: mw.config.get('wgPageName')}) + ' log])' : '';
+
+			var editsummary = "Mencatat pengusulan penghapusan cepat";
+			appendText += "\n# [[:" + Morebits.pageNameNorm;
+
 			if (params.fromDI) {
-				appendText += "DI [[WP:KPC#" + params.normalized.toUpperCase() + "|KPC " + params.normalized.toUpperCase() + "]]";// ({{tl|di-" + params.templatename + "}})";
+				appendText += "]]" + fileLogLink + ": DI [[WP:KPC#" + params.normalized.toUpperCase() + "|KPC " + params.normalized.toUpperCase() + "]]";// ({{tl|di-" + params.templatename + "}})";
+				// The params data structure when coming from DI is quite different,
+				// so this hardcodes the only interesting items worth logging
+				['reason', 'replacement', 'source'].forEach(function(item) {
+					if (params[item]) {
+						extraInfo += formatParamLog(params.normalized.toUpperCase(), item, params[item]);
+						return false;
+					}
+				});
+				editsummary += " of [[:" + Morebits.pageNameNorm + "]].";
 			} else {
+				if (params.normalizeds.indexOf("g10") === -1) {  // no article name in log for G10 taggings
+					appendText += "]]" + fileLogLink + ": ";
+					editsummary += " of [[:" + Morebits.pageNameNorm + "]].";
+				} else {
+					appendText += "|This]] attack page" + fileLogLink + ": ";
+					editsummary += " of an attack page.";
+				}
 				if (params.normalizeds.length > 1) {
 					appendText += "berbagai kriteria (";
 					$.each(params.normalizeds, function(index, norm) {
@@ -1578,15 +1654,40 @@ Twinkle.speedy.callbacks = {
 				} else {
 					appendText += "[[WP:KPC#" + params.normalizeds[0].toUpperCase() + "|KPC " + params.normalizeds[0].toUpperCase() + "]] ({{tl|db-" + params.values[0] + "}})";
 				}
+
+				// If params is "empty" it will still be full of empty arrays, but ask anyway
+				if (params.templateParams) {
+					// Treat custom rationale individually
+					if (params.normalizeds[0] && params.normalizeds[0] === 'db') {
+						extraInfo += formatParamLog('Custom', 'rationale', params.templateParams[0]["1"]);
+					} else {
+						params.templateParams.forEach(function(item, index) {
+							var keys = Object.keys(item);
+							if (keys[0] !== undefined && keys[0].length > 0) {
+								//Second loop required since G12 can have multiple urls
+								keys.forEach(function(key, keyIndex) {
+									if (keys[keyIndex] === 'blanked' || keys[keyIndex] === 'ts') {
+										return true; // Not worth logging
+									} else {
+										extraInfo += formatParamLog(params.normalizeds[index].toUpperCase(), keys[keyIndex], item[key]);
+									}
+								});
+							}
+						});
+					}
+				}
 			}
 
+			if (extraInfo) {
+				appendText += '; informasi tambahan:' + extraInfo;
+			}
 			if (params.logInitialContrib) {
 				appendText += "; memberitahukan {{user|1=" + params.logInitialContrib + "}}";
 			}
 			appendText += " ~~~~~\n";
 
 			pageobj.setAppendText(appendText);
-			pageobj.setEditSummary("Mencatat nominasi penghapusan cepat [[" + Morebits.pageNameNorm + "]]." + Twinkle.getPref('summaryAd'));
+			pageobj.setEditSummary(editsummary + Twinkle.getPref('summaryAd'));
 			pageobj.setCreateOption("recreate");
 			pageobj.append();
 		}
@@ -1626,41 +1727,29 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 				break;
 
 			case 'repost':  // G4
-				if (form["csd.repost_1"]) {
-					var deldisc = form["csd.repost_1"].value;
+				if (form["csd.repost_xfd"]) {
+					var deldisc = form["csd.repost_xfd"].value;
 					if (deldisc) {
 						if (deldisc.substring(0, 9) !== "Wikipedia" && deldisc.substring(0, 3) !== "WP:") {
 							alert( 'KPC U4: Penghapusan halaman diskusi, jika ada, harus dimulai dengan "Wikipedia:".' );
 							parameters = null;
 							return false;
 						}
-						currentParams["1"] = deldisc;
+						currentParams.xfd = deldisc;
 					}
 				}
 				break;
 
 			case 'banned':  // G5
-				if (form["csd.banned_1"] && form["csd.banned_1"].value) {
-					currentParams["1"] = form["csd.banned_1"].value.replace(/^\s*User:/i, "");
-				}
-				break;
-
-			case 'histmerge':  // G6
-				if (form["csd.histmerge_1"]) {
-					var merger = form["csd.histmerge_1"].value;
-					if (!merger || !merger.trim()) {
-						alert( 'KPC U6 (histmerge): Mohon tuliskan nama halaman yang akan digabung.' );
-						parameters = null;
-						return false;
-					}
-					currentParams["1"] = merger;
+				if (form["csd.banned_user"] && form["csd.banned_user"].value) {
+					currentParams.user = form["csd.banned_user"].value.replace(/^\s*User:/i, "");
 				}
 				break;
 
 			case 'move':  // G6
-				if (form["csd.move_1"] && form["csd.move_2"]) {
-					var movepage = form["csd.move_1"].value,
-						movereason = form["csd.move_2"].value;
+				if (form["csd.move_page"] && form["csd.move_reason"]) {
+					var movepage = form["csd.move_page"].value,
+						movereason = form["csd.move_reason"].value;
 					if (!movepage || !movepage.trim()) {
 						alert( 'KPC U6 (move): Mohon tuliskan nama halaman yang akan dipindahkan ke sini.' );
 						parameters = null;
@@ -1671,8 +1760,8 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 						parameters = null;
 						return false;
 					}
-					currentParams["1"] = movepage;
-					currentParams["2"] = movereason;
+					currentParams.page = movepage;
+					currentParams.reason = movereason;
 				}
 				break;
 
@@ -1691,14 +1780,14 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 			// 	break;
 
 			case 'copypaste':  // G6
-				if (form["csd.copypaste_1"]) {
-					var copypaste = form["csd.copypaste_1"].value;
+				if (form["csd.copypaste_sourcepage"]) {
+					var copypaste = form["csd.copypaste_sourcepage"].value;
 					if (!copypaste || !copypaste.trim()) {
 						alert( 'KPC U6 (salin-tempel): Mohon tuliskan halaman sumber.' );
 						parameters = null;
 						return false;
 					}
-					currentParams["1"] = copypaste;
+					currentParams.sourcepage = copypaste;
 				}
 				break;
 
@@ -1771,28 +1860,31 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 				break;
 
 			case 'badfairuse':  // F7
-				if (form["csd.badfairuse_reason"] && form["csd.badfairuse_reason"].value) {
-					currentParams.reason = form["csd.badfairuse_reason"].value;
+				if (form["csd.badfairuse_rationale"] && form["csd.badfairuse_rationale"].value) {
+					currentParams.rationale = form["csd.badfairuse_rationale"].value;
 				}
 				break;
 
-			case 'nowcommons':  // F8
-				if (form["csd.nowcommons_filename"]) {
-					var filename = form["csd.nowcommons_filename"].value;
+			case 'commons':  // F8
+				if (form["csd.commons_filename"]) {
+					var filename = form["csd.commons_filename"].value;
 					if (filename && filename !== Morebits.pageNameNorm) {
-						if (filename.indexOf("Image:") === 0 || filename.indexOf("File:") === 0) {
-							currentParams["1"] = filename;
-						} else {
-							currentParams["1"] = "File:" + filename;
-						}
+						currentParams.filename = (filename.indexOf("Image:") === 0 || filename.indexOf("File:") === 0) ? filename : "File:" + filename;
 					}
 				}
-				currentParams.date = "~~~~~";
 				break;
 
 			case 'imgcopyvio':  // F9
-				if (form["csd.imgcopyvio_url"] && form["csd.imgcopyvio_url"].value) {
-					currentParams.url = form["csd.imgcopyvio_url"].value;
+				if (form["csd.imgcopyvio_url"] && form["csd.imgcopyvio_rationale"]) {
+					var f9url = form["csd.imgcopyvio_url"].value;
+					var f9rationale = form["csd.imgcopyvio_rationale"].value;
+					if ((!f9url || !f9url.trim()) && (!f9rationale || !f9rationale.trim())) {
+						alert( 'CSD F9: You must enter a url or reason (or both) when nominating a file under F9.' );
+						parameters = null;
+						return false;
+					}
+					currentParams.url = f9url;
+					currentParams.rationale = f9rationale;
 				}
 				break;
 
@@ -1808,6 +1900,12 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 				}
 				break;
 
+			case 'transwiki':  // A5
+				if (form["csd.transwiki_location"] && form["csd.transwiki_location"].value) {
+					currentParams.location = form["csd.transwiki_location"].value;
+				}
+				break;
+
 			case 'a10':  // A10
 				if (form["csd.a10_article"]) {
 					var duptitle = form["csd.a10_article"].value;
@@ -1820,6 +1918,12 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 				}
 				break;
 
+			case 'policy':  // T2
+				if (form["csd.policy_rationale"] && form["csd.policy_rationale"].value) {
+					currentParams.rationale = form["csd.policy_rationale"].value;
+				}
+				break;
+
 			case 'duplicatetemplate':  // T3
 				if (form["csd.duplicatetemplate_2"]) {
 					var t3template = form["csd.duplicatetemplate_2"].value;
@@ -1828,8 +1932,8 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 						parameters = null;
 						return false;
 					}
-					currentParams["1"] = "~~~~~";
-					currentParams["2"] = t3template.replace(/^\s*Template:/i, "");
+					currentParams.ts = "~~~~~";
+					currentParams.template = t3template.replace(/^\s*Template:/i, "");
 				}
 				break;
 
@@ -1841,7 +1945,7 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 						parameters = null;
 						return false;
 					}
-					currentParams["1"] = criterion;
+					currentParams.criterion = criterion;
 				}
 				break;
 
@@ -1971,7 +2075,7 @@ Twinkle.speedy.callback.evaluateUser = function twinklespeedyCallbackEvaluateUse
 	if (form.notify.checked) {
 		$.each(normalizeds, function(index, norm) {
 			if (Twinkle.getPref('notifyUserOnSpeedyDeletionNomination').indexOf(norm) !== -1) {
-				if (norm === 'g6' && ['disambig', 'copypaste'].indexOf(values[index]) === -1) {
+				if (norm === 'g6' && values[index] !== 'copypaste') {
 					return true;
 				}
 				notifyuser = true;
@@ -2019,7 +2123,9 @@ Twinkle.speedy.callback.evaluateUser = function twinklespeedyCallbackEvaluateUse
 	Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
 	Morebits.wiki.actionCompleted.notice = "Penandaan selesai";
 
-	var wikipedia_page = new Morebits.wiki.page(mw.config.get('wgPageName'), "Menandai halaman");
+	// Modules can't be tagged, follow standard at TfD and place on /doc subpage
+	var isScribunto = mw.config.get('wgPageContentModel') === 'Scribunto';
+	var wikipedia_page = isScribunto ? new Morebits.wiki.page(mw.config.get('wgPageName')+'/doc', "Menandai halaman dokumentasi modul") : new Morebits.wiki.page(mw.config.get('wgPageName'), "Menandai halaman");
 	wikipedia_page.setCallbackParameters(params);
 	wikipedia_page.load(Twinkle.speedy.callbacks.user.main);
 };

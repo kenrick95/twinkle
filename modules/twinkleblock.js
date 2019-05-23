@@ -6,34 +6,34 @@
 var api = new mw.Api(), relevantUserName;
 
 /*
- ****************************************
- *** twinkleblock.js: Block module
- ****************************************
- * Mode of invocation:     Tab ("Block")
- * Active on:              any page with relevant user name (userspace, contribs, etc.)
- * Config directives in:   [soon to be TwinkleConfig]
- */
+	****************************************
+	*** twinkleblock.js: Block module
+	****************************************
+	* Mode of invocation:     Tab ("Block")
+	* Active on:              any page with relevant user name (userspace, contribs, etc.)
+	* Config directives in:   [soon to be TwinkleConfig]
+	*/
 
 Twinkle.block = function twinkleblock() {
 	// should show on Contributions pages, anywhere there's a relevant user
 	if ( Morebits.userIsInGroup('sysop') && mw.config.get('wgRelevantUserName') ) {
-		Twinkle.addPortletLink(Twinkle.block.callback, 'Block', 'tw-block', 'Block relevant user' );
+		Twinkle.addPortletLink(Twinkle.block.callback, 'Blokir', 'tw-block', 'Blokir pengguna' );
 	}
 };
 
 Twinkle.block.callback = function twinkleblockCallback() {
 	if( mw.config.get('wgRelevantUserName') === mw.config.get('wgUserName') &&
-			!confirm( 'You are about to block yourself! Are you sure you want to proceed?' ) ) {
+			!confirm( 'Anda akan memblokir diri sendiri. Apakah Anda yakin ingin melanjutkan?' ) ) {
 		return;
 	}
 
 	var Window = new Morebits.simpleWindow( 650, 530 );
 	// need to be verbose about who we're blocking
-	Window.setTitle( 'Block or issue block template to ' + mw.config.get('wgRelevantUserName') );
+	Window.setTitle( 'Blokir atau berikan templat blokir kepada ' + mw.config.get('wgRelevantUserName') );
 	Window.setScriptName( 'Twinkle' );
-	Window.addFooterLink( 'Block templates', 'Template:Uw-block/doc/Block_templates' );
-	Window.addFooterLink( 'Block policy', 'WP:BLOCK' );
-	Window.addFooterLink( 'Twinkle help', 'WP:TW/DOC#block' );
+	Window.addFooterLink( 'Templat pemblokiran', 'Template:Uw-block/doc/Block_templates' );
+	Window.addFooterLink( 'Kebijakan pemblokiran', 'WP:BLOK' );
+	Window.addFooterLink( 'Bantuan Twinkle', 'WP:TW/DOC#block' );
 
 	Twinkle.block.currentBlockInfo = undefined;
 	Twinkle.block.field_block_options = {};
@@ -50,23 +50,23 @@ Twinkle.block.callback = function twinkleblockCallback() {
 			event: Twinkle.block.callback.change_action,
 			list: [
 				{
-					label: 'Block user',
+					label: 'Blokir pengguna',
 					value: 'block',
-					tooltip: 'Block the relevant user with given options.',
+					tooltip: 'Blokir pengguna dengan opsi yang diberikan.',
 					checked: true
 				},
 				{
-					label: 'Add block template to user talk page',
+					label: 'Tempatkan templat blokir ke halaman pembicaraan pengguna',
 					value: 'template',
-					tooltip: 'If the blocking admin forgot to issue a block template, or you have just blocked the user without templating them, you can use this to issue the appropriate template.',
+					tooltip: 'Jika pengurus yang memblokir lupa memberikan templat blokir, atau telah memblokirnya tanpa memberikan templat, Anda dapat menggunakan ini untuk memberikan templat blokir yang sesuai.',
 					checked: true
 				}
 			]
 		});
 
-	form.append({ type: 'field', label: 'Preset', name: 'field_preset' });
-	form.append({ type: 'field', label: 'Template options', name: 'field_template_options' });
-	form.append({ type: 'field', label: 'Block options', name: 'field_block_options' });
+	form.append({ type: 'field', label: 'Opsi', name: 'field_preset' });
+	form.append({ type: 'field', label: 'Opsi templat', name: 'field_template_options' });
+	form.append({ type: 'field', label: 'Opsi pemblokiran', name: 'field_block_options' });
 
 	form.append( { type:'submit' } );
 
@@ -76,7 +76,7 @@ Twinkle.block.callback = function twinkleblockCallback() {
 	result.root = result;
 
 	Twinkle.block.fetchUserInfo(function() {
-		// clean up preset data (defaults, etc.), done exactly once, must be before Twinkle.block.callback.change_action is called
+		// clean up preset data (defaults, etc.), done exactly once, must be before Twinkle.block.callback.change_action is called
 		Twinkle.block.transformBlockPresets();
 
 		// init the controls after user and block info have been fetched
@@ -117,7 +117,7 @@ Twinkle.block.fetchUserInfo = function twinkleblockFetchUserInfo(fn) {
 		if (typeof fn === 'function') return fn();
 	}, function(msg) {
 		Morebits.status.init($('div[name="currentblock"] span').last()[0]);
-		Morebits.status.warn('Error fetching user info', msg);
+		Morebits.status.warn('Galat ketika mencari informasi pengguna', msg);
 	});
 };
 
@@ -135,67 +135,67 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 	Twinkle.block.callback.saveFieldset($('[name=field_template_options]'));
 
 	if ($form.find('[name=actiontype][value=block]').is(':checked')) {
-		field_preset = new Morebits.quickForm.element({ type: 'field', label: 'Preset', name: 'field_preset' });
+		field_preset = new Morebits.quickForm.element({ type: 'field', label: 'Opsi', name: 'field_preset' });
 		field_preset.append({
 				type: 'select',
 				name: 'preset',
-				label: 'Choose a preset:',
+				label: 'Pilih salah satu opsi:',
 				event: Twinkle.block.callback.change_preset,
 				list: Twinkle.block.callback.filtered_block_groups()
 			});
 
-		field_block_options = new Morebits.quickForm.element({ type: 'field', label: 'Block options', name: 'field_block_options' });
+		field_block_options = new Morebits.quickForm.element({ type: 'field', label: 'Opsi pemblokiran', name: 'field_block_options' });
 		field_block_options.append({ type: 'div', name: 'hasblocklog', label: ' ' });
 		field_block_options.append({ type: 'div', name: 'currentblock', label: ' ' });
 		field_block_options.append({
 				type: 'select',
 				name: 'expiry_preset',
-				label: 'Expiry:',
+				label: 'Kedaluwarsa:',
 				event: Twinkle.block.callback.change_expiry,
 				list: [
-					{ label: 'custom', value: 'custom', selected: true },
-					{ label: 'indefinite', value: 'infinity' },
-					{ label: '3 hours', value: '3 hours' },
-					{ label: '12 hours', value: '12 hours' },
-					{ label: '24 hours', value: '24 hours' },
-					{ label: '31 hours', value: '31 hours' },
-					{ label: '36 hours', value: '36 hours' },
-					{ label: '48 hours', value: '48 hours' },
-					{ label: '60 hours', value: '60 hours' },
-					{ label: '72 hours', value: '72 hours' },
-					{ label: '1 week', value: '1 week' },
-					{ label: '2 weeks', value: '2 weeks' },
-					{ label: '1 month', value: '1 month' },
-					{ label: '3 months', value: '3 months' },
-					{ label: '6 months', value: '6 months' },
-					{ label: '1 year', value: '1 year' },
-					{ label: '2 years', value: '2 years' },
-					{ label: '3 years', value: '3 years' }
+					{ label: 'lain-lain', value: 'custom', selected: true },
+					{ label: 'selamanya', value: 'infinity' },
+					{ label: '3 jam', value: '3 hours' },
+					{ label: '12 jam', value: '12 hours' },
+					{ label: '24 jam', value: '24 hours' },
+					{ label: '31 jam', value: '31 hours' },
+					{ label: '36 jam', value: '36 hours' },
+					{ label: '48 jam', value: '48 hours' },
+					{ label: '60 jam', value: '60 hours' },
+					{ label: '72 jam', value: '72 hours' },
+					{ label: '1 minggu', value: '1 week' },
+					{ label: '2 minggu', value: '2 weeks' },
+					{ label: '1 bulan', value: '1 month' },
+					{ label: '3 bulan', value: '3 months' },
+					{ label: '6 bulan', value: '6 months' },
+					{ label: '1 tahun', value: '1 year' },
+					{ label: '2 tahun', value: '2 years' },
+					{ label: '3 tahun', value: '3 years' }
 				]
 			});
 			field_block_options.append({
 					type: 'input',
 					name: 'expiry',
-					label: 'Custom expiry',
-					tooltip: 'You can use relative times, like "1 minute" or "19 days", or absolute timestamps, "yyyymmddhhmm" (e.g. "200602011405" is Feb 1, 2006, at 14:05 UTC).',
+					label: 'Waktu kedaluwarsa lain',
+					tooltip: 'Anda bisa menggunakan waktu relatif, seperti "1 menit" atau "19 hari", atau dengan stempel waktu "yyyymmddhhmm", seperti 201601010300 untuk 1 Januari 2016 pukul 3.00 GMT.',
 					value: Twinkle.block.field_block_options.expiry || Twinkle.block.field_template_options.template_expiry
 				});
 		var blockoptions = [
 				{
 					checked: Twinkle.block.field_block_options.nocreate,
-					label: 'Block account creation',
+					label: 'Matikan pembuatan akun',
 					name: 'nocreate',
 					value: '1'
 				},
 				{
 					checked: Twinkle.block.field_block_options.noemail,
-					label: 'Block user from sending email',
+					label: 'Batasi pengguna mengirimkan surel',
 					name: 'noemail',
 					value: '1'
 				},
 				{
 					checked: Twinkle.block.field_block_options.disabletalk,
-					label: 'Prevent this user from editing their own talk page while blocked',
+					label: 'Batasi pengguna untuk menyunting halaman pembicaraan penggunanya ketika sedang diblokir',
 					name: 'disabletalk',
 					value: '1'
 				}
@@ -204,14 +204,14 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 		if (Twinkle.block.isRegistered) {
 			blockoptions.push({
 					checked: Twinkle.block.field_block_options.autoblock,
-					label: 'Autoblock any IP addresses used (hardblock)',
+					label: 'Blokir otomatis alamat IP yang digunakan (pemblokiran rumit)',
 					name: 'autoblock',
 					value: '1'
 				});
 		} else {
 			blockoptions.push({
 					checked: Twinkle.block.field_block_options.hardblock,
-					label: 'Prevent logged-in users from editing from this IP address (hardblock)',
+					label: 'Cegah pengguna yang masuk log untuk menyunting dari alamat IP ini (pemblokiran rumit)',
 					name: 'hardblock',
 					value: '1'
 				});
@@ -219,7 +219,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 
 		blockoptions.push({
 				checked: Twinkle.block.field_block_options.watchuser,
-				label: 'Watch user and user talk pages',
+				label: 'Pantau halaman pengguna dan pembicaraannya',
 				name: 'watchuser',
 				value: '1'
 			});
@@ -231,10 +231,44 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 			});
 		field_block_options.append({
 				type: 'textarea',
-				label: 'Reason (for block log):',
+				label: 'Alasan (untuk dicantumkan di log pemblokiran):',
 				name: 'reason',
 				value: Twinkle.block.field_block_options.reason
 			});
+
+		field_block_options.append({
+				type: 'div',
+				name: 'filerlog_label',
+				label: 'See also:',
+				style: 'display:inline-block;font-style:normal !important',
+				tooltip: 'Insert a "see also" message to indicate whether the filter log or deleted contributions played a role in the decision to block.'
+			});
+		field_block_options.append({
+				type: 'checkbox',
+				name: 'filter_see_also',
+				event: Twinkle.block.callback.toggle_see_alsos,
+				style: 'display:inline-block; margin-right:5px',
+				list: [
+					{
+						label: 'Filter log',
+						checked: false,
+						value: 'filter log'
+					}
+				]
+			} );
+		field_block_options.append({
+				type: 'checkbox',
+				name: 'deleted_see_also',
+				event: Twinkle.block.callback.toggle_see_alsos,
+				style: 'display:inline-block',
+				list: [
+					{
+						label: 'Deleted contribs',
+						checked: false,
+						value: 'deleted contribs'
+					}
+				]
+			} );
 
 		if (Twinkle.block.currentBlockInfo) {
 			field_block_options.append( { type: 'hidden', name: 'reblock', value: '1' } );
@@ -242,11 +276,11 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 	}
 
 	if ($form.find('[name=actiontype][value=template]').is(':checked')) {
-		field_template_options = new Morebits.quickForm.element({ type: 'field', label: 'Template options', name: 'field_template_options' });
+		field_template_options = new Morebits.quickForm.element({ type: 'field', label: 'Opsi templat', name: 'field_template_options' });
 		field_template_options.append( {
 				type: 'select',
 				name: 'template',
-				label: 'Choose talk page template:',
+				label: 'Pilih templat halaman pembicaraan:',
 				event: Twinkle.block.callback.change_template,
 				list: Twinkle.block.callback.filtered_block_groups(true),
 				value: Twinkle.block.field_template_options.template
@@ -255,26 +289,26 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 				type: 'input',
 				name: 'article',
 				display: 'none',
-				label: 'Linked article',
+				label: 'Halaman yang berkaitan',
 				value: '',
-				tooltip: 'An article can be linked within the notice, perhaps if it was the primary target of disruption. Leave empty for no article to be linked.'
+				tooltip: 'Suatu halaman dapat ditautkan dengan pemberitahuan, yang mungkin yang menjadi sasaran perusakan. Kosongkan jika tidak ada.'
 			} );
 		if (!$form.find('[name=actiontype][value=block]').is(':checked')) {
 			field_template_options.append( {
 				type: 'input',
 				name: 'template_expiry',
 				display: 'none',
-				label: 'Period of blocking: ',
+				label: 'Periode pemblokiran: ',
 				value: '',
-				tooltip: 'The period the blocking is due for, for example 24 hours, 2 weeks, indefinite etc...'
+				tooltip: 'Periode pemblokiran, seperti 24 jam, dua minggu, dsb.'
 			} );
 		}
 		field_template_options.append( {
 			type: 'input',
 			name: 'block_reason',
-			label: '"You have been blocked for ..." ',
+			label: '"Anda telah diblokir karena ..." ',
 			display: 'none',
-			tooltip: 'An optional reason, to replace the default generic reason. Only available for the generic block templates.',
+			tooltip: 'Alasan opsional, untuk mengganti alasan baku dasar. Hanya tersedia untuk templat baku dasar.',
 			value: Twinkle.block.field_template_options.block_reason
 		} );
 
@@ -284,9 +318,9 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 				name: 'blank_duration',
 				list: [
 					{
-						label: 'Do not include expiry in template',
+						label: 'Jangan masukkan jangka waktu pemblokiran dalam templat',
 						checked: Twinkle.block.field_template_options.blank_duration,
-						tooltip: 'Instead of including the duration, make the block template read \"You have been blocked from editing temporarily for...\"'
+						tooltip: 'Jangka waktu pemblokiran tidak dimasukkan ke dalam templat, jadi hanya menginformasikan "Anda sudah diblokir dari penyuntingan sementara ini selama..."'
 					}
 				]
 			} );
@@ -296,9 +330,9 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 				name: 'notalk',
 				list: [
 					{
-						label: 'Talk page access disabled',
+						label: 'Akses halaman pembicaraan dimatikan',
 						checked: Twinkle.block.field_template_options.notalk,
-						tooltip: 'Use this to make the block template state that the user\'s talk page access has been removed'
+						tooltip: 'Gunakan opsi ini untuk membuat templat pemblokiran berisi bahwa akses ke halaman pembicaraan pengguna sudah dihapus'
 					}
 				]
 			} );
@@ -338,12 +372,12 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 		var $blockloglink = $( '<a target="_blank" href="' + mw.util.getUrl('Special:Log', {action: 'view', page: mw.config.get('wgRelevantUserName'), type: 'block'}) + '">block log</a>)' );
 
 		Morebits.status.init($('div[name="hasblocklog"] span').last()[0]);
-		Morebits.status.warn('This user has been blocked in the past', $blockloglink[0]);
+		Morebits.status.warn('Pengguna ini pernah diblokir sebelumnya', $blockloglink[0]);
 	}
 
 	if (Twinkle.block.currentBlockInfo) {
 		Morebits.status.init($('div[name="currentblock"] span').last()[0]);
-		Morebits.status.warn(relevantUserName + ' is already blocked', 'Submit query to reblock with supplied options');
+		Morebits.status.warn(relevantUserName + ' sudah diblokir', 'Kirim permintaan untuk memblokir ulang dengan opsi yang diberikan');
 		Twinkle.block.callback.update_form(e, Twinkle.block.currentBlockInfo);
 	} else if ($form.find('[name=actiontype][value=template]').is(':checked')) {
 		// make sure all the fields are correct based on defaults
@@ -363,7 +397,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
  * <title of block template> : {
  *   autoblock: <autoblock any IP addresses used (for registered users only)>
  *   disabletalk: <disable user from editing their own talk page while blocked>
- *   expiry: <string - expiry timestamp, can include relative times like "5 months", "2 weeks" etc, use "infinity" for indefinite>
+ *   expiry: <string - expiry timestamp, can include relative times like "5 months", "2 weeks" etc>
  *   forAnonOnly: <show block option in the interface only if the relevant user is an IP>
  *   forRegisteredOnly: <show block option in the interface only if the relevant user is registered>
  *   label: <string - label for the option of the dropdown in the interface (keep brief)>
@@ -408,20 +442,30 @@ Twinkle.block.blockPresetsInfo = {
 		forAnonOnly: true,
 		nocreate: true,
 		nonstandard: true,
+		hardblock: true,
 		reason: '{{blocked proxy}}',
 		sig: null
 	},
 	'CheckUser block' : {
+		expiry: '1 week',
+		forAnonOnly: true,
+		nocreate: true,
 		nonstandard: true,
 		reason: '{{CheckUser block}}',
 		sig: '~~~~'
 	},
 	'checkuserblock-account' : {
+		autoblock: true,
+		expiry: 'infinity',
+		forRegisteredOnly: true,
+		nocreate: true,
 		nonstandard: true,
 		reason: '{{checkuserblock-account}}',
 		sig: '~~~~'
 	},
 	'checkuserblock-wide' : {
+		forAnonOnly: true,
+		nocreate: true,
 		nonstandard: true,
 		reason: '{{checkuserblock-wide}}',
 		sig: '~~~~'
@@ -434,6 +478,9 @@ Twinkle.block.blockPresetsInfo = {
 		sig: null
 	},
 	'oversightblock' : {
+		autoblock: true,
+		expiry: 'infinity',
+		nocreate: true,
 		nonstandard: true,
 		reason: '{{OversightBlock}}',
 		sig: '~~~~'
@@ -444,6 +491,13 @@ Twinkle.block.blockPresetsInfo = {
 		nonstandard: true,
 		reason: '{{school block}}',
 		sig: '~~~~'
+	},
+	'spamblacklistblock' : {
+		forAnonOnly: true,
+		expiry: '1 month',
+		disabletalk: true,
+		nocreate: true,
+		reason: '{{spamblacklistblock}} <!-- editor only attempts to add blacklisted links, see [[Special:Log/spamblacklist]] -->'
 	},
 	// Placeholder for when we add support for rangeblocks
 	// 'rangeblock' : {
@@ -473,8 +527,8 @@ Twinkle.block.blockPresetsInfo = {
 		expiry: '24 hours',
 		nocreate: true,
 		pageParam: true,
-		reason: 'Violation of the [[WP:Three-revert rule|three-revert rule]]',
-		summary: 'You have been blocked from editing for violation of the [[WP:3RR|three-revert rule]]'
+		reason: 'Melanggar pengembalian tiga kali berturut-turut',
+		summary: 'Anda diblokir karena melanggar kebijakan [[WP:3RR|pengembalian tiga kali berturut-turut]]'
 	},
 	'uw-ablock' : {
 		autoblock: true,
@@ -483,30 +537,30 @@ Twinkle.block.blockPresetsInfo = {
 		nocreate: true,
 		pageParam: true,
 		reasonParam: true,
-		summary: 'Your IP address has been blocked from editing',
+		summary: 'Alamat IP Anda diblokir dari hak penyuntingan',
 		suppressArticleInSummary: true
 	},
 	'uw-adblock' : {
 		autoblock: true,
 		nocreate: true,
 		pageParam: true,
-		reason: 'Using Wikipedia for [[WP:Spam|spam]] or [[WP:NOTADVERTISING|advertising]] purposes',
-		summary: 'You have been blocked from editing for [[WP:SOAP|advertising or self-promotion]]'
+		reason: 'Menggunakan Wikipedia untuk mengirimkan spam atau beriklan',
+		summary: 'Anda diblokir karena mengirimkan spam atau beriklan di Wikipedia'
 	},
 	'uw-aeblock' : {
 		autoblock: true,
 		nocreate: true,
 		pageParam: true,
-		reason: '[[WP:Arbitration enforcement|Arbitration enforcement]]',
+		reason: 'Penegakan kebijakan arbitrase',
 		reasonParam: true,
-		summary: 'You have been blocked from editing for violating an [[WP:Arbitration|arbitration decision]] with your edits'
+		summary: 'Anda diblokir karena suntingan Anda melanggar kebijakan arbitrase'
 	},
 	'uw-bioblock' : {
 		autoblock: true,
 		nocreate: true,
 		pageParam: true,
-		reason: 'Violations of the [[WP:Biographies of living persons|biographies of living persons]] policy',
-		summary: 'You have been blocked from editing for violations of Wikipedia\'s [[WP:BLP|biographies of living persons policy]]'
+		reason: 'Melanggar kebijakan penulisan biografi tokoh yang masih hidup',
+		summary: 'Anda diblokir karena melanggar kebijakan penulisan biografi tokoh yang masih hidup'
 	},
 	'uw-block' : {
 		autoblock: true,
@@ -515,7 +569,7 @@ Twinkle.block.blockPresetsInfo = {
 		nocreate: true,
 		pageParam: true,
 		reasonParam: true,
-		summary: 'You have been blocked from editing',
+		summary: 'Anda telah diblokir dari hak penyuntingan',
 		suppressArticleInSummary: true
 	},
 	'uw-blockindef' : {
@@ -525,137 +579,131 @@ Twinkle.block.blockPresetsInfo = {
 		nocreate: true,
 		pageParam: true,
 		reasonParam: true,
-		summary: 'You have been indefinitely blocked from editing',
+		summary: 'Anda telah diblokir selamanya dari hak penyuntingan',
 		suppressArticleInSummary: true
 	},
 	'uw-blocknotalk' : {
 		disabletalk: true,
 		pageParam: true,
 		reasonParam: true,
-		summary: 'You have been blocked from editing and your user talk page access has been disabled',
+		summary: 'Anda telah diblokir dari penyuntingan dan akses ke halaman pembicaraan pengguna Anda dimatikan',
 		suppressArticleInSummary: true
 	},
 	'uw-botblock': {
 		forRegisteredOnly: true,
 		pageParam: true,
-		reason: 'Running a [[WP:BOT|bot script]] without [[WP:BRFA|approval]]',
-		summary: 'You have been blocked from editing because it appears you are running a [[WP:BOT|bot script]] without [[WP:BRFA|approval]]'
+		reason: 'Menjalankan kode bot tanpa persetujuan',
+		summary: 'Anda diblokir karena menjalankan kode bot tanpa mendapatkan persetujuan'
 	},
 	'uw-botublock': {
 		expiry: 'infinity',
 		forRegisteredOnly: true,
-		reason: '{{uw-botublock}} <!-- Username implies a bot, soft block -->',
-		summary: 'You have been indefinitely blocked from editing because your [[WP:U|username]] indicates this is a [[WP:BOT|bot]] account, which is currently not approved'
+		reason: 'Nama pengguna mirip dengan nama bot (pemblokiran lunak)',
+		summary: 'Anda diblokir selamanya karena nama pengguna Anda menyiratkan bahwa ini akun bot, yang saat ini belum mendapat persetujuan'
 	},
 	'uw-causeblock' : {
 		expiry: 'infinity',
 		forRegisteredOnly: true,
-		reason: '{{uw-causeblock}} <!-- Username represents a non-profit, soft block -->',
-		summary: 'You have been indefinitely blocked from editing because your [[WP:U|username]] gives the impression that the account represents a group, organization or website'
+		reason: 'Nama pengguna terkesan berhubungan dengan nama organisasi (pemblokiran lunak)',
+		summary: 'Anda diblokir selamanya karena nama pengguna Anda berhubungan dengan sebuah kelompok, organisasi, atau situs web'
 	},
 	'uw-compblock': {
 		autoblock: true,
 		expiry: 'infinity',
 		forRegisteredOnly: true,
 		nocreate: true,
-		reason: 'Compromised account',
-		summary: 'You have been indefinitely blocked from editing because it is believed that your [[WP:SECURE|account has been compromised]]'
+		reason: 'Akun yang disalahgunakan',
+		summary: 'Anda diblokir selamanya karena akun yang digunakan dianggap telah disalahgunakan'
 	},
 	'uw-copyrightblock' : {
 		autoblock: true,
 		expiry: '24 hours',
 		nocreate: true,
 		pageParam: true,
-		reason: '[[WP:Copyright violations|Copyright violations]]',
-		summary: 'You have been blocked from editing for continued [[WP:COPYVIO|copyright infringement]]'
+		reason: 'Melanggar hak cipta',
+		summary: 'Anda diblokir karena terus-menerus melanggar hak cipta'
 	},
 	'uw-dblock': {
 		autoblock: true,
 		nocreate: true,
-		reason: 'Persistent removal of content',
+		reason: 'Menghilangkan isi halaman terus-menerus',
 		pageParam: true,
-		summary: 'You have been blocked from editing for continued [[WP:VAND|removal of material]]'
+		summary: 'Anda diblokir karena terus-menerus menghilangkan isi halaman'
 	},
 	'uw-disruptblock' : {
 		autoblock: true,
 		nocreate: true,
-		reason: '[[WP:Disruptive editing|Disruptive editing]]',
-		summary: 'You have been blocked from editing for [[WP:DE|disruptive editing]]'
+		reason: 'Suntingan yang mengganggu',
+		summary: 'Anda diblokir karena melakukan penyuntingan yang mengganggu/mengacau'
 	},
 	'uw-efblock' : {
 		autoblock: true,
 		nocreate: true,
-		reason: 'Deliberately triggering the [[WP:Edit filter|Edit filter]]',
-		summary: 'You have been blocked from editing for making disruptive edits that repeatedly triggered the [[WP:EF|edit filter]]'
+		reason: 'Memicu filter suntingan secara sengaja',
+		summary: 'Anda diblokir karena memicu filter suntingan dengan sengaja'
 	},
 	'uw-ewblock' : {
 		autoblock: true,
 		expiry: '24 hours',
 		nocreate: true,
 		pageParam: true,
-		reason: '[[WP:Edit warring|Edit warring]]',
-		summary: 'You have been blocked from editing to prevent further [[WP:DE|disruption]] caused by your engagement in an [[WP:EW|edit war]]'
+		reason: 'Perang suntingan',
+		summary: 'Anda diblokir untuk mencegah perang suntingan dengan pengguna lain yang disebabkan oleh suntingan mengganggu Anda'
 	},
 	'uw-hblock' : {
 		autoblock: true,
 		nocreate: true,
 		pageParam: true,
-		reason: '[[WP:No personal attacks|Personal attacks]] or [[WP:Harassment|harassment]]',
-		summary: 'You have been blocked from editing for attempting to [[WP:HARASS|harass]] other users'
+		reason: 'Serangan atau olokan terhadap subjek lain',
+		summary: 'Anda diblokir karena mencoba menyerang pengguna/subjek lain'
 	},
 	'uw-ipevadeblock' : {
 		forAnonOnly: true,
 		nocreate: true,
-		reason: '[[WP:Blocking policy#Evasion of blocks|Block evasion]]',
-		summary: 'Your IP address has been blocked from editing because it has been used to [[WP:EVADE|evade a previous block]]'
+		reason: 'Menghindari pemblokiran',
+		summary: 'Alamat IP Anda diblokir karena digunakan untuk menhindari pemblokiran'
 	},
 	'uw-lblock' : {
 		autoblock: true,
 		expiry: 'infinity',
 		nocreate: true,
-		reason: 'Making [[WP:No legal threats|legal threats]]',
-		summary: 'You have been blocked from editing for making [[WP:NLT|legal threats or taking legal action]]'
-	},
-	'uw-memorialblock': {
-		forRegisteredOnly: true,
-		expiry: 'infinity',
-		reason: '{{uw-memorialblock}} <!-- Username indicates tribute to someone, soft block -->',
-		summary: 'You have been indefinitely blocked from editing because your [[WP:U|username]] indicates this account may be used as a memorial or tribute to someone'
+		reason: 'Membuat ancaman hukum',
+		summary: 'Anda diblokir karena mencoba membuat ancaman hukum'
 	},
 	'uw-myblock': {
 		autoblock: true,
 		nocreate: true,
 		pageParam: true,
-		reason: 'Using Wikipedia as a [[WP:NOTMYSPACE|blog, web host, social networking site or forum]]',
-		summary: 'You have been blocked from editing for using user and/or article pages as a [[WP:NOTMYSPACE|blog, web host, social networking site or forum]]'
+		reason: 'Menggunakan Wikipedia sebagai forum, situs web, atau blog',
+		summary: 'Anda diblokir karena menggunakan Wikipedia sebagai tempat menulis blog, situs jejaring sosial, atau forum'
 	},
 	'uw-nothereblock' : {
 		autoblock: true,
 		expiry: 'infinity',
 		nocreate: true,
-		reason: 'Clearly [[WP:NOTHERE|not here to contribute to the encyclopedia]]',
+		reason: 'Jelas-jelas tidak bermaksud mengembangkan Wikipedia',
 		forRegisteredOnly: true,
-		summary: 'You have been indefinitely blocked from editing because it appears that you are not here to [[WP:NOTHERE|build an encyclopedia]]'
+		summary: 'Anda diblokir karena dianggap tidak akan mengembangkan Wikipedia'
 	},
 	'uw-npblock' : {
 		autoblock: true,
 		nocreate: true,
 		pageParam: true,
-		reason: 'Creating [[WP:Patent nonsense|patent nonsense]] or other inappropriate pages',
-		summary: 'You have been blocked from editing for creating [[WP:PN|nonsense pages]]'
+		reason: 'Membuat halaman tanpa isi',
+		summary: 'Anda diblokir karena membuat halaman tanpa isi yang bermakna'
 	},
 	'uw-pablock' : {
 		autoblock: true,
 		expiry: '31 hours',
 		nocreate: true,
-		reason: '[[WP:No personal attacks|Personal attacks]] or [[WP:Harassment|harassment]]',
-		summary: 'You have been blocked from editing for making [[WP:NPA|personal attacks]] toward other users'
+		reason: 'Serangan atau olokan terhadap subjek lain',
+		summary: 'Anda diblokir karena menyerang pengguna/subjek lainnya'
 	},
 	'uw-sblock' : {
 		autoblock: true,
 		nocreate: true,
-		reason: 'Using Wikipedia for [[WP:SPAM|spam]] purposes',
-		summary: 'You have been blocked from editing for using Wikipedia for [[WP:SPAM|spam]] purposes'
+		reason: 'Menggunakan Wikipedia untuk menyebarkan spam',
+		summary: 'Anda diblokir karena mengirimkan spam atau beriklan'
 	},
 	'uw-soablock' : {
 		autoblock: true,
@@ -663,80 +711,88 @@ Twinkle.block.blockPresetsInfo = {
 		forRegisteredOnly: true,
 		nocreate: true,
 		pageParam: true,
-		reason: '[[WP:Spam|Spam]] / [[WP:NOTADVERTISING|advertising]]-only account',
-		summary: 'You have been indefinitely blocked from editing because your account is being used only for [[WP:SPAM|spam, advertising, or promotion]]'
+		reason: 'Akun spam, promosi, dan iklan',
+		summary: 'Anda diblokir karena menggunakan akun untuk mengirimkan iklan, spam, dan promosi'
 	},
 	'uw-sockblock' : {
 		autoblock: true,
 		forRegisteredOnly: true,
 		nocreate: true,
-		reason: 'Abusing [[WP:Sock puppetry|multiple accounts]]',
-		summary: 'You have been blocked from editing for abusing [[WP:SOCK|multiple accounts]]'
+		reason: 'Menyalahgunakan beberapa akun',
+		summary: 'Anda diblokir karena menyalahgunakan beberapa akun'
 	},
 	'uw-softerblock' : {
 		expiry: 'infinity',
 		forRegisteredOnly: true,
-		reason: '{{uw-softerblock}} <!-- Promotional username, soft block -->',
-		summary: 'You have been indefinitely blocked from editing because your [[WP:U|username]] gives the impression that the account represents a group, organization or website'
+		reason: 'Nama pengguna untuk promosi (pemblokiran lunak)',
+		summary: 'Anda diblokir selamanya karena akun Anda dianggap mewakili sebuah kelompok, organisasi, atau situs web'
 	},
 	'uw-spamublock' : {
 		autoblock: true,
 		expiry: 'infinity',
 		forRegisteredOnly: true,
 		nocreate: true,
-		reason: '{{uw-spamublock}} <!-- Promotional username, promotional edits -->',
-		summary: 'You have been indefinitely blocked from editing because your account is being used only for [[WP:SPAM|spam or advertising]] and your username is a violation of the [[WP:U|username policy]]'
+		reason: 'Nama pengguna untuk promosi, suntingan iklan',
+		summary: 'Anda diblokir selamanya karena akun ini digunakan untuk beriklan dan melanggar kebijakan nama pengguna'
 	},
 	'uw-spoablock' : {
 		autoblock: true,
 		expiry: 'infinity',
 		forRegisteredOnly: true,
 		nocreate: true,
-		reason: '[[WP:SOCK|Sock puppetry]]',
-		summary: 'This account has been blocked as a [[WP:SOCK|sock puppet]] created to violate Wikipedia policy'
+		reason: 'Akun boneka',
+		summary: 'Anda diblokir karena menggunakan akun boneka'
 	},
 	'uw-talkrevoked' : {
 		disabletalk: true,
-		reason: 'Revoking talk page access: inappropriate use of user talk page while blocked',
+		reason: 'Mencabut akses halaman pembicaraan: menyalahgunakan halaman pembicaraan selama diblokir',
 		prependReason: true,
-		summary: 'Your user talk page access has been disabled',
+		summary: 'Halaman pembicaraan pengguna Anda dimatikan',
 		useInitialOptions: true
 	},
 	'uw-ublock' : {
 		expiry: 'infinity',
 		forRegisteredOnly: true,
-		reason: '{{uw-ublock}} <!-- Username violation, soft block -->',
+		reason: 'Nama pengguna dilarang (pemblokiran lunak)',
 		reasonParam: true,
-		summary: 'You have been indefinitely blocked from editing because your username is a violation of the [[WP:U|username policy]]'
+		summary: 'Anda diblokir selamanya karena nama pengguna tersebut melanggar kebijakan nama pengguna'
 	},
 	'uw-ublock-double': {
 		expiry: 'infinity',
 		forRegisteredOnly: true,
-		reason: '{{uw-ublock-double}} <!-- Username closely resembles another user, soft block -->',
-		summary: 'You have been indefinitely blocked from editing because your [[WP:U|username]] is too similar to the username of another Wikipedia user'
+		reason: 'Nama pengguna mirip dengan pengguna lain (pemblokiran lunak)',
+		summary: 'Anda diblokir karena nama pengguna Anda sangat mirip dengan pengguna lain'
+	},
+	'uw-ucblock' : {
+		autoblock: true,
+		expiry: '31 hours',
+		nocreate: true,
+		pageParam: true,
+		reason: 'Persistent addition of [[WP:INTREF|unsourced content]]',
+		summary: 'You have been blocked from editing for persistent addition of [[WP:INTREF|unsourced content]]'
 	},
 	'uw-uhblock' : {
 		autoblock: true,
 		expiry: 'infinity',
 		forRegisteredOnly: true,
 		nocreate: true,
-		reason: '{{uw-uhblock}} <!-- Username violation, hard block -->',
+		reason: 'Nama pengguna dilarang (pemblokiran rumit)',
 		reasonParam: true,
-		summary: 'You have been indefinitely blocked from editing because your username is a blatant violation of the [[WP:U|username policy]]'
+		summary: 'Anda diblokir selamanya karena menggunakan nama pengguna yang dilarang'
 	},
 	'uw-ublock-famous' : {
 		expiry: 'infinity',
 		forRegisteredOnly: true,
-		reason: '{{uw-ublock-famous}} <!-- Username represents a famous person, soft block -->',
-		summary: 'You have been indefinitely blocked from editing because your [[WP:U|username]] matches the name of a well-known living individual'
+		reason: 'Nama pengguna mirip tokoh terkenal (pemblokiran rumit)',
+		summary: 'Anda diblokir selamanya karena nama pengguna Anda mirip dengan nama tokoh terkenal'
 	},
 	'uw-uhblock-double': {
 		autoblock: true,
 		expiry: 'infinity',
 		forRegisteredOnly: true,
 		nocreate: true,
-		reason: '{{uw-ublock-double}} <!-- Username closely resembles another user, hard block -->',
-		summary: 'You have been indefinitely blocked from editing because your [[WP:U|username]] appears to impersonate another established Wikipedia user'
+		reason: 'Nama pengguna mirip dengan pengguna lain (pemblokiran rumit)',
+		summary: 'Anda diblokir selamanya karena nama pengguna Anda sangat mirip dengan pengguna lain'
 	},
 	'uw-vaublock' : {
 		autoblock: true,
@@ -744,16 +800,16 @@ Twinkle.block.blockPresetsInfo = {
 		forRegisteredOnly: true,
 		nocreate: true,
 		pageParam: true,
-		reason: '{{uw-vaublock}} <!-- Username violation, vandalism-only account -->',
-		summary: 'You have been indefinitely blocked from editing because your account is being [[WP:VOA|used only for vandalism]] and your username is a blatant violation of the [[WP:U|username policy]]'
+		reason: 'Nama pengguna dilarang, akun vandalisme semata-mata',
+		summary: 'Anda diblokir selamanya karena melakukan vandalisme semata-mata dan menggunakan nama pengguna yang dilarang'
 	},
 	'uw-vblock' : {
 		autoblock: true,
 		expiry: '31 hours',
 		nocreate: true,
 		pageParam: true,
-		reason: '[[WP:Vandalism|Vandalism]]',
-		summary: 'You have been blocked from editing for persistent [[WP:VAND|vandalism]]'
+		reason: 'Melakukan vandalisme',
+		summary: 'Anda diblokir karena melakukan [[WP:VANDAL|vandalisme]] terus-terusan'
 	},
 	'uw-voablock' : {
 		autoblock: true,
@@ -761,8 +817,16 @@ Twinkle.block.blockPresetsInfo = {
 		forRegisteredOnly: true,
 		nocreate: true,
 		pageParam: true,
-		reason: '[[WP:Vandalism-only account|Vandalism-only account]]',
-		summary: 'You have been indefinitely blocked from editing because your account is being [[WP:VOA|used only for vandalism]]'
+		reason: 'Akun vandalisme semata-mata',
+		summary: 'Anda diblokir selamanya karena semata-mata melakukan [[WP:VANDAL|vandalisme]]'
+	},
+	'zombie proxy' : {
+		expiry: '1 month',
+		forAnonOnly: true,
+		nocreate: true,
+		nonstandard: true,
+		reason: '{{zombie proxy}}',
+		sig: null
 	}
 };
 
@@ -772,7 +836,7 @@ Twinkle.block.transformBlockPresets = function twinkleblockTransformBlockPresets
 		settings.summary = settings.summary || settings.reason;
 		settings.sig = settings.sig !== undefined ? settings.sig : 'yes';
 		// despite this it's preferred that you use 'infinity' as the value for expiry
-		settings.indefinite = settings.indefinite || settings.expiry === 'infinity' || settings.expiry === 'indefinite' || settings.expiry === 'never';
+		settings.indefinite = settings.indefinite || settings.expiry === 'infinity' || settings.expiry === 'infinite' || settings.expiry === 'indefinite' || settings.expiry === 'never';
 
 		if (!Twinkle.block.isRegistered && settings.indefinite) {
 			settings.expiry = '31 hours';
@@ -789,75 +853,77 @@ Twinkle.block.transformBlockPresets = function twinkleblockTransformBlockPresets
 //   value: <string, the key of a preset in blockPresetsInfo>
 Twinkle.block.blockGroups = [
 	{
-		label: 'Common block reasons',
+		label: 'Alasan pemblokiran umum',
 		list: [
-			{ label: 'anonblock', value: 'anonblock' },
-			{ label: 'anonblock - likely a school', value: 'anonblock - school' },
-			{ label: 'school block', value: 'school block' },
-			{ label: 'Generic block (custom reason)', value: 'uw-block' }, // ends up being default for registered users
-			{ label: 'Generic block (custom reason) – IP', value: 'uw-ablock', selected: true }, // set only when blocking IP
-			{ label: 'Generic block (custom reason) – indefinite', value: 'uw-blockindef' },
-			{ label: 'Disruptive editing', value: 'uw-disruptblock' },
-			{ label: 'Inappropriate use of user talk page while blocked', value: 'uw-talkrevoked' },
-			{ label: 'Not here to contribute to the encyclopedia', value: 'uw-nothereblock' },
-			{ label: 'Vandalism', value: 'uw-vblock' },
-			{ label: 'Vandalism-only account', value: 'uw-voablock' }
+			{ label: 'blokanon', value: 'anonblock' },
+			{ label: 'blokanon - mirip sebuah sekolah', value: 'anonblock - school' },
+			{ label: 'blokir sekolah', value: 'school block' },
+			{ label: 'Blokir umum (alasan tertentu)', value: 'uw-block' }, // ends up being default for registered users
+			{ label: 'Blokir umum (alasan tertentu) – IP', value: 'uw-ablock', selected: true }, // set only when blocking IP
+			{ label: 'Blokir umum (alasan tertentu) – selamanya', value: 'uw-blockindef' },
+			{ label: 'Suntingan mengganggu', value: 'uw-disruptblock' },
+			{ label: 'Penyalahgunaan halaman pembicaraan pengguna selama diblokir', value: 'uw-talkrevoked' },
+			{ label: 'Tidak ingin mengembangkan ensiklopedia', value: 'uw-nothereblock' },
+			{ label: 'Isi tanpa sumber', value: 'uw-ucblock' },
+			{ label: 'Vandalisme', value: 'uw-vblock' },
+			{ label: 'Akun vandalisme semata-mata', value: 'uw-voablock' }
 		],
 	},
 	{
-		label: 'Extended reasons',
+		label: 'Alasan tambahan',
 		list: [
-			{ label: 'Advertising', value: 'uw-adblock' },
-			{ label: 'Arbitration enforcement', value: 'uw-aeblock' },
-			{ label: 'Block evasion – IP', value: 'uw-ipevadeblock' },
-			{ label: 'BLP violations', value: 'uw-bioblock' },
-			{ label: 'Copyright violations', value: 'uw-copyrightblock' },
-			{ label: 'Creating inappropriate pages', value: 'uw-npblock' },
-			{ label: 'Edit filter-related', value: 'uw-efblock' },
-			{ label: 'Edit warring', value: 'uw-ewblock' },
-			{ label: 'Generic block with talk page access revoked', value: 'uw-blocknotalk' },
-			{ label: 'Harassment', value: 'uw-hblock' },
-			{ label: 'Legal threats', value: 'uw-lblock' },
-			{ label: 'Personal attacks or harassment', value: 'uw-pablock' },
-			{ label: 'Possible compromised account', value: 'uw-compblock' },
-			{ label: 'Removal of content', value: 'uw-dblock' },
-			{ label: 'Sock puppetry (master)', value: 'uw-sockblock' },
-			{ label: 'Sock puppetry (puppet)', value: 'uw-spoablock' },
-			{ label: 'Social networking', value: 'uw-myblock' },
+			{ label: 'Beriklan', value: 'uw-adblock' },
+			{ label: 'Penegakan kebijakan arbitrase', value: 'uw-aeblock' },
+			{ label: 'Menghindari pemblokiran – IP', value: 'uw-ipevadeblock' },
+			{ label: 'Melanggar kebijakan tokoh yang masih hidup', value: 'uw-bioblock' },
+			{ label: 'Melanggar hak cipta', value: 'uw-copyrightblock' },
+			{ label: 'Membuat halaman yang tidak pantas', value: 'uw-npblock' },
+			{ label: 'Berhubungan dengan filter suntingan', value: 'uw-efblock' },
+			{ label: 'Perang suntingan', value: 'uw-ewblock' },
+			{ label: 'Pemblokiran umum dengan akses halaman pembicaraan dicabut', value: 'uw-blocknotalk' },
+			{ label: 'Menyerang subjek', value: 'uw-hblock' },
+			{ label: 'Ancaman hukum', value: 'uw-lblock' },
+			{ label: 'Menyerang pribadi', value: 'uw-pablock' },
+			{ label: 'Akun yang disalahgunakan', value: 'uw-compblock' },
+			{ label: 'Menghapus isi halaman', value: 'uw-dblock' },
+			{ label: 'Akun boneka (inang)', value: 'uw-sockblock' },
+			{ label: 'Akun boneka (anak)', value: 'uw-spoablock' },
+			{ label: 'Jejaring sosial', value: 'uw-myblock' },
 			{ label: 'Spam', value: 'uw-sblock' },
-			{ label: 'Spam/advertising-only account', value: 'uw-soablock' },
-			{ label: 'Unapproved bot', value: 'uw-botblock' },
-			{ label: 'Violating the three-revert rule', value: 'uw-3block' }
+			{ label: 'Akun spam/iklan semata-mata', value: 'uw-soablock' },
+			{ label: 'Bot yang belum disetujui', value: 'uw-botblock' },
+			{ label: 'Melanggar tiga kali pengembalian', value: 'uw-3block' }
 		]
 	},
 	{
-		label: 'Username violations',
+		label: 'Pelanggaran nama pengguna',
 		list: [
-			{ label: 'Bot username', value: 'uw-botublock' },
-			{ label: 'Memorial username soft block', value: 'uw-memorialblock' },
-			{ label: 'Promotional username, hard block', value: 'uw-spamublock' },
-			{ label: 'Promotional username, soft block', value: 'uw-softerblock' },
-			{ label: 'Similar username soft block', value: 'uw-ublock-double' },
-			{ label: 'Username violation, soft block', value: 'uw-ublock' },
-			{ label: 'Username violation, hard block', value: 'uw-uhblock' },
-			{ label: 'Username impersonation hard block', value: 'uw-uhblock-double' },
-			{ label: 'Username represents a famous person, soft block', value: 'uw-ublock-famous' },
-			{ label: 'Username represents a non-profit, soft block', value: 'uw-causeblock' },
-			{ label: 'Username violation, vandalism-only account', value: 'uw-vaublock' }
+			{ label: 'Nama pengguna bot', value: 'uw-botublock' },
+			{ label: 'Nama pengguna promosi, pemblokiran rumit', value: 'uw-spamublock' },
+			{ label: 'Nama pengguna promosi, pemblokiran lunak', value: 'uw-softerblock' },
+			{ label: 'Nama pengguna yang mirip, pemblokiran lunak', value: 'uw-ublock-double' },
+			{ label: 'Pelanggaran nama pengguna, pemblokiran lunak', value: 'uw-ublock' },
+			{ label: 'Pelanggaran nama pengguna, pemblokiran rumit', value: 'uw-uhblock' },
+			{ label: 'Nama pengguna meniru-niru, pemblokiran rumit', value: 'uw-uhblock-double' },
+			{ label: 'Nama pengguna yang mewakili tokoh terkenal, pemblokiran lunak', value: 'uw-ublock-famous' },
+			{ label: 'Nama pengguna yang mewakili organisasi, pemblokiran lunak', value: 'uw-causeblock' },
+			{ label: 'Pelanggaran nama pengguna dan akun spam semata-mata', value: 'uw-vaublock' }
 		]
 	},
 	{
-		label: 'Templated reasons',
+		label: 'Alasan bertemplat',
 		list: [
-			{ label: 'blocked proxy', value: 'blocked proxy' },
-			{ label: 'CheckUser block', value: 'CheckUser block' },
+			{ label: 'proksi yang diblokir', value: 'blocked proxy' },
+			{ label: 'pemblokiran oleh CheckUser', value: 'CheckUser block' },
 			{ label: 'checkuserblock-account', value: 'checkuserblock-account' },
 			{ label: 'checkuserblock-wide', value: 'checkuserblock-wide' },
 			{ label: 'colocationwebhost', value: 'colocationwebhost' },
 			{ label: 'oversightblock', value: 'oversightblock' },
 			// { label: 'rangeblock', value: 'rangeblock' }, // placeholder for when we add support for rangeblocks
+			{ label: 'spamblacklistblock', value: 'spamblacklistblock' },
 			{ label: 'tor', value: 'tor' },
-			{ label: 'webhostblock', value: 'webhostblock' }
+			{ label: 'webhostblock', value: 'webhostblock' },
+			{ label: 'zombie proxy', value: 'zombie proxy' }
 		]
 	}
 ];
@@ -906,6 +972,28 @@ Twinkle.block.callback.change_expiry = function twinkleblockCallbackChangeExpiry
 	} else {
 		Morebits.quickForm.setElementVisibility(expiry.parentNode, false);
 		expiry.value = e.target.value;
+	}
+};
+
+Twinkle.block.seeAlsos = [];
+Twinkle.block.callback.toggle_see_alsos = function twinkleblockCallbackToggleSeeAlso() {
+	var reason = this.form.reason.value.replace(
+		new RegExp('( <!--|;) ' + 'see also ' + Twinkle.block.seeAlsos.join(' and ') + '( -->)?'), ''
+	);
+
+	Twinkle.block.seeAlsos = Twinkle.block.seeAlsos.filter(function(el) {
+		return el !== this.value;
+	}.bind(this));
+
+	if (this.checked) Twinkle.block.seeAlsos.push(this.value);
+	var seeAlsoMessage = Twinkle.block.seeAlsos.join(' and ');
+
+	if (!Twinkle.block.seeAlsos.length) {
+		this.form.reason.value = reason;
+	} else if (reason.indexOf('{{') !== -1) {
+		this.form.reason.value = reason + ' <!-- see also ' + seeAlsoMessage + ' -->';
+	} else {
+		this.form.reason.value = reason + '; see also ' + seeAlsoMessage;
 	}
 };
 
@@ -996,14 +1084,14 @@ Twinkle.block.callback.preview = function twinkleblockcallbackPreview(form) {
 		disabletalk: form.disabletalk.checked || (form.notalk ? form.notalk.checked : false),
 		expiry: form.template_expiry ? form.template_expiry.value : form.expiry.value,
 		hardblock: Twinkle.block.isRegistered ? form.autoblock.checked : form.hardblock.checked,
-		indefinite: (/indef|infinity|never|\*|max/).test( form.template_expiry ? form.template_expiry.value : form.expiry.value ),
+		indefinite: (/indef|infinit|never|\*|max/).test( form.template_expiry ? form.template_expiry.value : form.expiry.value ),
 		reason: form.block_reason.value,
 		template: form.template.value
 	};
 
 	var templateText = Twinkle.block.callback.getBlockNoticeWikitext(params);
 
-	form.previewer.beginRender(templateText);
+	form.previewer.beginRender(templateText, 'User_talk:' + mw.config.get('wgRelevantUserName')); // Force wikitext/correct username
 };
 
 Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
@@ -1027,12 +1115,12 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 	templateoptions.expiry = templateoptions.template_expiry || blockoptions.expiry;
 
 	if (toBlock) {
-		if (!blockoptions.expiry) return alert('Please provide an expiry!');
-		if (!blockoptions.reason) return alert('Please provide a reason for the block!');
+		if (!blockoptions.expiry) return alert('Berikan waktu kedaluwarsa pemblokiran!');
+		if (!blockoptions.reason) return alert('Berikan alasan pemblokiran!');
 
 		Morebits.simpleWindow.setButtonsEnabled( false );
 		Morebits.status.init( e.target );
-		var statusElement = new Morebits.status('Executing block');
+		var statusElement = new Morebits.status('Menjalankan pemblokiran');
 		blockoptions.action = 'block';
 		blockoptions.user = mw.config.get('wgRelevantUserName');
 
@@ -1040,20 +1128,17 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 		blockoptions.anononly = blockoptions.hardblock ? undefined : true;
 		blockoptions.allowusertalk = blockoptions.disabletalk ? undefined : true;
 
-		// fix for bug with block API, see [[phab:T68646]]
-		if (blockoptions.expiry === 'infinity') blockoptions.expiry = 'infinite';
-
 		// execute block
 		api.getToken('block').then(function(token) {
-			statusElement.status('Processing...');
+			statusElement.status('Sedang menjalankan...');
 			blockoptions.token = token;
-			var mbApi = new Morebits.wiki.api( 'Executing block', blockoptions, function(data) {
-				statusElement.info('Completed');
+			var mbApi = new Morebits.wiki.api( 'Executing block', blockoptions, function() {
+				statusElement.info('Selesai');
 				if (toWarn) Twinkle.block.callback.issue_template(templateoptions);
 			});
 			mbApi.post();
 		}, function() {
-			statusElement.error('Unable to fetch block token');
+			statusElement.error('Tidak bisa mendapatkan token pemblokiran');
 		});
 	} else if (toWarn) {
 		Morebits.simpleWindow.setButtonsEnabled( false );
@@ -1061,7 +1146,7 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 		Morebits.status.init( e.target );
 		Twinkle.block.callback.issue_template(templateoptions);
 	} else {
-		return alert('Please give Twinkle something to do!');
+		return alert('Berikan tugas kepada Twinkle!');
 	}
 };
 
@@ -1075,9 +1160,9 @@ Twinkle.block.callback.issue_template = function twinkleblockCallbackIssueTempla
 	});
 
 	Morebits.wiki.actionCompleted.redirect = userTalkPage;
-	Morebits.wiki.actionCompleted.notice = 'Actions complete, loading user talk page in a few seconds';
+	Morebits.wiki.actionCompleted.notice = 'Tindakan selesai, memuat ulang halaman pembicaraan dalam beberapa detik';
 
-	var wikipedia_page = new Morebits.wiki.page( userTalkPage, 'User talk page modification' );
+	var wikipedia_page = new Morebits.wiki.page( userTalkPage, 'Mengubah halaman pembicaraan pengguna' );
 	wikipedia_page.setCallbackParameters( params );
 	wikipedia_page.setFollowRedirect( true );
 	wikipedia_page.load( Twinkle.block.callback.main );
@@ -1134,13 +1219,13 @@ Twinkle.block.callback.main = function twinkleblockcallbackMain( pageobj ) {
 		text += '\n\n';
 	}
 
-	params.indefinite = (/indef|infinity|never|\*|max/).test( params.expiry );
+	params.indefinite = (/indef|infinit|never|\*|max/).test( params.expiry );
 
 	if ( Twinkle.getPref('blankTalkpageOnIndefBlock') && params.template !== 'uw-lblock' && params.indefinite ) {
-		Morebits.status.info( 'Info', 'Blanking talk page per preferences and creating a new level 2 heading for the date' );
+		Morebits.status.info( 'Info', 'Menghapus isi halaman pembicaraan berdasarkan preferensi dan membuat bagian tingkat 2 untuk tanggal' );
 		text = '== ' + date.getUTCMonthName() + ' ' + date.getUTCFullYear() + ' ==\n';
 	} else if( !dateHeaderRegexResult || dateHeaderRegexResult.index !== lastHeaderIndex ) {
-		Morebits.status.info( 'Info', 'Will create a new level 2 heading for the date, as none was found for this month' );
+		Morebits.status.info( 'Info', 'Akan membuat bagian tingkat 2 baru untuk tanggal, karena subbagian bulan ini tidak tersedia' );
 		text += '== ' + date.getUTCMonthName() + ' ' + date.getUTCFullYear() + ' ==\n';
 	}
 
@@ -1151,7 +1236,7 @@ Twinkle.block.callback.main = function twinkleblockcallbackMain( pageobj ) {
 	// build the edit summary
 	var summary = messageData.summary;
 	if ( messageData.suppressArticleInSummary !== true && params.article ) {
-		summary += ' on [[' + params.article + ']]';
+		summary += ' di [[:' + params.article + ']]';
 	}
 	summary += '.' + Twinkle.getPref('summaryAd');
 
@@ -1162,5 +1247,6 @@ Twinkle.block.callback.main = function twinkleblockcallbackMain( pageobj ) {
 };
 
 })(jQuery);
+
 
 //</nowiki>

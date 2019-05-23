@@ -9,16 +9,20 @@
  *** twinklewarn.js: Warn module
  ****************************************
  * Mode of invocation:     Tab ("Warn")
- * Active on:              User talk pages
+ * Active on:              User (talk) pages and (deleted) Contributions
  * Config directives in:   TwinkleConfig
  */
 
 Twinkle.warn = function twinklewarn() {
 	if( mw.config.get( 'wgRelevantUserName' ) ) {
 			Twinkle.addPortletLink( Twinkle.warn.callback, "Peringati", "tw-warn", "Peringatkan/beritahukan pengguna" );
+			if (Twinkle.getPref('autoMenuAfterRollback') && mw.config.get('wgNamespaceNumber') === 3 && mw.util.getParamValue('vanarticle') && !mw.util.getParamValue('friendlywelcome')) {
+				Twinkle.warn.callback();
+			}
 	}
 
-	// modify URL of talk page on rollback success pages
+	// Modify URL of talk page on rollback success pages, makes use of a
+	// custom message box in [[MediaWiki:Rollback-success]]
 	if( mw.config.get('wgAction') === 'rollback' ) {
 		var $vandalTalkLink = $("#mw-rollback-success").find(".mw-usertoollinks a").first();
 		if ( $vandalTalkLink.length ) {
@@ -62,11 +66,11 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 		} );
 
 	var defaultGroup = parseInt(Twinkle.getPref('defaultWarningGroup'), 10);
-	main_group.append( { type: 'option', label: 'Catatan umum (1)', value: 'level1', selected: ( defaultGroup === 1 || defaultGroup < 1 || ( Morebits.userIsInGroup( 'sysop' ) ? defaultGroup > 8 : defaultGroup > 7 ) ) } );
-	main_group.append( { type: 'option', label: 'Pemberitahuan (2)', value: 'level2', selected: ( defaultGroup === 2 ) } );
-	main_group.append( { type: 'option', label: 'Peringatan (3)', value: 'level3', selected: ( defaultGroup === 3 ) } );
-	main_group.append( { type: 'option', label: 'Peringatan terakhir (4)', value: 'level4', selected: ( defaultGroup === 4 ) } );
-	main_group.append( { type: 'option', label: 'Sekadar peringatan (4im)', value: 'level4im', selected: ( defaultGroup === 5 ) } );
+	main_group.append( { type: 'option', label: '1: Catatan umum', value: 'level1', selected: ( defaultGroup === 1 ) } );
+	main_group.append( { type: 'option', label: '2: Pemberitahuan', value: 'level2', selected: ( defaultGroup === 2 ) } );
+	main_group.append( { type: 'option', label: '3: Peringatan', value: 'level3', selected: ( defaultGroup === 3 ) } );
+	main_group.append( { type: 'option', label: '4: Peringatan terakhir', value: 'level4', selected: ( defaultGroup === 4 ) } );
+	main_group.append( { type: 'option', label: '4im: Sekadar peringatan', value: 'level4im', selected: ( defaultGroup === 5 ) } );
 	main_group.append( { type: 'option', label: 'Pemberitahuan isu tunggal', value: 'singlenotice', selected: ( defaultGroup === 6 ) } );
 	main_group.append( { type: 'option', label: 'Peringatan isu tunggal', value: 'singlewarn', selected: ( defaultGroup === 7 ) } );
 	if( Twinkle.getPref( 'customWarningList' ).length ) {
@@ -189,6 +193,10 @@ Twinkle.warn.messages = {
 				label: "Tidak berpegang pada sudut pandang netral",
 				summary: "Catatan: Tidak berpegang pada sudut pandang netral"
 			},
+			"uw-paid1": {
+				label: "Paid editing without disclosure under the Wikimedia Terms of Use",
+				summary: "General note: Paid editing without disclosure under the Wikimedia Terms of Use"
+			},
 			"uw-spam1": {
 				label: "Menambahkan pranala spam",
 				summary: "Catatan: Penambahan pranala spam"
@@ -231,6 +239,10 @@ Twinkle.warn.messages = {
 			}
 		},
 		"Lain-lain": {
+			"uw-attempt1": {
+				label: "Memicu filter penyuntingan",
+				summary: "Catatan: Memicu filter penyuntingan"
+			},
 			"uw-chat1": {
 				label: "Menggunakan halaman pembicaraan sebagai forum",
 				summary: "Catatan: Penggunaan halaman pembicaraan sebagai forum"
@@ -255,21 +267,7 @@ Twinkle.warn.messages = {
 				label: "Menggunggah berkas nonensiklopedis",
 				summary: "Catatan: Pengunggahan berkas nonensiklopedis"
 			}
-		}/*,
-		"To be removed from Twinkle": {
-			"uw-redirect1": {
-				label: "Creating malicious redirects",
-				summary: "General note: Creating malicious redirects"
-			},
-			"uw-ics1": {
-				label: "Uploading files missing copyright status",
-				summary: "General note: Uploading files missing copyright status"
-			},
-			"uw-af1": {
-				label: "Inappropriate feedback through the Article Feedback Tool",
-				summary: "General note: Inappropriate feedback through the Article Feedback Tool"
-			}
-		}*/
+		}
 	},
 
 
@@ -347,6 +345,10 @@ Twinkle.warn.messages = {
 				label: "Tidak berpegang pada sudut pandang netral",
 				summary: "Pemberitahuan: Tidak berpegang pada sudut pandang netral"
 			},
+			"uw-paid2": {
+				label: "Paid editing without disclosure under the Wikimedia Terms of Use",
+				summary: "Caution: Paid editing without disclosure under the Wikimedia Terms of Use"
+			},
 			"uw-spam2": {
 				label: "Menambahkan pranala spam",
 				summary: "Pemberitahuan: Penambahan pranala spam"
@@ -417,17 +419,7 @@ Twinkle.warn.messages = {
 				label: "Menggunggah berkas nonensiklopedis",
 				summary: "Pemberitahuan: Pengunggahan berkas nonensiklopedis"
 			}
-		}/*,
-		"To be removed from Twinkle": {
-			"uw-redirect2": {
-				label: "Creating malicious redirects",
-				summary: "Caution: Creating malicious redirects"
-			},
-			"uw-ics2": {
-				label: "Uploading files missing copyright status",
-				summary: "Caution: Uploading files missing copyright status"
-			}
-		}*/
+		}
 	},
 
 
@@ -505,6 +497,10 @@ Twinkle.warn.messages = {
 				label: "Tidak berpegang pada sudut pandang netral",
 				summary: "Peringatan: Tidak berpegang pada sudut pandang netral"
 			},
+			"uw-paid3": {
+				label: "Paid editing without disclosure under the Wikimedia Terms of Use",
+				summary: "Warning: Paid editing without disclosure under the Wikimedia Terms of Use"
+			},
 			"uw-spam3": {
 				label: "Menambahkan pranala spam",
 				summary: "Peringatan: Penambahan pranala spam"
@@ -571,17 +567,7 @@ Twinkle.warn.messages = {
 				label: "Menggunggah berkas nonensiklopedis",
 				summary: "Peringatan: Pengunggahan berkas nonensiklopedis"
 			}
-		}/*,
-		"To be removed fomr Twinkle": {
-			"uw-ics3": {
-				label: "Uploading files missing copyright status",
-				summary: "Warning: Uploading files missing copyright status"
-			},
-			"uw-redirect3": {
-				label: "Creating malicious redirects",
-				summary: "Warning: Creating malicious redirects"
-			}
-		}*/
+		}
 	},
 
 
@@ -647,6 +633,10 @@ Twinkle.warn.messages = {
 				label: "Tidak berpegang pada sudut pandang netral",
 				summary: "Peringatan terakhir: Tidak berpegang pada sudut pandang netral"
 			},
+			"uw-paid4": {
+				label: "Paid editing without disclosure under the Wikimedia Terms of Use",
+				summary: "Final warning: Paid editing without disclosure under the Wikimedia Terms of Use"
+			},
 			"uw-spam4": {
 				label: "Menambahkan pranala spam",
 				summary: "Peringatan terakhir: Penambahan pranala spam"
@@ -709,17 +699,7 @@ Twinkle.warn.messages = {
 				label: "Menggunggah berkas nonensiklopedis",
 				summary: "Peringatan terakhir: Pengunggahan berkas nonensiklopedis"
 			}
-		}/*,
-		"To be removed from Twinkle": {
-			"uw-redirect4": {
-				label: "Creating malicious redirects",
-				summary: "Final warning: Creating malicious redirects"
-			},
-			"uw-ics4": {
-				label: "Uploading files missing copyright status",
-				summary: "Final warning: Uploading files missing copyright status"
-			}
-		}*/
+		}
 	},
 
 
@@ -789,13 +769,7 @@ Twinkle.warn.messages = {
 				label: "Menggunggah berkas nonensiklopedis",
 				summary: "Sekadar peringatan: Pengunggahan berkas nonensiklopedis"
 			}
-		}/*,
-		"To be removed from Twinkle": {
-			"uw-redirect4im": {
-				label: "Creating malicious redirects",
-				summary: "Only warning: Creating malicious redirects"
-			}
-		}*/
+		}
 	},
 
 	singlenotice: {
@@ -925,10 +899,6 @@ Twinkle.warn.messages = {
 		"uw-spoiler": {
 			label: "Menambahkan peringatan beberan atau menghapus beberan dari bagian terkait",
 			summary: "Pemberitahuan: Jangan menghapus atau menandai kemungkinan 'beberan'"
-		},
-		"uw-subst": {
-			label: "Ingat, gnt: perlu ditambahkan pada templat",
-			summary: "Pemberitahuan: Ingat, gnt: perlu ditambahkan pada templat"
 		},
 		"uw-talkinarticle": {
 			label: "Pembicaraan dalam artikel",
@@ -1109,9 +1079,10 @@ Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCatego
 				selected = true;
 			}
 
+			// Slice out leading uw- from the menu display
 			var elem = new Morebits.quickForm.element( {
 				type: 'option',
-				label: "{{" + key + "}}: " + itemProperties.label,
+				label: (value === 'custom' ? "{{" + key + "}}" : key.slice(3)) + ": " + itemProperties.label,
 				value: key,
 				selected: selected
 			} );
@@ -1142,44 +1113,46 @@ Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCatego
 	// clear overridden label on article textbox
 	Morebits.quickForm.setElementTooltipVisibility(e.target.root.article, true);
 	Morebits.quickForm.resetElementLabel(e.target.root.article);
-
 	// hide the big red notice
 	$("#tw-warn-red-notice").remove();
+	// add custom label.redWarning
+	Twinkle.warn.callback.change_subcategory(e);
 };
 
 Twinkle.warn.callback.change_subcategory = function twinklewarnCallbackChangeSubcategory(e) {
 	var main_group = e.target.form.main_group.value;
 	var value = e.target.form.sub_group.value;
 
+	// Tags that don't take a linked article, but something else (often a username).
+	// The value of each tag is the label next to the input field
+	var notLinkedArticle = {
+		"uw-agf-sock": "Optional username of other account (without User:) ",
+		"uw-bite": "Username of 'bitten' user (without User:) ",
+		"uw-socksuspect": "Username of sock master, if known (without User:) ",
+		"uw-username": "Username violates policy because... ",
+		"uw-aiv": "Optional username that was reported (without User:) "
+	};
+
 	if( main_group === 'singlenotice' || main_group === 'singlewarn' ) {
-		if( value === 'uw-bite' || value === 'uw-username' || value === 'uw-socksuspect' ) {
+		if( notLinkedArticle[value] ) {
 			if(Twinkle.warn.prev_article === null) {
 				Twinkle.warn.prev_article = e.target.form.article.value;
 			}
 			e.target.form.article.notArticle = true;
 			e.target.form.article.value = '';
+
+			// change form labels according to the warning selected
+			Morebits.quickForm.setElementTooltipVisibility(e.target.form.article, false);
+			Morebits.quickForm.overrideElementLabel(e.target.form.article, notLinkedArticle[value]);
 		} else if( e.target.form.article.notArticle ) {
 			if(Twinkle.warn.prev_article !== null) {
 				e.target.form.article.value = Twinkle.warn.prev_article;
 				Twinkle.warn.prev_article = null;
 			}
 			e.target.form.article.notArticle = false;
+			Morebits.quickForm.setElementTooltipVisibility(e.target.form.article, true);
+			Morebits.quickForm.resetElementLabel(e.target.form.article);
 		}
-	}
-
-	// change form labels according to the warning selected
-	if (value === "uw-socksuspect") {
-		Morebits.quickForm.setElementTooltipVisibility(e.target.form.article, false);
-		Morebits.quickForm.overrideElementLabel(e.target.form.article, "Nama penguna induk siluman, jika diketahui (tanpa Pengguna:) ");
-	} else if (value === "uw-username") {
-		Morebits.quickForm.setElementTooltipVisibility(e.target.form.article, false);
-		Morebits.quickForm.overrideElementLabel(e.target.form.article, "Nama pengguna melanggar kebijakan karena... ");
-	} else if (value === "uw-bite") {
-		Morebits.quickForm.setElementTooltipVisibility(e.target.form.article, false);
-		Morebits.quickForm.overrideElementLabel(e.target.form.article, "Nama pengguna yang 'digigit' (tanpa Pengguna:) ");
-	} else {
-		Morebits.quickForm.setElementTooltipVisibility(e.target.form.article, true);
-		Morebits.quickForm.resetElementLabel(e.target.form.article);
 	}
 
 	// add big red notice, warning users about how to use {{uw-[coi-]username}} appropriately
@@ -1223,7 +1196,7 @@ Twinkle.warn.callbacks = {
 			text += " ''" + reason + "''";
 		}
 
-		return text;
+		return text + ' ~~~~';
 	},
 	preview: function(form) {
 		var templatename = form.sub_group.value;
@@ -1233,7 +1206,7 @@ Twinkle.warn.callbacks = {
 		templatetext = Twinkle.warn.callbacks.getWarningWikitext(templatename, linkedarticle,
 			form.reason.value, form.main_group.value === 'custom');
 
-		form.previewer.beginRender(templatetext);
+		form.previewer.beginRender(templatetext, 'User_talk:' + mw.config.get('wgRelevantUserName')); // Force wikitext/correct username
 	},
 	main: function( pageobj ) {
 		var text = pageobj.getPageText();
@@ -1301,9 +1274,9 @@ Twinkle.warn.callbacks = {
 			text += "== " + date.getUTCMonthName() + " " + date.getUTCFullYear() + " ==\n";
 		}
 		text += Twinkle.warn.callbacks.getWarningWikitext(params.sub_group, params.article,
-			params.reason, params.main_group === 'custom') + " ~~~~";
+			params.reason, params.main_group === 'custom');
 
-		if ( Twinkle.getPref('showSharedIPNotice') && Morebits.isIPAddress( mw.config.get('wgTitle') ) ) {
+		if ( Twinkle.getPref('showSharedIPNotice') && mw.util.isIPAddress( mw.config.get('wgTitle') ) ) {
 			Morebits.status.info( 'Info', 'Menambahkan pemberitahuan IP bersama' );
 			text +=  "\n{{subst:Shared IP advice}}";
 		}
@@ -1339,10 +1312,12 @@ Twinkle.warn.callbacks = {
 		} else {
 			summary = messageData.summary;
 			if ( messageData.suppressArticleInSummary !== true && params.article ) {
-				if ( params.sub_group === "uw-socksuspect" ) {  // this template requires a username
-					summary += " dari [[User:" + params.article + "]]";
+				if ( params.sub_group === "uw-agf-sock" ||
+						params.sub_group === "uw-socksuspect" ||
+						params.sub_group === "uw-aiv" ) {  // these templates require a username
+					summary += " dari [[:User:" + params.article + "]]";
 				} else {
-					summary += " di [[" + params.article + "]]";
+					summary += " di [[:" + params.article + "]]";
 				}
 			}
 		}
