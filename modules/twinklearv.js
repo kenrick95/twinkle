@@ -111,7 +111,7 @@ Twinkle.arv.callback.changeCategory = function (e) {
 				type: 'input',
 				name: 'page',
 				label: 'Primary linked page: ',
-				tooltip: 'Leave blank to not link to the page in the report',
+				tooltip: 'Biarkan kosong jika Anda tidak ingin menautkan ke halaman dalam laporan',
 				value: Morebits.queryString.exists( 'vanarticle' ) ? Morebits.queryString.get( 'vanarticle' ) : '',
 				event: function(e) {
 					var value = e.target.value;
@@ -127,7 +127,7 @@ Twinkle.arv.callback.changeCategory = function (e) {
 		work_area.append( {
 				type: 'input',
 				name: 'badid',
-				label: 'Revision ID for target page when vandalised: ',
+				label: 'ID revisi untuk halaman target ketika divandal: ',
 				tooltip: 'Leave blank for no diff link',
 				value: Morebits.queryString.exists( 'vanarticlerevid' ) ? Morebits.queryString.get( 'vanarticlerevid' ) : '',
 				disabled: !Morebits.queryString.exists( 'vanarticle' ),
@@ -241,8 +241,8 @@ Twinkle.arv.callback.changeCategory = function (e) {
 			{
 				type: 'input',
 				name: 'sockmaster',
-				label: 'Sockpuppeteer',
-				tooltip: 'The username of the sockpuppeteer (sockmaster) without the User:-prefix'
+				label: 'Induk akun siluman',
+				tooltip: 'Tuliskan hanya nama pengguna dari induk akun siluman tanpa indeks awalan Pengguna:'
 			}
 		);
 		work_area.append( {
@@ -255,12 +255,12 @@ Twinkle.arv.callback.changeCategory = function (e) {
 				type: 'checkbox',
 				list: [
 					{
-						label: 'Request CheckUser evidence',
+						label: 'Minta bukti dari Pemeriksa',
 						name: 'checkuser',
 						tooltip: 'CheckUser is a tool used to obtain technical evidence related to a sock-puppetry allegation. It will not be used without good cause, which you must clearly demonstrate. Make sure your evidence explains why CheckUser is appropriate.'
 					},
 					{
-						label: 'Notify reported users',
+						label: 'Beritahu pengguna yang dilaporkan',
 						name: 'notify',
 						tooltip: 'Notification is not mandatory. In many cases, especially of chronic sockpuppeteers, notification may be counterproductive. However, especially in less egregious cases involving users who has not been reported before, notification may make the cases fairer and also appear to be fairer in the eyes of the accused. Use your judgment.'
 					}
@@ -778,7 +778,7 @@ Twinkle.arv.processSock = function( params ) {
 	}
 	text += "}}";
 
-	var reportpage = 'Wikipedia:Sockpuppet investigations/' + params.uid;
+	var reportpage = 'Wikipedia:Investigasi pengguna siluman/' + params.uid;
 
 	Morebits.wiki.actionCompleted.redirect = reportpage;
 	Morebits.wiki.actionCompleted.notice = "Reporting complete";
