@@ -907,6 +907,53 @@ HTMLFormElement.prototype.getChecked = function( name, type ) {
 	return return_array;
 };
 
+/**
+ * getUnchecked:
+ *   Does the same as getChecked above, but with unchecked elements.
+ */
+
+HTMLFormElement.prototype.getUnchecked = function( name, type ) {
+	var elements = this.elements[name];
+	if( !elements ) {
+		// if the element doesn't exists, return null.
+		return null;
+	}
+	var return_array = [];
+	var i;
+	if( elements instanceof HTMLSelectElement ) {
+		var options = elements.options;
+		for( i = 0; i < options.length; ++i ) {
+			if( !options[i].selected ) {
+				if( options[i].values ) {
+					return_array.push( options[i].values );
+				} else {
+					return_array.push( options[i].value );
+				}
+
+			}
+		}
+	} else if( elements instanceof HTMLInputElement ) {
+		if( type && elements.type !== type ) {
+			return [];
+		} else if( !elements.checked ) {
+			return [ elements.value ];
+		}
+	} else {
+		for( i = 0; i < elements.length; ++i ) {
+			if( !elements[i].checked ) {
+				if( type && elements[i].type !== type ) {
+					continue;
+				}
+				if( elements[i].values ) {
+					return_array.push( elements[i].values );
+				} else {
+					return_array.push( elements[i].value );
+				}
+			}
+		}
+	}
+	return return_array;
+};
 
 
 /**
@@ -927,93 +974,6 @@ RegExp.escape = function( text, space_fix ) {
 
 	return text;
 };
-
-
-
-/**
- * **************** Morebits.bytes ****************
- * Utility object for formatting byte values
- */
-
-Morebits.bytes = function( value ) {
-	if( typeof value === 'string' ) {
-		var res = /(\d+) ?(\w?)(i?)B?/.exec( value );
-		var number = res[1];
-		var mag = res[2];
-		var si = res[3];
-
-		if( !number ) {
-			this.number = 0;
-			return;
-		}
-
-		if( !si ) {
-			this.value = number * Math.pow( 10, Morebits.bytes.magnitudes[mag] * 3 );
-		} else {
-			this.value = number * Math.pow( 2, Morebits.bytes.magnitudes[mag] * 10 );
-		}
-	} else {
-		this.value = value;
-	}
-};
-
-Morebits.bytes.magnitudes = {
-	'': 0,
-	'K': 1,
-	'M': 2,
-	'G': 3,
-	'T': 4,
-	'P': 5,
-	'E': 6,
-	'Z': 7,
-	'Y': 8
-};
-
-Morebits.bytes.rmagnitudes = {
-	0: '',
-	1: 'K',
-	2: 'M',
-	3: 'G',
-	4: 'T',
-	5: 'P',
-	6: 'E',
-	7: 'Z',
-	8: 'Y'
-};
-
-Morebits.bytes.prototype.valueOf = function() {
-	return this.value;
-};
-
-Morebits.bytes.prototype.toString = function( magnitude ) {
-	var tmp = this.value;
-	if( magnitude ) {
-		var si = /i/.test(magnitude);
-		var mag = magnitude.replace( /.*?(\w)i?B?.*/g, '$1' );
-		if( si ) {
-			tmp /= Math.pow( 2, Morebits.bytes.magnitudes[mag] * 10 );
-		} else {
-			tmp /= Math.pow( 10, Morebits.bytes.magnitudes[mag] * 3 );
-		}
-		if( parseInt( tmp, 10 ) !== tmp ) {
-			tmp = Number( tmp ).toPrecision( 4 );
-		}
-		return tmp + ' ' + mag + (si?'i':'') + 'B';
-	} else {
-		// si per default
-		var current = 0;
-		while( tmp >= 1024 ) {
-			tmp /= 1024;
-			++current;
-		}
-		tmp = this.value / Math.pow( 2, current * 10 );
-		if( parseInt( tmp, 10 ) !== tmp ) {
-			tmp = Number( tmp ).toPrecision( 4 );
-		}
-		return tmp + ' ' + Morebits.bytes.rmagnitudes[current] + ( current > 0 ? 'iB' : 'B' );
-	}
-};
-
 
 
 /**
@@ -1188,6 +1148,16 @@ Morebits.pageNameNorm = mw.config.get('wgPageName').replace(/_/g, ' ');
 
 
 /**
+ * *************** Morebits.pageNameRegex *****************
+ * For a page name 'Foo bar', returns the string '[Ff]oo bar'
+ * @param {string} pageName - page name without namespace
+ */
+Morebits.pageNameRegex = function(pageName) {
+	return '[' + pageName[0].toUpperCase() + pageName[0].toLowerCase() + ']' + pageName.slice(1);
+};
+
+
+/**
  * **************** Morebits.unbinder ****************
  * Used for temporarily hiding a part of a string while processing the rest of it.
  *
@@ -1288,79 +1258,7 @@ Date.prototype.getUTCMonthNameAbbrev = function() {
 };
 
 
-
-/**
- * **************** Morebits.wikipedia ****************
- * English Wikipedia-specific objects
- */
-
-Morebits.wikipedia = {};
-
-Morebits.wikipedia.namespaces = {
-	'-2':  'Media',
-	'-1':  'Special',
-	'0':   '',
-	'1':   'Talk',
-	'2':   'User',
-	'3':   'User talk',
-	'4':   'Project',
-	'5':   'Project talk',
-	'6':   'File',
-	'7':   'File talk',
-	'8':   'MediaWiki',
-	'9':   'MediaWiki talk',
-	'10':  'Template',
-	'11':  'Template talk',
-	'12':  'Help',
-	'13':  'Help talk',
-	'14':  'Category',
-	'15':  'Category talk',
-	'100': 'Portal',
-	'101': 'Portal talk',
-	'108': 'Book',
-	'109': 'Book talk',
-	'118': 'Draft',
-	'119': 'Draft talk',
-	'446': 'Education Program',
-	'447': 'Education Program talk',
-	'710': 'TimedText',
-	'711': 'TimedText talk',
-	'828': 'Module',
-	'829': 'Module talk'
-};
-
-Morebits.wikipedia.namespacesFriendly = {
-	'0':   '(Article)',
-	'1':   'Talk',
-	'2':   'User',
-	'3':   'User talk',
-	'4':   'Wikipedia',
-	'5':   'Wikipedia talk',
-	'6':   'File',
-	'7':   'File talk',
-	'8':   'MediaWiki',
-	'9':   'MediaWiki talk',
-	'10':  'Template',
-	'11':  'Template talk',
-	'12':  'Help',
-	'13':  'Help talk',
-	'14':  'Category',
-	'15':  'Category talk',
-	'100': 'Portal',
-	'101': 'Portal talk',
-	'108': 'Book',
-	'109': 'Book talk',
-	'118': 'Draft',
-	'119': 'Draft talk',
-	'446': 'Education Program',
-	'447': 'Education Program talk',
-	'710': 'TimedText',
-	'711': 'TimedText talk',
-	'828': 'Module',
-	'829': 'Module talk'
-};
-
-
+// Morebits.wikipedia.namespaces is deprecated - use mw.config.get('wgFormattedNamespaces') or mw.config.get('wgNamespaceIds') instead
 
 /**
  * **************** Morebits.wiki ****************
@@ -1622,7 +1520,7 @@ Morebits.wiki.api.setApiUserAgent = function( ua ) {
  * getPageText(): returns a string containing the text of the page after a successful load()
  *
  * save([onSuccess], [onFailure]):  Saves the text set via setPageText() for the page.
- * 									Must be preceded by calling load().
+ * Must be preceded by calling load().
  *    Warning: Calling save() can result in additional calls to the previous load() callbacks to
  *             recover from edit conflicts!
  *             In this case, callers must make the same edit to the new pageText and reinvoke save().
@@ -1637,6 +1535,8 @@ Morebits.wiki.api.setApiUserAgent = function( ua ) {
  * move(onSuccess, [onFailure]): Moves a page to another title
  *
  * deletePage(onSuccess, [onFailure]): Deletes a page (for admins only)
+ *
+ * undeletePage(onSuccess, [onFailure]): Undeletes a page (for admins only)
  *
  * protect(onSuccess, [onFailure]): Protects a page
  *
@@ -1782,6 +1682,8 @@ Morebits.wiki.page = function(pageName, currentAction) {
 		onMoveFailure: null,
 		onDeleteSuccess: null,
 		onDeleteFailure: null,
+		onUndeleteSuccess: null,
+		onUndeleteFailure: null,
 		onProtectSuccess: null,
 		onProtectFailure: null,
 		onStabilizeSuccess: null,
@@ -1796,6 +1698,8 @@ Morebits.wiki.page = function(pageName, currentAction) {
 		moveProcessApi: null,
 		deleteApi: null,
 		deleteProcessApi: null,
+		undeleteApi: null,
+		undeleteProcessApi: null,
 		protectApi: null,
 		protectProcessApi: null,
 		stabilizeApi: null,
@@ -2407,6 +2311,44 @@ Morebits.wiki.page = function(pageName, currentAction) {
 	};
 
 	/**
+	 * Undeletes a page (for admins only)
+	 * @param {Function} onSuccess - callback function to run on success
+	 * @param {Function} [onFailure] - callback function to run on failure (optional)
+	 */
+	this.undeletePage = function(onSuccess, onFailure) {
+		ctx.onUndeleteSuccess = onSuccess;
+		ctx.onUndeleteFailure = onFailure || emptyFunction;
+
+		// if a non-admin tries to do this, don't bother
+		if (!Morebits.userIsInGroup('sysop')) {
+			ctx.statusElement.error("Cannot undelete page: only admins can do that");
+			ctx.onUndeleteFailure(this);
+			return;
+		}
+		if (!ctx.editSummary) {
+			ctx.statusElement.error("Internal error: undelete reason not set before undelete (use setEditSummary function)!");
+			ctx.onUndeleteFailure(this);
+			return;
+		}
+
+		if (fnCanUseMwUserToken('undelete')) {
+			fnProcessUndelete.call(this, this);
+		} else {
+			var query = {
+				action: 'query',
+				prop: 'info',
+				inprop: 'protection',
+				intoken: 'undelete',
+				titles: ctx.pageName
+			};
+
+			ctx.undeleteApi = new Morebits.wiki.api("retrieving undelete token...", query, fnProcessUndelete, ctx.statusElement, ctx.onUndeleteFailure);
+			ctx.undeleteApi.setParent(this);
+			ctx.undeleteApi.post();
+		}
+	};
+
+	/**
 	 * Protects a page (for admins only)
 	 * @param {Function} onSuccess - callback function to run on success
 	 * @param {Function} [onFailure] - callback function to run on failure (optional)
@@ -2879,11 +2821,9 @@ Morebits.wiki.page = function(pageName, currentAction) {
 
 		// check for "Database query error"
 		if ( errorCode === "internal_api_error_DBQueryError" && ctx.retries++ < ctx.maxRetries ) {
-
 			ctx.statusElement.info("Database query error, retrying");
 			--Morebits.wiki.numberOfActionsLeft;  // allow for normal completion if retry succeeds
 			ctx.deleteProcessApi.post(); // give it another go!
-
 		} else if ( errorCode === "badtoken" ) {
 			// this is pathetic, but given the current state of Morebits.wiki.page it would
 			// be a dog's breakfast to try and fix this
@@ -2891,20 +2831,100 @@ Morebits.wiki.page = function(pageName, currentAction) {
 			if (ctx.onDeleteFailure) {
 				ctx.onDeleteFailure.call(this, this, ctx.deleteProcessApi);
 			}
-
 		} else if ( errorCode === "missingtitle" ) {
-
 			ctx.statusElement.error("Cannot delete the page, because it no longer exists");
 			if (ctx.onDeleteFailure) {
 				ctx.onDeleteFailure.call(this, ctx.deleteProcessApi);  // invoke callback
 			}
-
 		// hard error, give up
 		} else {
-
 			ctx.statusElement.error( "Failed to delete the page: " + ctx.deleteProcessApi.getErrorText() );
 			if (ctx.onDeleteFailure) {
 				ctx.onDeleteFailure.call(this, ctx.deleteProcessApi);  // invoke callback
+			}
+		}
+	};
+
+	var fnProcessUndelete = function() {
+		var pageTitle, token;
+
+		// The whole handling of tokens in Morebits is outdated (#615)
+		// but has generally worked since intoken has been deprecated
+		// but remains.  intoken does not, however, take undelete, so
+		// fnCanUseMwUserToken('undelete') is no good.  Everything
+		// except watching and patrolling should eventually use csrf,
+		// but until then (#615) the stupid hack below should work for
+		// undeletion.
+		if (fnCanUseMwUserToken('undelete')) {
+			token = mw.user.tokens.get('editToken');
+			pageTitle = ctx.pageName;
+		} else {
+			var xml = ctx.undeleteApi.getXML();
+
+			if ($(xml).find('page').attr('missing') !== "") {
+				ctx.statusElement.error("Cannot undelete the page, because it already exists");
+				ctx.onUndeleteFailure(this);
+				return;
+			}
+
+			// extract protection info
+			var editprot = $(xml).find('pr[type="create"]');
+			if (editprot.length > 0 && editprot.attr('level') === 'sysop' && !ctx.suppressProtectWarning &&
+				!confirm('You are about to undelete the fully create protected page "' + ctx.pageName +
+				(editprot.attr('expiry') === 'infinity' ? '" (protected indefinitely)' : ('" (protection expiring ' + editprot.attr('expiry') + ')')) +
+				'.  \n\nClick OK to proceed with the undeletion, or Cancel to skip this undeletion.')) {
+				ctx.statusElement.error("Undeletion of fully create protected page was aborted.");
+				ctx.onUndeleteFailure(this);
+				return;
+			}
+
+			// KLUDGE:
+			token = mw.user.tokens.get('editToken');
+			pageTitle = ctx.pageName;
+		}
+
+		var query = {
+			'action': 'undelete',
+			'title': pageTitle,
+			'token': token,
+			'reason': ctx.editSummary
+		};
+		if (ctx.watchlistOption === 'watch') {
+			query.watch = 'true';
+		}
+
+		ctx.undeleteProcessApi = new Morebits.wiki.api("undeleting page...", query, ctx.onUndeleteSuccess, ctx.statusElement, fnProcessUndeleteError);
+		ctx.undeleteProcessApi.setParent(this);
+		ctx.undeleteProcessApi.post();
+	};
+
+	// callback from undeleteProcessApi.post()
+	var fnProcessUndeleteError = function() {
+
+		var errorCode = ctx.undeleteProcessApi.getErrorCode();
+
+		// check for "Database query error"
+		if ( errorCode === "internal_api_error_DBQueryError" && ctx.retries++ < ctx.maxRetries ) {
+			ctx.statusElement.info("Database query error, retrying");
+			--Morebits.wiki.numberOfActionsLeft;  // allow for normal completion if retry succeeds
+			ctx.undeleteProcessApi.post(); // give it another go!
+		} else if ( errorCode === "badtoken" ) {
+			// this is pathetic, but given the current state of Morebits.wiki.page it would
+			// be a dog's breakfast to try and fix this
+			ctx.statusElement.error("Invalid token. Please refresh the page and try again.");
+			if (ctx.onUndeleteFailure) {
+				ctx.onUndeleteFailure.call(this, this, ctx.undeleteProcessApi);
+			}
+		} else if ( errorCode === "cantundelete" ) {
+			ctx.statusElement.error("Cannot undelete the page, either because there are no revisions to undelete or because it has already been undeleted");
+			if (ctx.onUndeleteFailure) {
+				ctx.onUndeleteFailure.call(this, ctx.undeleteProcessApi);  // invoke callback
+			}
+		// hard error, give up
+		} else {
+			ctx.statusElement.error( "Failed to undelete the page: " + ctx.undeleteProcessApi.getErrorText() );
+			if (ctx.onUndeleteFailure) {
+				ctx.onUndeleteFailure.call(this, ctx.undeleteProcessApi);  // invoke callback
 			}
 		}
 	};
@@ -3704,7 +3724,7 @@ Morebits.checkboxShiftClickSupport = function (jQuerySelector, jQueryContext) {
  * |pageName| property on the Morebits.wiki.api object.
  *
  * There are sample batchOperation implementations using Morebits.wiki.page in
- * twinklebatchdelete.js, and using Morebits.wiki.api in twinklebatchundelete.js.
+ * twinklebatchdelete.js, twinklebatchundelete.js, and twinklebatchprotect.js.
  */
 
 /**

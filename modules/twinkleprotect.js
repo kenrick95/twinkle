@@ -123,9 +123,10 @@ Twinkle.protect.fetchProtectingAdmin = function twinkleprotectFetchProtectingAdm
 	});
 };
 
-// wgFlaggedRevsParams contains an object, tags.  If flagged_revisions is enabled,
-// it will be populated with things like accuracy, depth, or tone.  With enwiki's
-// Pending Changes, it exists but is empty.  If flaggedrevs is not enabled, it will not exist.
+// mw.loader.getState('ext.flaggedRevs.review') returns null if the
+// FlaggedRevs extension is not registered.  Previously, this was done with
+// wgFlaggedRevsParams, but after 1.34-wmf4 it is no longer exported if empty
+// (https://gerrit.wikimedia.org/r/c/mediawiki/extensions/FlaggedRevs/+/508427)
 Twinkle.protect.fetchProtectionLevel = function twinkleprotectFetchProtectionLevel() {
 
 	var api = new mw.Api();
@@ -136,7 +137,7 @@ Twinkle.protect.fetchProtectionLevel = function twinkleprotectFetchProtectionLev
 		list: 'logevents',
 		letype: 'protect',
 		letitle: mw.config.get('wgPageName'),
-		prop: (mw.config.exists('wgFlaggedRevsParams') ? 'info|flagged' : 'info'),
+		prop: (mw.loader.getState('ext.flaggedRevs.review') ? 'info|flagged' : 'info'),
 		inprop: 'protection',
 		titles: mw.config.get('wgPageName')
 	});
@@ -149,7 +150,7 @@ Twinkle.protect.fetchProtectionLevel = function twinkleprotectFetchProtectionLev
 	});
 
 	var earlyDecision = [protectDeferred];
-	if (mw.config.exists('wgFlaggedRevsParams')) {
+	if (mw.loader.getState('ext.flaggedRevs.review')) {
 		earlyDecision.push(stableDeferred);
 	}
 
@@ -189,7 +190,7 @@ Twinkle.protect.fetchProtectionLevel = function twinkleprotectFetchProtectionLev
 
 		// show the protection level and log info
 		Twinkle.protect.hasProtectLog = !!protectData[0].query.logevents.length;
-		Twinkle.protect.hasStableLog = mw.config.exists('wgFlaggedRevsParams') ? !!stableData[0].query.logevents.length : false;
+		Twinkle.protect.hasStableLog = mw.loader.getState('ext.flaggedRevs.review') ? !!stableData[0].query.logevents.length : false;
 		Twinkle.protect.currentProtectionLevels = current;
 
 		if (adminEditDeferred) {
@@ -438,7 +439,7 @@ Twinkle.protect.callback.changeAction = function twinkleprotectCallbackChangeAct
 							{ label: 'Lain-lain...', value: 'custom' }
 						]
 					});
-				if (mw.config.exists('wgFlaggedRevsParams')) {
+				if (mw.loader.getState('ext.flaggedRevs.review')) {
 					field2.append({
 							type: 'checkbox',
 							name: 'pcmodify',

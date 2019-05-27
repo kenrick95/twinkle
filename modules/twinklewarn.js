@@ -119,655 +119,663 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 //   summary (required): The edit summary used. If an article name is entered, the summary is postfixed with "on [[article]]", and it is always postfixed with ". $summaryAd"
 //   suppressArticleInSummary (optional): Set to true to suppress showing the article name in the edit summary. Useful if the warning relates to attack pages, or some such.
 Twinkle.warn.messages = {
-	level1: {
+	levels: {
 		"Peringatan umum": {
-			"uw-vandalism1": {
-				label: "Vandalisme",
-				summary: "Catatan: Suntingan merusak"
+			"uw-vandalism": {
+				level1: {
+					label: "Vandalisme",
+					summary: "Catatan: Suntingan tidak membangun"
+				},
+				level2: {
+					label: "Vandalisme",
+					summary: "Pemberitahuan: Suntingan merusak"
+				},
+				level3: {
+					label: "Vandalisme",
+					summary: "Pengatan: Vandalisme"
+				},
+				level4: {
+					label: "Vandalisme",
+					summary: "Pengatan terakhir: Vandalisme"
+				},
+				level4im: {
+					label: "Vandalisme",
+					summary: "Hanya peringatna: Vandalisme"
+				}
 			},
-			"uw-disruptive1": {
-				label: "Suntingan tidak membangun",
-				summary: "Catatan: Suntingan tidak membangun"
+			"uw-disruptive": {
+				level1: {
+					label: "Suntingan tidak membangun",
+					summary: "Catatan: Suntingan tidak membangun"
+				},
+				level2: {
+					label: "Suntingan tidak membangun",
+					summary: "Pemberitahuan: Suntingan tidak membangun"
+				},
+				level3: {
+					label: "Suntingan tidak membangun",
+					summary: "Peringatan: Suntingan tidak membangun"
+				}
 			},
-			"uw-test1": {
-				label: "Suntingan uji coba",
-				summary: "Catatan: Suntingan uji coba"
+			"uw-test": {
+				level1: {
+					label: "Suntingan uji coba",
+					summary: "Catatan: Suntingan uji coba"
+				},
+				level2: {
+					label: "Suntingan uji coba",
+					summary: "Pemberitahuan: Suntingan uji coba"
+				},
+				level3: {
+					label: "Suntingan uji coba",
+					summary: "Peringatan: Suntingan uji coba"
+				}
 			},
-			"uw-delete1": {
-				label: "Menghapus konten, mengosongkan halaman",
-				summary: "Catatan: Penghapusan konten, pengosongan halaman"
-			}
+			"uw-delete": {
+				level1: {
+					label: "Menghapus konten, mengosongkan halaman",
+					summary: "Catatan: Menghapus konten, mengosongkan halaman"
+				},
+				level2: {
+					label: "Menghapus konten, mengosongkan halaman",
+					summary: "Pemberitahuan: Menghapus konten, mengosongkan halaman"
+				},
+				level3: {
+					label: "Menghapus konten, mengosongkan halaman",
+					summary: "Peringatan: Menghapus konten, mengosongkan halaman"
+				},
+				level4: {
+					label: "Menghapus konten, mengosongkan halaman",
+					summary: "Peringatan terakhir: Menghapus konten, mengosongkan halaman"
+				},
+				level4im: {
+					label: "Menghapus konten, mengosongkan halaman",
+					summary: "Sekadar peringatan: Menghapus konten, mengosongkan halaman"
+				}
+			},
+			"uw-generic": {
+				level4: {
+					label: "Peringatan umum (untuk templat yang tidak ada di tingkat 4)",
+					summary: "Pemberitahuan peringatan terakhir"
+				}
+			},
 		},
 		"Perilaku dalam artikel": {
-			"uw-biog1": {
-				label: "Menambahkan informasi kontroversial tanpa rujukan tentang orang yang masih hidup",
-				summary: "Catatan: Penambahan informasi kontroversial tanpa rujukan tentang orang yang masih hidup"
+			"uw-biog": {
+				level1: {
+					label: "Menambahkan informasi kontroversial tanpa rujukan tentang orang yang masih hidup",
+					summary: "Catatan: Menambahkan informasi kontroversial tanpa rujukan tentang orang yang masih hidup"
+				},
+				level2: {
+					label: "Menambahkan informasi kontroversial tanpa rujukan tentang orang yang masih hidup",
+					summary: "Pemberitahuan: Menambahkan informasi kontroversial tanpa rujukan tentang orang yang masih hidup"
+				},
+				level3: {
+					label: "Menambahkan informasi fitnah/kontroversial tanpa rujukan tentang orang yang masih hidup",
+					summary: "Peringatan: Menambahkan informasi kontroversial tanpa rujukan tentang orang yang masih hidup"
+				},
+				level4: {
+					label: "Menambahkan informasi fitnah tanpa rujukan tentang orang yang masih hidup",
+					summary: "Peringatan terakhir: Menambahkan informasi kontroversial tanpa rujukan tentang orang yang masih hidup"
+				},
+				level4im: {
+					label: "Menambahkan informasi fitnah tanpa rujukan tentang orang yang masih hidup",
+					summary: "Sekadar peringatan: Menambahkan informasi kontroversial tanpa rujukan tentang orang yang masih hidup"
+				}
 			},
-			"uw-defamatory1": {
-				label: "Menambahkan konten yang memfitnah",
-				summary: "Catatan: Penambahan konten yang memfitnah"
+			"uw-defamatory": {
+				level1: {
+					label: "Menambahkan konten yang memfitnah",
+					summary: "Catatan: Menambahkan konten yang memfitnah"
+				},
+				level2: {
+					label: "Menambahkan konten yang memfitnah",
+					summary: "Pemberitahuan: Menambahkan konten yang memfitnah"
+				},
+				level3: {
+					label: "Menambahkan konten yang memfitnah",
+					summary: "Peringatan: Menambahkan konten yang memfitnah"
+				},
+				level4: {
+					label: "Menambahkan konten yang memfitnah",
+					summary: "Peringatan terakhir: Menambahkan konten yang memfitnah"
+				},
+				level4im: {
+					label: "Menambahkan konten yang memfitnah",
+					summary: "Sekadar peringatan: Menambahkan konten yang memfitnah"
+				}
 			},
-			"uw-error1": {
-				label: "Menambahkan kesalahan faktual secara sengaja",
-				summary: "Catatan: Penambahan kesalahan faktual secara sengaja"
+			"uw-error": {
+				level1: {
+					label: "Menambahkan kesalahan faktual secara sengaja",
+					summary: "Catatan: Penambahan kesalahan faktual secara sengaja"
+				},
+				level2: {
+					label: "Menambahkan kesalahan faktual secara sengaja",
+					summary: "Pemberitahuan: Penambahan kesalahan faktual secara sengaja"
+				},
+				level3: {
+					label: "Menambahkan kesalahan faktual secara sengaja",
+					summary: "Peringatan: Menambahkan kesalahan faktual secara sengaja"
+				},
+				level4: {
+					label: "Menambahkan kesalahan faktual secara sengaja",
+					summary: "Peringatan terakhir: Menambahkan kesalahan faktual secara sengaja"
+				}
 			},
-			"uw-genre1": {
-				label: "Mengubah secara massal atau sering tanpa konsensus atau rujukan",
-				summary: "Catatan: Pengubahan secara massal atau sering tanpa konsensus atau rujukan"
+			"uw-genre": {
+				level1: {
+					label: "Mengubah secara massal atau sering tanpa konsensus atau rujukan",
+					summary: "Catatan: Mengubah secara massal atau sering tanpa konsensus atau rujukan"
+				},
+				level2: {
+					label: "Mengubah secara massal atau sering tanpa konsensus atau rujukan",
+					summary: "Pemberitahuan: Mengubah secara massal atau sering tanpa konsensus atau rujukan"
+				},
+				level3: {
+					label: "Mengubah secara massal atau sering tanpa konsensus atau rujukan",
+					summary: "Peringatan: Mengubah secara massal atau sering tanpa konsensus atau rujukan"
+				},
+				level4: {
+					label: "Mengubah secara massal atau sering tanpa konsensus atau rujukan",
+					summary: "Peringatan terakhir: Mengubah secara massal atau sering tanpa konsensus atau rujukan"
+				}
 			},
-			"uw-image1": {
-				label: "Vandalisme terkait berkas dalam artikel",
-				summary: "Catatan: Vandalisme terkait berkas dalam artikel"
+			"uw-image": {
+				level1: {
+					label: "Vandalisme terkait berkas dalam artikel",
+					summary: "Catatan: Vandalisme terkait berkas dalam artikel"
+				},
+				level2: {
+					label: "Vandalisme terkait berkas dalam artikel",
+					summary: "Pemberitahuan: Vandalisme terkait berkas dalam artikel"
+				},
+				level3: {
+					label: "Vandalisme terkait berkas dalam artikel",
+					summary: "Peringatan: Vandalisme terkait berkas dalam artikel"
+				},
+				level4: {
+					label: "Vandalisme terkait berkas dalam artikel",
+					summary: "Peringatan terakhir: Vandalisme terkait berkas dalam artikel"
+				},
+				level4im: {
+					label: "Vandalisme terkait berkas",
+					summary: "Sekadar peringatan: Vandalisme terkait berkas"
+				}
 			},
-			"uw-joke1": {
-				label: "Menggunakan lelucon yang tidak pantas dalam artikel",
-				summary: "Catatan: Penggunaan lelucon yang tidak pantas dalam artikel"
+			"uw-joke": {
+				level1: {
+					label: "Menggunakan lelucon yang tidak pantas dalam artikel",
+					summary: "Catatan: Menggunakan lelucon yang tidak pantas dalam artikel"
+				},
+				level2: {
+					label: "Menggunakan lelucon yang tidak pantas dalam artikel",
+					summary: "Pemberitahuan: Menggunakan lelucon yang tidak pantas dalam artikel"
+				},
+				level3: {
+					label: "Menggunakan lelucon yang tidak pantas dalam artikel",
+					summary: "Peringatan: Menggunakan lelucon yang tidak pantas dalam artikel"
+				},
+				level4: {
+					label: "Menggunakan lelucon yang tidak pantas dalam artikel",
+					summary: "Peringatan terakhir: Menggunakan lelucon yang tidak pantas dalam artikel"
+				},
+				level4im: {
+					label: "Menggunakan lelucon yang tidak pantas",
+					summary: "Sekadar peringatan: Menggunakan lelucon yang tidak pantas"
+				}
 			},
-			"uw-nor1": {
-				label: "Menambahkan riset asli, misalnya kumpulan rujukan yang belum dipublikasikan",
-				summary: "Catatan: Penambahan riset asli, misalnya kumpulan rujukan yang belum dipublikasikan"
+			"uw-nor": {
+				level1: {
+					label: "Menambahkan riset asli, misalnya kumpulan rujukan yang belum dipublikasikan",
+					summary: "Catatan: Menambahkan riset asli, misalnya kumpulan rujukan yang belum dipublikasikan"
+				},
+				level2: {
+					label: "Menambahkan riset asli, misalnya kumpulan rujukan yang belum dipublikasikan",
+					summary: "Pemberitahuan: Menambahkan riset asli, misalnya kumpulan rujukan yang belum dipublikasikan"
+				},
+				level3: {
+					label: "Menambahkan riset asli, misalnya kumpulan rujukan yang belum dipublikasikan",
+					summary: "Peringatan: Menambahkan riset asli, misalnya kumpulan rujukan yang belum dipublikasikan"
+				},
+				level4: {
+					label: "Menambahkan riset asli, misalnya kumpulan rujukan yang belum dipublikasikan",
+					summary: "Peringatan terakhir: Menambahkan riset asli, misalnya kumpulan rujukan yang belum dipublikasikan"
+				}
 			},
-			"uw-notcensored1": {
-				label: "Menyensor materi",
-				summary: "Catatan: Penyensoran materi"
+			"uw-notcensored": {
+				level1: {
+					label: "Menyensor materi",
+					summary: "Catatan: Menyensor materi"
+				},
+				level2: {
+					label: "Menyensor materi",
+					summary: "Pemberitahuan: Menyensor materi"
+				},
+				level3: {
+					label: "Menyensor materi",
+					summary: "Peringatan: Menyensor materi"
+				}
 			},
-			"uw-own1": {
-				label: "Mengklaim kepemilikan artikel",
-				summary: "Catatan: Klaim kepemilikan artikel"
+			"uw-own": {
+				level1: {
+					label: "Mengklaim kepemilikan artikel",
+					summary: "Catatan: Mengklaim kepemilikan artikel"
+				},
+				level2: {
+					label: "Mengklaim kepemilikan artikel",
+					summary: "Pemberitahuan: Mengklaim kepemilikan artikel"
+				},
+				level3: {
+					label: "Mengklaim kepemilikan artikel",
+					summary: "Peringatan: Mengklaim kepemilikan artikel"
+				},
+				level4im: {
+					label: "Mengklaim kepemilikan artikel",
+					summary: "Sekadar peringatan: Mengklaim kepemilikan artikel"
+				}
 			},
-			"uw-tdel1": {
-				label: "Menghapus templat pemeliharaan",
-				summary: "Catatan: Penghapusan templat pemeliharaan"
+			"uw-tdel": {
+				level1: {
+					label: "Menghapus templat pemeliharaan",
+					summary: "Catatan: Menghapus templat pemeliharaan"
+				},
+				level2: {
+					label: "Menghapus templat pemeliharaan",
+					summary: "Pemberitahuan: Menghapus templat pemeliharaan"
+				},
+				level3: {
+					label: "Menghapus templat pemeliharaan",
+					summary: "Peringatan: Menghapus templat pemeliharaan"
+				},
+				level4: {
+					label: "Menghapus templat pemeliharaan",
+					summary: "Peringatan terakhir: Menghapus templat pemeliharaan"
+				}
 			},
-			"uw-unsourced1": {
-				label: "Menambahkan materi tanpa dikutip dengan semestinya atau tanpa rujukan",
-				summary: "Catatan: Penambahan materi tanpa dikutip dengan semestinya atau tanpa rujukan"
-			}
+			"uw-unsourced": {
+				level1: {
+					label: "Menambahkan materi tanpa dikutip dengan semestinya atau tanpa rujukan",
+					summary: "Catatan: Menambahkan materi tanpa dikutip dengan semestinya atau tanpa rujukan"
+				},
+				level2: {
+					label: "Menambahkan materi tanpa dikutip dengan semestinya atau tanpa rujukan",
+					summary: "Pemberitahuan: Menambahkan materi tanpa dikutip dengan semestinya atau tanpa rujukan"
+				},
+				level3: {
+					label: "Menambahkan materi tanpa dikutip dengan semestinya atau tanpa rujukan",
+					summary: "Peringatan: Menambahkan materi tanpa dikutip dengan semestinya atau tanpa rujukan"
+				},
+				level4: {
+					label: "Menambahkan materi tanpa dikutip dengan semestinya atau tanpa rujukan",
+					summary: "Peringatan terakhir: Menambahkan materi tanpa dikutip dengan semestinya atau tanpa rujukan"
+				}
+			},
 		},
-		"Promosi dan spam": {
-			"uw-advert1": {
-				label: "Menggunakan Wikipedia untuk beriklan atau promosi",
-				summary: "Catatan: Penggunaan Wikipedia untuk beriklan atau promosi"
+		"Promotions and spam": {
+			"uw-advert": {
+				level1: {
+					label: "Menggunakan Wikipedia untuk beriklan atau promosi",
+					summary: "Catatan: Menggunakan Wikipedia untuk beriklan atau promosi"
+				},
+				level2: {
+					label: "Menggunakan Wikipedia untuk beriklan atau promosi",
+					summary: "Pemberitahuan: Menggunakan Wikipedia untuk beriklan atau promosi"
+				},
+				level3: {
+					label: "Menggunakan Wikipedia untuk beriklan atau promosi",
+					summary: "Peringatan: Menggunakan Wikipedia untuk beriklan atau promosi"
+				},
+				level4: {
+					label: "Menggunakan Wikipedia untuk beriklan atau promosi",
+					summary: "Peringatan terakhir: Menggunakan Wikipedia untuk beriklan atau promosi"
+				},
+				level4im: {
+					label: "Menggunakan Wikipedia untuk beriklan atau promosi",
+					summary: "Sekadar peringatan: Menggunakan Wikipedia untuk beriklan atau promosi"
+				}
 			},
-			"uw-npov1": {
-				label: "Tidak berpegang pada sudut pandang netral",
-				summary: "Catatan: Tidak berpegang pada sudut pandang netral"
+			"uw-npov": {
+				level1: {
+					label: "Tidak berpegang pada sudut pandang netral",
+					summary: "Catatan: Tidak berpegang pada sudut pandang netral"
+				},
+				level2: {
+					label: "Tidak berpegang pada sudut pandang netral",
+					summary: "Pemberitahuan: Tidak berpegang pada sudut pandang netral"
+				},
+				level3: {
+					label: "Tidak berpegang pada sudut pandang netral",
+					summary: "Peringatan: Tidak berpegang pada sudut pandang netral"
+				},
+				level4: {
+					label: "Tidak berpegang pada sudut pandang netral",
+					summary: "Peringatan terakhir: Tidak berpegang pada sudut pandang netral"
+				}
 			},
-			"uw-paid1": {
-				label: "Paid editing without disclosure under the Wikimedia Terms of Use",
-				summary: "General note: Paid editing without disclosure under the Wikimedia Terms of Use"
+			"uw-paid": {
+				level1: {
+					label: "Suntingan berbayar tanpa penyingkapan di bawah Ketentuan Pengunaan Wikimedia",
+					summary: "Catatan: Suntingan berbayar tanpa penyingkapan di bawah Ketentuan Pengunaan Wikimedia"
+				},
+				level2: {
+					label: "Suntingan berbayar tanpa penyingkapan di bawah Ketentuan Pengunaan Wikimedia",
+					summary: "Pemberitahuan: Suntingan berbayar tanpa penyingkapan di bawah Ketentuan Pengunaan Wikimedia"
+				},
+				level3: {
+					label: "Suntingan berbayar tanpa penyingkapan di bawah Ketentuan Pengunaan Wikimedia",
+					summary: "Peringatan: Suntingan berbayar tanpa penyingkapan di bawah Ketentuan Pengunaan Wikimedia"
+				},
+				level4: {
+					label: "Suntingan berbayar tanpa penyingkapan di bawah Ketentuan Pengunaan Wikimedia",
+					summary: "Peringatan terakhir: Suntingan berbayar tanpa penyingkapan di bawah Ketentuan Pengunaan Wikimedia"
+				}
 			},
-			"uw-spam1": {
-				label: "Menambahkan pranala spam",
-				summary: "Catatan: Penambahan pranala spam"
-			}
+			"uw-spam": {
+				level1: {
+					label: "Menambahkan pranala luar yang tak pantas",
+					summary: "Catatan: Menambahkan pranala luar yang tak pantas"
+				},
+				level2: {
+					label: "Menambahkan pranala luar spam",
+					summary: "Pemberitahuan: Menambahkan pranala luar spam"
+				},
+				level3: {
+					label: "Menambahkan pranala luar spam",
+					summary: "Peringatan: Menambahkan pranala luar spam"
+				},
+				level4: {
+					label: "Menambahkan pranala luar spam",
+					summary: "Peringatan terakhir: Menambahkan pranala luar spam"
+				},
+				level4im: {
+					label: "Menambahkan pranala luar spam",
+					summary: "Sekadar peringatan: Menambahkan pranala luar spam"
+				}
+			},
 		},
 		"Perilaku terhadap pengguna lain": {
-			"uw-agf1": {
-				label: "Tidak mengasumsikan niat baik",
-				summary: "Catatan: Tidak mengasumsikan niat baik"
+			"uw-agf": {
+				level1: {
+					label: "Not assuming good faith",
+					summary: "Catatan: Not assuming good faith"
+				},
+				level2: {
+					label: "Not assuming good faith",
+					summary: "Pemberitahuan: Not assuming good faith"
+				},
+				level3: {
+					label: "Not assuming good faith",
+					summary: "Peringatan: Not assuming good faith"
+				}
 			},
-			"uw-harass1": {
-				label: "Melecehkan pengguna lain",
-				summary: "Catatan: Pelecehan terhadap pengguna lain"
+			"uw-harass": {
+				level1: {
+					label: "Harassment of other users",
+					summary: "Catatan: Harassment of other users"
+				},
+				level2: {
+					label: "Harassment of other users",
+					summary: "Pemberitahuan: Harassment of other users"
+				},
+				level3: {
+					label: "Harassment of other users",
+					summary: "Peringatan: Harassment of other users"
+				},
+				level4: {
+					label: "Harassment of other users",
+					summary: "Peringatan terakhir: Harassment of other users"
+				},
+				level4im: {
+					label: "Harassment of other users",
+					summary: "Sekadar peringatan: Harassment of other users"
+				}
 			},
-			"uw-npa1": {
-				label: "Serangan pribadi terhadap pengguna tertentu",
-				summary: "Catatan: Serangan pribadi terhadap pengguna tertentu"
+			"uw-npa": {
+				level1: {
+					label: "Personal attack directed at a specific editor",
+					summary: "Catatan: Personal attack directed at a specific editor"
+				},
+				level2: {
+					label: "Personal attack directed at a specific editor",
+					summary: "Pemberitahuan: Personal attack directed at a specific editor"
+				},
+				level3: {
+					label: "Personal attack directed at a specific editor",
+					summary: "Peringatan: Personal attack directed at a specific editor"
+				},
+				level4: {
+					label: "Personal attack directed at a specific editor",
+					summary: "Peringatan terakhir: Personal attack directed at a specific editor"
+				},
+				level4im: {
+					label: "Personal attack directed at a specific editor",
+					summary: "Sekadar peringatan: Personal attack directed at a specific editor"
+				}
 			},
-			"uw-tempabuse1": {
-				label: "Menyalahgunakan templat pemblokiran atau peringatan",
-				summary: "Catatan: Penyalahgunaan templat pemblokiran atau peringatan"
-			}
+			"uw-tempabuse": {
+				level1: {
+					label: "Improper use of warning or blocking template",
+					summary: "Catatan: Improper use of warning or blocking template"
+				},
+				level2: {
+					label: "Improper use of warning or blocking template",
+					summary: "Pemberitahuan: Improper use of warning or blocking template"
+				}
+			},
 		},
 		"Penghilangan tag penghapusan": {
-			"uw-afd1": {
-				label: "Menghilangkan templat {{Afd}}",
-				summary: "Catatan: Penghilangan templat {{Afd}}"
+			"uw-afd": {
+				level1: {
+					label: "Menghilangkan templat {{Afd}}",
+					summary: "Catatan: Menghilangkan templat {{Afd}}"
+				},
+				level2: {
+					label: "Menghilangkan templat {{Afd}}",
+					summary: "Pemberitahuan: Menghilangkan templat {{Afd}}"
+				},
+				level3: {
+					label: "Menghilangkan templat {{Afd}}",
+					summary: "Peringatan: Menghilangkan templat {{Afd}}"
+				},
+				level4: {
+					label: "Menghilangkan templat {{Afd}}",
+					summary: "Peringatan terakhir: Menghilangkan templat {{Afd}}"
+				}
 			},
-			"uw-blpprod1": {
-				label: "Menghilangkan templat {{Prod blp}}",
-				summary: "Catatan: Penghilangan templat {{Prod blp}}"
+			"uw-blpprod": {
+				level1: {
+					label: "Menghilangkan templat {{Prod blp}}",
+					summary: "Catatan: Menghilangkan templat {{Prod blp}}"
+				},
+				level2: {
+					label: "Menghilangkan templat {{Prod blp}}",
+					summary: "Pemberitahuan: Menghilangkan templat {{Prod blp}}"
+				},
+				level3: {
+					label: "Menghilangkan templat {{Prod blp}}",
+					summary: "Peringatan: Menghilangkan templat {{Prod blp}}"
+				},
+				level4: {
+					label: "Menghilangkan templat {{Prod blp}}",
+					summary: "Peringatan terakhir: Menghilangkan templat {{Prod blp}}"
+				}
 			},
-			"uw-idt1": {
-				label: "Menghilangkan tag penghapusan berkas",
-				summary: "Catatan: Penghilangan tag penghapusan berkas"
+			"uw-idt": {
+				level1: {
+					label: "Menghilangkan tag penghapusan berkas",
+					summary: "Catatan: Menghilangkan tag penghapusan berkas"
+				},
+				level2: {
+					label: "Menghilangkan tag penghapusan berkas",
+					summary: "Pemberitahuan: Menghilangkan tag penghapusan berkas"
+				},
+				level3: {
+					label: "Menghilangkan tag penghapusan berkas",
+					summary: "Peringatan: Menghilangkan tag penghapusan berkas"
+				},
+				level4: {
+					label: "Menghilangkan tag penghapusan berkas",
+					summary: "Peringatan terakhir: Menghilangkan tag penghapusan berkas"
+				}
 			},
-			"uw-speedy1": {
-				label: "Menghilangkan tag penghapusan cepat",
-				summary: "Catatan: Penghilangan tag penghapusan cepat"
-			}
+			"uw-speedy": {
+				level1: {
+					label: "Menghilangkan tag penghapusan cepat",
+					summary: "Catatan: Menghilangkan tag penghapusan cepat"
+				},
+				level2: {
+					label: "Menghilangkan tag penghapusan cepat",
+					summary: "Pemberitahuan: Menghilangkan tag penghapusan cepat"
+				},
+				level3: {
+					label: "Menghilangkan tag penghapusan cepat",
+					summary: "Peringatan: Menghilangkan tag penghapusan cepat"
+				},
+				level4: {
+					label: "Menghilangkan tag penghapusan cepat",
+					summary: "Peringatan terakhir: Menghilangkan tag penghapusan cepat"
+				}
+			},
 		},
 		"Lain-lain": {
-			"uw-attempt1": {
-				label: "Memicu filter penyuntingan",
-				summary: "Catatan: Memicu filter penyuntingan"
-			},
-			"uw-chat1": {
-				label: "Menggunakan halaman pembicaraan sebagai forum",
-				summary: "Catatan: Penggunaan halaman pembicaraan sebagai forum"
-			},
-			"uw-create1": {
-				label: "Membuat halaman yang tidak pantas",
-				summary: "Catatan: Pembuatan halaman yang tidak pantas"
-			},
-			"uw-mos1": {
-				label: "Pedoman gaya",
-				summary: "Catatan: Format, tanggal, bahasa, dll. (Pedoman gaya)"
-			},
-			"uw-move1": {
-				label: "Memindahkan halaman bertentangan dengan konvensi penamaan atau konsensus",
-				summary: "Catatan: Pemindahan halaman bertentangan dengan konvensi penamaan atau konsensus"
-			},
-			"uw-tpv1": {
-				label: "Menyunting komentar pengguna lain di halaman pembicaraan",
-				summary: "Catatan: Penyuntingan komentar pengguna lain di halaman pembicaraan"
-			},
-			"uw-upload1": {
-				label: "Menggunggah berkas nonensiklopedis",
-				summary: "Catatan: Pengunggahan berkas nonensiklopedis"
-			}
-		}
-	},
-
-
-	level2: {
-		"Peringatan umum": {
-			"uw-vandalism2": {
-				label: "Vandalisme",
-				summary: "Pemberitahuan: Suntingan merusak"
-			},
-			"uw-disruptive2": {
-				label: "Suntingan tidak membangun",
-				summary: "Pemberitahuan: Suntingan tidak membangun"
-			},
-			"uw-test2": {
-				label: "Suntingan uji coba",
-				summary: "Pemberitahuan: Suntingan uji coba"
-			},
-			"uw-delete2": {
-				label: "Menghapus konten, mengosongkan halaman",
-				summary: "Pemberitahuan: Penghapusan konten, pengosongan halaman"
-			}
-		},
-		"Perilaku dalam artikel": {
-			"uw-biog2": {
-				label: "Menambahkan informasi kontroversial tanpa rujukan tentang orang yang masih hidup",
-				summary: "Pemberitahuan: Menambahkan informasi kontroversial tanpa rujukan tentang orang yang masih hidup"
-			},
-			"uw-defamatory2": {
-				label: "Menambahkan konten yang memfitnah",
-				summary: "Pemberitahuan: Penambahan konten yang memfitnah"
-			},
-			"uw-error2": {
-				label: "Menambahkan kesalahan faktual secara sengaja",
-				summary: "Pemberitahuan: Penambahan kesalahan faktual secara sengaja"
-			},
-			"uw-genre2": {
-				label: "Mengubah secara massal atau sering tanpa konsensus atau rujukan",
-				summary: "Pemberitahuan: Pengubahan secara massal atau sering tanpa konsensus atau rujukan"
-			},
-			"uw-image2": {
-				label: "Vandalisme terkait berkas dalam artikel",
-				summary: "Pemberitahuan: Vandalisme terkait berkas dalam artikel"
-			},
-			"uw-joke2": {
-				label: "Menggunakan lelucon yang tidak pantas dalam artikel",
-				summary: "Pemberitahuan: Penggunaan lelucon yang tidak pantas dalam artikel"
-			},
-			"uw-nor2": {
-				label: "Menambahkan riset asli, misalnya kumpulan rujukan yang belum dipublikasikan",
-				summary: "Pemberitahuan: Penambahan riset asli, misalnya kumpulan rujukan yang belum dipublikasikan"
-			},
-			"uw-notcensored2": {
-				label: "Menyensor materi",
-				summary: "Pemberitahuan: Penyensoran materi"
-			},
-			"uw-own2": {
-				label: "Mengklaim kepemilikan artikel",
-				summary: "Pemberitahuan: Klaim kepemilikan artikel"
-			},
-			"uw-tdel2": {
-				label: "Menghapus templat pemeliharaan",
-				summary: "Pemberitahuan: Penghapusan templat pemeliharaan"
-			},
-			"uw-unsourced2": {
-				label: "Menambahkan materi tanpa dikutip dengan semestinya atau tanpa rujukan",
-				summary: "Pemberitahuan: Penambahan materi tanpa dikutip dengan semestinya atau tanpa rujukan"
-			}
-		},
-		"Promosi dan spam": {
-			"uw-advert2": {
-				label: "Menggunakan Wikipedia untuk beriklan atau promosi",
-				summary: "Pemberitahuan: Penggunaan Wikipedia untuk beriklan atau promosi"
-			},
-			"uw-npov2": {
-				label: "Tidak berpegang pada sudut pandang netral",
-				summary: "Pemberitahuan: Tidak berpegang pada sudut pandang netral"
-			},
-			"uw-paid2": {
-				label: "Paid editing without disclosure under the Wikimedia Terms of Use",
-				summary: "Caution: Paid editing without disclosure under the Wikimedia Terms of Use"
-			},
-			"uw-spam2": {
-				label: "Menambahkan pranala spam",
-				summary: "Pemberitahuan: Penambahan pranala spam"
-			}
-		},
-		"Perilaku terhadap pengguna lain": {
-			"uw-agf2": {
-				label: "Tidak mengasumsikan niat baik",
-				summary: "Pemberitahuan: Tidak mengasumsikan niat baik"
-			},
-			"uw-harass2": {
-				label: "Melecehkan pengguna lain",
-				summary: "Pemberitahuan: Pelecehan terhadap pengguna lain"
-			},
-			"uw-npa2": {
-				label: "Serangan pribadi terhadap pengguna tertentu",
-				summary: "Pemberitahuan: Serangan pribadi terhadap pengguna tertentu"
-			},
-			"uw-tempabuse2": {
-				label: "Menyalahgunakan templat pemblokiran atau peringatan",
-				summary: "Pemberitahuan: Penyalahgunaan templat pemblokiran atau peringatan"
-			}
-		},
-		"Penghilangan tag penghapusan": {
-			"uw-afd2": {
-				label: "Menghilangkan templat {{Afd}}",
-				summary: "Pemberitahuan: Penghilangan templat {{Afd}}"
-			},
-			"uw-blpprod2": {
-				label: "Menghilangkan templat {{Prod blp}}",
-				summary: "Pemberitahuan: Penghilangan templat {{Prod blp}}"
-			},
-			"uw-idt2": {
-				label: "Menghilangkan tag penghapusan berkas",
-				summary: "Pemberitahuan: Penghilangan tag penghapusan berkas"
-			},
-			"uw-speedy2": {
-				label: "Menghilangkan tag penghapusan cepat",
-				summary: "Pemberitahuan: Penghilangan tag penghapusan cepat"
-			}
-		},
-		"Lain-lain": {
-			"uw-attempt2": {
-				label: "Memicu filter penyuntingan",
-				summary: "Pemberitahuan: Memicu filter penyuntingan"
-			},
-			"uw-chat2": {
-				label: "Menggunakan halaman pembicaraan sebagai forum",
-				summary: "Pemberitahuan: Penggunaan halaman pembicaraan sebagai forum"
-			},
-			"uw-create2": {
-				label: "Membuat halaman yang tidak pantas",
-				summary: "Pemberitahuan: Pembuatan halaman yang tidak pantas"
-			},
-			"uw-mos2": {
-				label: "Pedoman gaya",
-				summary: "Pemberitahuan: Format, tanggal, bahasa, dll. (Pedoman gaya)"
-			},
-			"uw-move2": {
-				label: "Memindahkan halaman bertentangan dengan konvensi penamaan atau konsensus",
-				summary: "Pemberitahuan: Pemindahan halaman bertentangan dengan konvensi penamaan atau konsensus"
-			},
-			"uw-tpv2": {
-				label: "Menyunting komentar pengguna lain di halaman pembicaraan",
-				summary: "Pemberitahuan: Penyuntingan komentar pengguna lain di halaman pembicaraan"
-			},
-			"uw-upload2": {
-				label: "Menggunggah berkas nonensiklopedis",
-				summary: "Pemberitahuan: Pengunggahan berkas nonensiklopedis"
-			}
-		}
-	},
-
-
-	level3: {
-		"Peringatan umum": {
-			"uw-vandalism3": {
-				label: "Vandalisme",
-				summary: "Peringatan: Vandalisme"
-			},
-			"uw-disruptive3": {
-				label: "Suntingan tidak membangun",
-				summary: "Peringatan: Suntingan tidak membangun"
-			},
-			"uw-test3": {
-				label: "Suntingan uji coba",
-				summary: "Peringatan: Suntingan uji coba"
-			},
-			"uw-delete3": {
-				label: "Menghapus konten, mengosongkan halaman",
-				summary: "Peringatan: Penghapusan konten, pengosongan halaman"
-			}
-		},
-		"Perilaku dalam artikel": {
-			"uw-biog3": {
-				label: "Menambahkan informasi fitnah/kontroversial tanpa rujukan tentang orang yang masih hidup",
-				summary: "Peringatan: Menambahkan informasi kontroversial tanpa rujukan tentang orang yang masih hidup"
-			},
-			"uw-defamatory3": {
-				label: "Menambahkan konten yang memfitnah",
-				summary: "Peringatan: Penambahan konten yang memfitnah"
-			},
-			"uw-error3": {
-				label: "Menambahkan kesalahan faktual secara sengaja",
-				summary: "Peringatan: Penambahan kesalahan faktual secara sengaja"
-			},
-			"uw-genre3": {
-				label: "Mengubah secara massal atau sering tanpa konsensus atau rujukan",
-				summary: "Peringatan: Pengubahan secara massal atau sering tanpa konsensus atau rujukan"
-			},
-			"uw-image3": {
-				label: "Vandalisme terkait berkas dalam artikel",
-				summary: "Peringatan: Vandalisme terkait berkas dalam artikel"
-			},
-			"uw-joke3": {
-				label: "Menggunakan lelucon yang tidak pantas dalam artikel",
-				summary: "Peringatan: Penggunaan lelucon yang tidak pantas dalam artikel"
-			},
-			"uw-nor3": {
-				label: "Menambahkan riset asli, misalnya kumpulan rujukan yang belum dipublikasikan",
-				summary: "Peringatan: Penambahan riset asli, misalnya kumpulan rujukan yang belum dipublikasikan"
-			},
-			"uw-notcensored3": {
-				label: "Menyensor materi",
-				summary: "Peringatan: Penyensoran materi"
-			},
-			"uw-own3": {
-				label: "Mengklaim kepemilikan artikel",
-				summary: "Peringatan: Klaim kepemilikan artikel"
-			},
-			"uw-tdel3": {
-				label: "Menghapus templat pemeliharaan",
-				summary: "Peringatan: Penghapusan templat pemeliharaan"
-			},
-			"uw-unsourced3": {
-				label: "Menambahkan materi tanpa dikutip dengan semestinya atau tanpa rujukan",
-				summary: "Peringatan: Penambahan materi tanpa dikutip dengan semestinya atau tanpa rujukan"
-			}
-		},
-		"Promosi dan spam": {
-			"uw-advert3": {
-				label: "Menggunakan Wikipedia untuk beriklan atau promosi",
-				summary: "Peringatan: Penggunaan Wikipedia untuk beriklan atau promosi"
-			},
-			"uw-npov3": {
-				label: "Tidak berpegang pada sudut pandang netral",
-				summary: "Peringatan: Tidak berpegang pada sudut pandang netral"
-			},
-			"uw-paid3": {
-				label: "Paid editing without disclosure under the Wikimedia Terms of Use",
-				summary: "Warning: Paid editing without disclosure under the Wikimedia Terms of Use"
-			},
-			"uw-spam3": {
-				label: "Menambahkan pranala spam",
-				summary: "Peringatan: Penambahan pranala spam"
-			}
-		},
-		"Perilaku terhadap pengguna lain": {
-			"uw-agf3": {
-				label: "Tidak mengasumsikan niat baik",
-				summary: "Peringatan: Tidak mengasumsikan niat baik"
-			},
-			"uw-harass3": {
-				label: "Melecehkan pengguna lain",
-				summary: "Peringatan: Pelecehan terhadap pengguna lain"
-			},
-			"uw-npa3": {
-				label: "Serangan pribadi terhadap pengguna tertentu",
-				summary: "Peringatan: Serangan pribadi terhadap pengguna tertentu"
-			}
-		},
-		"Penghilangan tag penghapusan": {
-			"uw-afd3": {
-				label: "Menghilangkan templat {{Afd}}",
-				summary: "Peringatan: Penghilangan templat {{Afd}}"
-			},
-			"uw-blpprod3": {
-				label: "Menghilangkan templat {{Prod blp}}",
-				summary: "Peringatan: Penghilangan templat {{Prod blp}}"
-			},
-			"uw-idt3": {
-				label: "Menghilangkan tag penghapusan berkas",
-				summary: "Peringatan: Penghilangan tag penghapusan berkas"
-			},
-			"uw-speedy3": {
-				label: "Menghilangkan tag penghapusan cepat",
-				summary: "Peringatan: Penghilangan tag penghapusan cepat"
-			}
-		},
-		"Lain-lain": {
-			"uw-attempt3": {
-				label: "Memicu filter penyuntingan",
-				summary: "Peringatan: Memicu filter penyuntingan"
-			},
-			"uw-chat3": {
-				label: "Menggunakan halaman pembicaraan sebagai forum",
-				summary: "Peringatan: Penggunaan halaman pembicaraan sebagai forum"
-			},
-			"uw-create3": {
-				label: "Membuat halaman yang tidak pantas",
-				summary: "Peringatan: Pembuatan halaman yang tidak pantas"
-			},
-			"uw-mos3": {
-				label: "Pedoman gaya",
-				summary: "Peringatan: Format, tanggal, bahasa, dll. (Pedoman gaya)"
-			},
-			"uw-move3": {
-				label: "Memindahkan halaman bertentangan dengan konvensi penamaan atau konsensus",
-				summary: "Peringatan: Pemindahan halaman bertentangan dengan konvensi penamaan atau konsensus"
-			},
-			"uw-tpv3": {
-				label: "Menyunting komentar pengguna lain di halaman pembicaraan",
-				summary: "Peringatan: Penyuntingan komentar pengguna lain di halaman pembicaraan"
-			},
-			"uw-upload3": {
-				label: "Menggunggah berkas nonensiklopedis",
-				summary: "Peringatan: Pengunggahan berkas nonensiklopedis"
-			}
-		}
-	},
-
-
-	level4: {
-		"Peringatan umum": {
-			"uw-vandalism4": {
-				label: "Vandalisme",
-				summary: "Peringatan terakhir: Vandalisme"
-			},
-			"uw-generic4": {
-				label: "Peringatan umum (untuk templat yang tidak ada di tingkat 4)",
-				summary: "Pemberitahuan peringatan terakhir"
-			},
-			"uw-delete4": {
-				label: "Menghapus konten, mengosongkan halaman",
-				summary: "Peringatan terakhir: Penghapusan konten, pengosongan halaman"
-			}
-		},
-		"Perilaku dalam artikel": {
-			"uw-biog4": {
-				label: "Menambahkan informasi fitnah tanpa rujukan tentang orang yang masih hidup",
-				summary: "Peringatan terakhir: Menambahkan informasi kontroversial tanpa rujukan tentang orang yang masih hidup"
-			},
-			"uw-defamatory4": {
-				label: "Menambahkan konten yang memfitnah",
-				summary: "Peringatan terakhir: Penambahan konten yang memfitnah"
-			},
-			"uw-error4": {
-				label: "Menambahkan kesalahan faktual secara sengaja",
-				summary: "Peringatan terakhir: Penambahan kesalahan faktual secara sengaja"
-			},
-			"uw-genre4": {
-				label: "Mengubah secara massal atau sering tanpa konsensus atau rujukan",
-				summary: "Peringatan terakhir: Pengubahan secara massal atau sering tanpa konsensus atau rujukan"
-			},
-			"uw-image4": {
-				label: "Vandalisme terkait berkas dalam artikel",
-				summary: "Peringatan terakhir: Vandalisme terkait berkas dalam artikel"
-			},
-			"uw-joke4": {
-				label: "Menggunakan lelucon yang tidak pantas dalam artikel",
-				summary: "Peringatan terakhir: Penggunaan lelucon yang tidak pantas dalam artikel"
-			},
-			"uw-nor4": {
-				label: "Menambahkan riset asli, misalnya kumpulan rujukan yang belum dipublikasikan",
-				summary: "Peringatan terakhir: Penambahan riset asli, misalnya kumpulan rujukan yang belum dipublikasikan"
-			},
-			"uw-tdel4": {
-				label: "Menghapus templat pemeliharaan",
-				summary: "Peringatan terakhir: Penghapusan templat pemeliharaan"
-			},
-			"uw-unsourced4": {
-				label: "Menambahkan materi tanpa dikutip dengan semestinya atau tanpa rujukan",
-				summary: "Peringatan terakhir: Penambahan materi tanpa dikutip dengan semestinya atau tanpa rujukan"
-			}
-		},
-		"Promosi dan spam": {
-			"uw-advert4": {
-				label: "Menggunakan Wikipedia untuk beriklan atau promosi",
-				summary: "Peringatan terakhir: Penggunaan Wikipedia untuk beriklan atau promosi"
-			},
-			"uw-npov4": {
-				label: "Tidak berpegang pada sudut pandang netral",
-				summary: "Peringatan terakhir: Tidak berpegang pada sudut pandang netral"
-			},
-			"uw-paid4": {
-				label: "Paid editing without disclosure under the Wikimedia Terms of Use",
-				summary: "Final warning: Paid editing without disclosure under the Wikimedia Terms of Use"
-			},
-			"uw-spam4": {
-				label: "Menambahkan pranala spam",
-				summary: "Peringatan terakhir: Penambahan pranala spam"
-			}
-		},
-		"Perilaku terhadap pengguna lain": {
-			"uw-harass4": {
-				label: "Melecehkan pengguna lain",
-				summary: "Peringatan terakhir: Pelecehan terhadap pengguna lain"
-			},
-			"uw-npa4": {
-				label: "Serangan pribadi terhadap pengguna tertentu",
-				summary: "Peringatan terakhir: Serangan pribadi terhadap pengguna tertentu"
-			}
-		},
-		"Penghilangan tag penghapusan": {
-			"uw-afd4": {
-				label: "Menghilangkan templat {{Afd}}",
-				summary: "Peringatan terakhir: Penghilangan templat {{Afd}}"
-			},
-			"uw-blpprod4": {
-				label: "Menghilangkan templat {{Prod blp}}",
-				summary: "Peringatan terakhir: Penghilangan templat {{Prod blp}}"
-			},
-			"uw-idt4": {
-				label: "Menghilangkan tag penghapusan berkas",
-				summary: "Peringatan terakhir: Penghilangan tag penghapusan berkas"
-			},
-			"uw-speedy4": {
-				label: "Menghilangkan tag penghapusan cepat",
-				summary: "Peringatan terakhir: Penghilangan tag penghapusan cepat"
-			}
-		},
-		"Lain-lain": {
-			"uw-attempt4": {
-				label: "Memicu filter penyuntingan",
-				summary: "Peringatan terakhir: Memicu filter penyuntingan"
-			},
-			"uw-chat4": {
-				label: "Menggunakan halaman pembicaraan sebagai forum",
-				summary: "Peringatan terakhir: Penggunaan halaman pembicaraan sebagai forum"
-			},
-			"uw-create4": {
-				label: "Membuat halaman yang tidak pantas",
-				summary: "Peringatan terakhir: Pembuatan halaman yang tidak pantas"
-			},
-			"uw-mos4": {
-				label: "Pedoman gaya",
-				summary: "Peringatan terakhir: Format, tanggal, bahasa, dll. (Pedoman gaya)"
-			},
-			"uw-move4": {
-				label: "Memindahkan halaman bertentangan dengan konvensi penamaan atau konsensus",
-				summary: "Peringatan terakhir: Pemindahan halaman bertentangan dengan konvensi penamaan atau konsensus"
-			},
-			"uw-tpv4": {
-				label: "Menyunting komentar pengguna lain di halaman pembicaraan",
-				summary: "Peringatan terakhir: Penyuntingan komentar pengguna lain di halaman pembicaraan"
-			},
-			"uw-upload4": {
-				label: "Menggunggah berkas nonensiklopedis",
-				summary: "Peringatan terakhir: Pengunggahan berkas nonensiklopedis"
-			}
-		}
-	},
-
-
-	level4im: {
-		"Peringatan umum": {
-			"uw-vandalism4im": {
-				label: "Vandalisme",
-				summary: "Sekadar peringatan: Vandalisme"
-			},
-			"uw-delete4im": {
-				label: "Menghapus konten, mengosongkan halaman",
-				summary: "Sekadar peringatan: Penghapusan konten, pengosongan halaman"
-			}
-		},
-		"Perilaku dalam artikel": {
-			"uw-biog4im": {
-				label: "Menambahkan informasi fitnah tanpa rujukan tentang orang yang masih hidup",
-				summary: "Sekadar peringatan: Menambahkan informasi kontroversial tanpa rujukan tentang orang yang masih hidup"
-			},
-			"uw-defamatory4im": {
-				label: "Menambahkan konten yang memfitnah",
-				summary: "Sekadar peringatan: Penambahan konten yang memfitnah"
-			},
-			"uw-image4im": {
-				label: "Vandalisme terkait berkas dalam artikel",
-				summary: "Sekadar peringatan: Vandalisme terkait berkas"
-			},
-			"uw-joke4im": {
-				label: "Menggunakan lelucon yang tidak pantas",
-				summary: "Sekadar peringatan: Penggunaan lelucon yang tidak pantas"
-			},
-			"uw-own4im": {
-				label: "Mengklaim kepemilikan artikel",
-				summary: "Sekadar peringatan: Klaim kepemilikan artikel"
-			}
-		},
-		"Promosi dan spam": {
-			"uw-advert4im": {
-				label: "Menggunakan Wikipedia untuk beriklan atau promosi",
-				summary: "Sekadar peringatan: Penggunaan Wikipedia untuk beriklan atau promosi"
-			},
-			"uw-spam4im": {
-				label: "Menambahkan pranala spam",
-				summary: "Sekadar peringatan: Penambahan pranala spam"
-			}
-		},
-		"Perilaku terhadap pengguna lain": {
-			"uw-harass4im": {
-				label: "Melecehkan pengguna lain",
-				summary: "Sekadar peringatan: Pelecehan terhadap pengguna lain"
-			},
-			"uw-npa4im": {
-				label: "Serangan pribadi terhadap pengguna tertentu",
-				summary: "Sekadar peringatan: Serangan pribadi terhadap pengguna tertentu"
-			}
-		},
-		"Lain-lain": {
-			"uw-create4im": {
-				label: "Membuat halaman yang tidak pantas",
-				summary: "Sekadar peringatan: Pembuatan halaman yang tidak pantas"
-			},
-			"uw-move4im": {
-				label: "Memindahkan halaman bertentangan dengan konvensi penamaan atau konsensus",
-				summary: "Sekadar peringatan: Pemindahan halaman bertentangan dengan konvensi penamaan atau konsensus"
-			},
-			"uw-upload4im": {
-				label: "Menggunggah berkas nonensiklopedis",
-				summary: "Sekadar peringatan: Pengunggahan berkas nonensiklopedis"
+			"uw-attempt": {
+				level1: {
+					label: "Memicu filter penyuntingan",
+					summary: "Catatan: Memicu filter penyuntingan"
+				},
+				level2: {
+					label: "Memicu filter penyuntingan",
+					summary: "Pemberitahuan: Memicu filter penyuntingan"
+				},
+				level3: {
+					label: "Memicu filter penyuntingan",
+					summary: "Peringatan: Memicu filter penyuntingan"
+				},
+				level4: {
+					label: "Memicu filter penyuntingan",
+					summary: "Peringatan terakhir: Memicu filter penyuntingan"
+				}
+			},
+			"uw-chat": {
+				level1: {
+					label: "Menggunakan halaman pembicaraan sebagai forum",
+					summary: "Catatan: Menggunakan halaman pembicaraan sebagai forum"
+				},
+				level2: {
+					label: "Menggunakan halaman pembicaraan sebagai forum",
+					summary: "Pemberitahuan: Menggunakan halaman pembicaraan sebagai forum"
+				},
+				level3: {
+					label: "Menggunakan halaman pembicaraan sebagai forum",
+					summary: "Peringatan: Menggunakan halaman pembicaraan sebagai forum"
+				},
+				level4: {
+					label: "Menggunakan halaman pembicaraan sebagai forum",
+					summary: "Peringatan terakhir: Menggunakan halaman pembicaraan sebagai forum"
+				}
+			},
+			"uw-create": {
+				level1: {
+					label: "Membuat halaman yang tidak pantas",
+					summary: "Catatan: Membuat halaman yang tidak pantas"
+				},
+				level2: {
+					label: "Membuat halaman yang tidak pantas",
+					summary: "Pemberitahuan: Membuat halaman yang tidak pantas"
+				},
+				level3: {
+					label: "Membuat halaman yang tidak pantas",
+					summary: "Peringatan: Membuat halaman yang tidak pantas"
+				},
+				level4: {
+					label: "Membuat halaman yang tidak pantas",
+					summary: "Peringatan terakhir: Membuat halaman yang tidak pantas"
+				},
+				level4im: {
+					label: "Membuat halaman yang tidak pantas",
+					summary: "Sekadar peringatan: Membuat halaman yang tidak pantas"
+				}
+			},
+			"uw-mos": {
+				level1: {
+					label: "Pedoman gaya",
+					summary: "Catatan: Format, tanggal, bahasa, dll. (Pedoman gaya)"
+				},
+				level2: {
+					label: "Pedoman gaya",
+					summary: "Pemberitahuan: Format, tanggal, bahasa, dll. (Pedoman gaya)"
+				},
+				level3: {
+					label: "Pedoman gaya",
+					summary: "Peringatan: Format, tanggal, bahasa, dll. (Pedoman gaya)"
+				},
+				level4: {
+					label: "Pedoman gaya",
+					summary: "Peringatan terakhir: Format, tanggal, bahasa, dll. (Pedoman gaya)"
+				}
+			},
+			"uw-move": {
+				level1: {
+					label: "Memindahkan halaman bertentangan dengan konvensi penamaan atau konsensus",
+					summary: "Catatan: Memindahkan halaman bertentangan dengan konvensi penamaan atau konsensus"
+				},
+				level2: {
+					label: "Memindahkan halaman bertentangan dengan konvensi penamaan atau konsensus",
+					summary: "Pemberitahuan: Memindahkan halaman bertentangan dengan konvensi penamaan atau konsensus"
+				},
+				level3: {
+					label: "Memindahkan halaman bertentangan dengan konvensi penamaan atau konsensus",
+					summary: "Peringatan: Memindahkan halaman bertentangan dengan konvensi penamaan atau konsensus"
+				},
+				level4: {
+					label: "Memindahkan halaman bertentangan dengan konvensi penamaan atau konsensus",
+					summary: "Peringatan terakhir: Memindahkan halaman bertentangan dengan konvensi penamaan atau konsensus"
+				},
+				level4im: {
+					label: "Memindahkan halaman bertentangan dengan konvensi penamaan atau konsensus",
+					summary: "Sekadar peringatan: Memindahkan halaman bertentangan dengan konvensi penamaan atau konsensus"
+				}
+			},
+			"uw-tpv": {
+				level1: {
+					label: "Menyunting komentar pengguna lain di halaman pembicaraan",
+					summary: "Catatan: Menyunting komentar pengguna lain di halaman pembicaraan"
+				},
+				level2: {
+					label: "Menyunting komentar pengguna lain di halaman pembicaraan",
+					summary: "Pemberitahuan: Menyunting komentar pengguna lain di halaman pembicaraan"
+				},
+				level3: {
+					label: "Menyunting komentar pengguna lain di halaman pembicaraan",
+					summary: "Peringatan: Menyunting komentar pengguna lain di halaman pembicaraan"
+				},
+				level4: {
+					label: "Menyunting komentar pengguna lain di halaman pembicaraan",
+					summary: "Peringatan terakhir: Menyunting komentar pengguna lain di halaman pembicaraan"
+				}
+			},
+			"uw-upload": {
+				level1: {
+					label: "Menggunggah berkas nonensiklopedis",
+					summary: "Catatan: Menggunggah berkas nonensiklopedis"
+				},
+				level2: {
+					label: "Menggunggah berkas nonensiklopedis",
+					summary: "Pemberitahuan: Menggunggah berkas nonensiklopedis"
+				},
+				level3: {
+					label: "Menggunggah berkas nonensiklopedis",
+					summary: "Peringatan: Menggunggah berkas nonensiklopedis"
+				},
+				level4: {
+					label: "Menggunggah berkas nonensiklopedis",
+					summary: "Peringatan terakhir: Menggunggah berkas nonensiklopedis"
+				},
+				level4im: {
+					label: "Menggunggah berkas nonensiklopedis",
+					summary: "Sekadar peringatan: Menggunggah berkas nonensiklopedis"
+				}
 			}
 		}
 	},
@@ -926,7 +934,6 @@ Twinkle.warn.messages = {
 		}
 	},
 
-
 	singlewarn: {
 		"uw-3rr": {
 			label: "Melanggar aturan tiga kali pengembalian; lihat pula uw-ew",
@@ -968,7 +975,7 @@ Twinkle.warn.messages = {
 		"uw-copyright-new": {
 			label: "Pelanggaran hak cipta (dengan penjelasan bagi pengguna baru)",
 			summary: "Peringatan: Hindari masalah hak cipta",
-			heading: "Wikipedia and copyright"
+			heading: "Wikipedia dan hak cipta"
 		},
 		"uw-copyright-remove": {
 			label: "Menghapus templat {{copyvio}} dari artikel",
@@ -1026,7 +1033,7 @@ Twinkle.warn.messages = {
 		"uw-coi-username": {
 			label: "Nama pengguna tidak sesuai kebijakan, dan konflik kepentingan",
 			summary: "Pemberitahuan: Kebijakan konflik kepentingan dan nama pengguna",
-			heading: "Your username"
+			heading: "Nama pengguna Anda"
 		},
 		"uw-userpage": {
 			label: "Subhalaman atau halaman pengguna tidak sesuai kebijakan",
@@ -1059,6 +1066,9 @@ Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCatego
 
 	// worker function to create the combo box entries
 	var createEntries = function( contents, container, wrapInOptgroup ) {
+		// level2->2, singlewarn->''; also used to distinguish the
+		// scaled levels from singlenotice, singlewarn, and custom
+		var level = value.replace(/^\D+/g,'');
 		// due to an apparent iOS bug, we have to add an option-group to prevent truncation of text
 		// (search WT:TW archives for "Problem selecting warnings on an iPhone")
 		if ( wrapInOptgroup && $.client.profile().platform === "iphone" ) {
@@ -1072,6 +1082,10 @@ Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCatego
 		}
 
 		$.each( contents, function( itemKey, itemProperties ) {
+			// Skip if the current template doesn't have a version for the current level
+			if (!!level && !itemProperties[value]) {
+				return;
+			}
 			var key = (typeof itemKey === "string") ? itemKey : itemProperties.value;
 
 			var selected = false;
@@ -1082,8 +1096,8 @@ Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCatego
 			// Slice out leading uw- from the menu display
 			var elem = new Morebits.quickForm.element( {
 				type: 'option',
-				label: (value === 'custom' ? "{{" + key + "}}" : key.slice(3)) + ": " + itemProperties.label,
-				value: key,
+				label: (value === 'custom' ? "{{" + key + "}}" : key.slice(3)) + level + ": " + (level ? itemProperties[value].label : itemProperties.label),
+				value: key + level,
 				selected: selected
 			} );
 			var elemRendered = container.appendChild( elem.render() );
@@ -1098,7 +1112,9 @@ Twinkle.warn.callback.change_category = function twinklewarnCallbackChangeCatego
 		createEntries( Twinkle.getPref("customWarningList"), sub_group, true );
 	} else {
 		// create the option-groups
-		$.each( Twinkle.warn.messages[ value ], function( groupLabel, groupContents ) {
+		$.each( Twinkle.warn.messages.levels, function( groupLabel, groupContents ) {
+			// Creates subgroup regardless of whether there is anything to place in it;
+			// leaves "Removal of deletion tags" empty for 4im
 			var optgroup = new Morebits.quickForm.element( {
 				type: 'optgroup',
 				label: groupLabel
@@ -1310,7 +1326,7 @@ Twinkle.warn.callbacks = {
 			}
 			summary += ": " + Morebits.string.toUpperCaseFirstChar(messageData.label);
 		} else {
-			summary = messageData.summary;
+			summary = (/^\D+$/.test(params.main_group) ? messageData.summary : messageData[params.main_group].summary);
 			if ( messageData.suppressArticleInSummary !== true && params.article ) {
 				if ( params.sub_group === "uw-agf-sock" ||
 						params.sub_group === "uw-socksuspect" ||

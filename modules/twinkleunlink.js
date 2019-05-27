@@ -164,7 +164,7 @@ Twinkle.unlink.callbacks = {
 					apiobj.params.form.append( { type:'header', label: 'Penggunaan berkas' } );
 					namespaces = [];
 					$.each(Twinkle.getPref('unlinkNamespaces'), function(k, v) {
-						namespaces.push(Morebits.wikipedia.namespacesFriendly[v]);
+						namespaces.push(v === '0' ? '(Article)' : mw.config.get('wgFormattedNamespaces')[v]);
 					});
 					apiobj.params.form.append( {
 						type: 'div',
@@ -210,7 +210,7 @@ Twinkle.unlink.callbacks = {
 				apiobj.params.form.append( { type:'header', label: 'Pranala balik' } );
 				namespaces = [];
 				$.each(Twinkle.getPref('unlinkNamespaces'), function(k, v) {
-					namespaces.push(Morebits.wikipedia.namespacesFriendly[v]);
+					namespaces.push(v === '0' ? '(Article)' : mw.config.get('wgFormattedNamespaces')[v]);
 				});
 				apiobj.params.form.append( {
 					type: 'div',

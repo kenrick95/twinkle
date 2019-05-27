@@ -78,6 +78,7 @@ Twinkle.speedy.mode = {
 // Prepares the speedy deletion dialog and displays it
 Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 	var dialog;
+	var isSysop = Morebits.userIsInGroup( 'sysop' );
 	Twinkle.speedy.dialog = new Morebits.simpleWindow( Twinkle.getPref('speedyWindowWidth'), Twinkle.getPref('speedyWindowHeight') );
 	dialog = Twinkle.speedy.dialog;
 	dialog.setTitle( "Pilih kriteria penghapusan cepat" );
@@ -86,7 +87,7 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 	dialog.addFooterLink( "Bantuan Twinkle", "WP:TW/DOC#speedy" );
 
 	var form = new Morebits.quickForm( callbackfunc, (Twinkle.getPref('speedySelectionStyle') === 'radioClick' ? 'change' : null) );
-	if( Morebits.userIsInGroup( 'sysop' ) ) {
+	if( isSysop ) {
 		form.append( {
 				type: 'checkbox',
 				list: [
@@ -205,7 +206,7 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 			name: 'tag_options'
 		} );
 
-	if( Morebits.userIsInGroup( 'sysop' ) ) {
+	if( isSysop ) {
 		tagOptions.append( {
 				type: 'header',
 				label: 'Opsi terkait dengan tag'
@@ -221,8 +222,8 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 					name: 'notify',
 					tooltip: "Templat notifikasi akan diberikan pada halaman pembicaraan pembuat halaman, JIKA Anda mengaktifkan notifikasi di preferensi Twinkle " +
 						"untuk kriteria yang Anda pilih DAN kotak ini diberi ceklis. Pembuat halaman akan disambut juga.",
-					checked: !Morebits.userIsInGroup( 'sysop' ) || Twinkle.getPref('deleteSysopDefaultToTag'),
-					disabled: Morebits.userIsInGroup( 'sysop' ) && !Twinkle.getPref('deleteSysopDefaultToTag'),
+					checked: !isSysop || Twinkle.getPref('deleteSysopDefaultToTag'),
+					disabled: isSysop && !Twinkle.getPref('deleteSysopDefaultToTag'),
 					event: function( event ) {
 						event.stopPropagation();
 					}
@@ -237,7 +238,7 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 					value: 'multiple',
 					name: 'multiple',
 					tooltip: "Ketika dipilih, Anda dapat memilih beberapa kriteria untuk diterapkan. Contohnya, G11 dan A7 adalah gabungan umum pada artikel.",
-					disabled: Morebits.userIsInGroup( 'sysop' ) && !Twinkle.getPref('deleteSysopDefaultToTag'),
+					disabled: isSysop && !Twinkle.getPref('deleteSysopDefaultToTag'),
 					event: function( event ) {
 						Twinkle.speedy.callback.modeChanged( event.target.form );
 						event.stopPropagation();
@@ -290,8 +291,9 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 
 	// first figure out what mode we're in
 	var mode = Twinkle.speedy.callback.getMode(form);
+	var isSysopMode = Twinkle.speedy.mode.isSysop(mode);
 
-	if (Twinkle.speedy.mode.isSysop(mode)) {
+	if (isSysopMode) {
 		$("[name=delete_options]").show();
 		$("[name=tag_options]").hide();
 	} else {
@@ -305,7 +307,7 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 		} );
 
 	if (mode === Twinkle.speedy.mode.userMultipleRadioClick || mode === Twinkle.speedy.mode.sysopMultipleRadioClick) {
-		var evaluateType = Twinkle.speedy.mode.isSysop(mode) ? 'evaluateSysop' : 'evaluateUser';
+		var evaluateType = isSysopMode ? 'evaluateSysop' : 'evaluateUser';
 
 		work_area.append( {
 				type: 'div',
@@ -324,7 +326,7 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 
 	var radioOrCheckbox = (Twinkle.speedy.mode.isMultiple(mode) ? 'checkbox' : 'radio');
 
-	if (Twinkle.speedy.mode.isSysop(mode) && !Twinkle.speedy.mode.isMultiple(mode)) {
+	if (isSysopMode && !Twinkle.speedy.mode.isMultiple(mode)) {
 		work_area.append( { type: 'header', label: 'Alasan lain' } );
 		work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.customRationale, mode) } );
 	}
@@ -346,14 +348,14 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 			case 2:  // user
 			case 3:  // user talk
 				work_area.append( { type: 'header', label: 'Halaman pengguna' } );
-				work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.userAllList.concat(Twinkle.speedy.userNonRedirectList), mode) } );
+				work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.userList, mode) } );
 				break;
 
 			case 6:  // file
 			case 7:  // file talk
 				work_area.append( { type: 'header', label: 'Berkas' } );
 				work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.fileList, mode) } );
-				if (!Twinkle.speedy.mode.isSysop(mode)) {
+				if (!isSysopMode) {
 					work_area.append( { type: 'div', label: 'Menandai untuk KPC B4 (tanpa lisensi), B5 (penggunaan wajar tak terpakai), F6 (tanpa alasan penggunaan untuk penggunaan wajar), dan F11 (tanpa izin) dapat menggunakan tab "DI".' } );
 				}
 				break;
@@ -382,7 +384,7 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 	} else {
 		if (namespace == 2 || namespace == 3) {
 			work_area.append( { type: 'header', label: 'User pages' } );
-			work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.userAllList, mode) } );
+			work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.userList, mode) } );
 		}
 		work_area.append( { type: 'header', label: 'Redirects' } );
 		work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.redirectList, mode) } );
@@ -391,7 +393,7 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 	var generalCriteria = Twinkle.speedy.generalList;
 
 	// custom rationale lives under general criteria when tagging
-	if(!Twinkle.speedy.mode.isSysop(mode)) {
+	if(!isSysopMode) {
 		generalCriteria = Twinkle.speedy.customRationale.concat(generalCriteria);
 	}
 	work_area.append( { type: 'header', label: 'Kriteria umum' } );
@@ -401,7 +403,7 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 	form.replaceChild(work_area.render(), old_area);
 
 	// if sysop, check if CSD is already on the page and fill in custom rationale
-	if (Twinkle.speedy.mode.isSysop(mode) && $("#delete-reason").length) {
+	if (isSysopMode && $("#delete-reason").length) {
 		var customOption = $("input[name=csd][value=reason]")[0];
 		if (customOption) {
 			if (Twinkle.getPref('speedySelectionStyle') !== 'radioClick') {
@@ -416,9 +418,10 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 
 Twinkle.speedy.generateCsdList = function twinklespeedyGenerateCsdList(list, mode) {
 	// mode switches
-	var isSysop = Twinkle.speedy.mode.isSysop(mode);
+	var isSysopMode = Twinkle.speedy.mode.isSysop(mode);
 	var multiple = Twinkle.speedy.mode.isMultiple(mode);
 	var hasSubmitButton = Twinkle.speedy.mode.hasSubmitButton(mode);
+	var pageNamespace = mw.config.get('wgNamespaceNumber');
 
 	var openSubgroupHandler = function(e) {
 		$(e.target.form).find('input').prop('disabled', true);
@@ -452,7 +455,7 @@ Twinkle.speedy.generateCsdList = function twinklespeedyGenerateCsdList(list, mod
 			}
 		}
 
-		if (isSysop) {
+		if (isSysopMode) {
 			if (criterion.hideWhenSysop) {
 				return null;
 			}
@@ -472,9 +475,10 @@ Twinkle.speedy.generateCsdList = function twinklespeedyGenerateCsdList(list, mod
 			return null;
 		}
 
-		if (criterion.showInNamespaces && criterion.showInNamespaces.indexOf(mw.config.get('wgNamespaceNumber')) < 0) {
+		if (criterion.showInNamespaces && criterion.showInNamespaces.indexOf(pageNamespace) < 0) {
 			return null;
-		} else if (criterion.hideInNamespaces && criterion.hideInNamespaces.indexOf(mw.config.get('wgNamespaceNumber')) > -1) {
+		}
+		if (criterion.hideInNamespaces && criterion.hideInNamespaces.indexOf(pageNamespace) > -1) {
 			return null;
 		}
 
@@ -501,7 +505,7 @@ Twinkle.speedy.generateCsdList = function twinklespeedyGenerateCsdList(list, mod
 			criterion.event = openSubgroupHandler;
 		}
 
-		if ( isSysop ) {
+		if ( isSysopMode ) {
 			var originalEvent = criterion.event;
 			criterion.event = function(e) {
 				if (multiple) return originalEvent(e);
@@ -774,10 +778,16 @@ Twinkle.speedy.categoryList = [
 		label: 'U8: Kategori yang berisi templat yang telah dihapus',
 		value: 'templatecat',
 		tooltip: 'Situasi ini di mana kategori memang kosong, karena templat yang menempatkan halaman dalam kategori ini sudah dihapus. Ini tidak termasuk kategori yang masih digunakan.'
+	},
+	{
+		label: 'U8: Pengalihan ke target rusak',
+		value: 'redirnone',
+		tooltip: 'Pengecualian termasuk halaman-halaman yang berguna ke proyek, dan secara specifik: halaman diskusi penghapusan yang tidak tertulis di tempat lainnya, halaman pengguna dan pembicaraannya, arsip halaman pembicaraan, pengalihan yang mungkin bisa disunting ke target valid, dan halaman berkas dan pembicaraannya yang ada di Commons.',
+		hideWhenMultiple: true
 	}
 ];
 
-Twinkle.speedy.userAllList = [
+Twinkle.speedy.userList = [
 	{
 		label: 'H1: Permintaan pengguna',
 		value: 'userreq',
@@ -794,32 +804,33 @@ Twinkle.speedy.userAllList = [
 	{
 		label: 'H2: Pengguna yang tidak ada',
 		value: 'nouser',
-		tooltip: 'Yang termasuk di dalamya: halaman pengguna seorang pengguna yang tidak eksis (cek lewat Istimewa:Daftar pengguna), tidak termasuk alamat IP'
-	}
-];
-
-Twinkle.speedy.userNonRedirectList = [
+		tooltip: 'Halaman pengguna seorang pengguna yang tidak eksis (cek lewat Istimewa:Daftar pengguna)'
+	},
 	{
 		label: 'H3: Galeri tak bebas',
 		value: 'gallery',
-		tooltip: 'Galeri di ruangnama pengguna yang terdiri lebih dari separuhnya gambar-gambar tak bebas atau "penggunaan wajar". Kebijakan Wikipedia melarang penggunaan berkas-berkas tak bebas di ruangnama pengguna, walaupun yang memuat adalah pengguna itu sendiri; penggunaan berkas-berkas yang berada di bawah domain umum atau lisensi bebas diperkenankan.'
+		tooltip: 'Galeri di ruangnama pengguna yang terdiri lebih dari separuhnya gambar-gambar tak bebas atau "penggunaan wajar". Kebijakan Wikipedia melarang penggunaan berkas-berkas tak bebas di ruangnama pengguna, walaupun yang memuat adalah pengguna itu sendiri; penggunaan berkas-berkas yang berada di bawah domain umum atau lisensi bebas diperkenankan.',
+		hideWhenRedirect: true
 	},
 	{
 		label: 'H4: Penyalahgunaan halaman pengguna sebagai penginangan webs',
 		value: 'notwebhost',
-		tooltip: 'Penyalahgunaan halaman pengguna sebagai penginangan web. Yang termasuk di dalamnya adalah tulisan, informasi, atau aktivitas yang tidak terkait dengan Wikipedia, yang penggunanya telah menyunting beberapa halaman di luar halaman penggunanya dengan pengecualian halaman draf dan halaman yang sesuai dengan apa-apa yang dapat dicantumkan di halaman pengguna..'
+		tooltip: 'Penyalahgunaan halaman pengguna sebagai penginangan web. Yang termasuk di dalamnya adalah tulisan, informasi, atau aktivitas yang tidak terkait dengan Wikipedia, yang penggunanya telah menyunting beberapa halaman di luar halaman penggunanya dengan pengecualian halaman draf dan halaman yang sesuai dengan apa-apa yang dapat dicantumkan di halaman pengguna.',
+		hideWhenRedirect: true
 	},
 	{
 		label: 'U11: Halaman pengguna untuk promosi, dengan nama pengguna untuk tujuan promosi',
 		value: 'spamuser',
 		tooltip: 'Halaman pengguna untuk promosi, dengan nama pengguna untuk tujuan promosi. Perhatikan pula bahwa dengan adanya halaman mengenai perusahaan pada halaman pengguna tidak termasuk dalam kriteria ini. Jika halaman pengguna adalah spam, dan nama penggunanya tidak, tandai dengan U11 saja.',
-		hideWhenMultiple: true
-	}//,
+		hideWhenMultiple: true,
+		hideWhenRedirect: true
+	},
 	// {
 	// 	label: 'G13: AfC draft submission or a blank draft, stale by over 6 months',
 	// 	value: 'afc',
 	// 	tooltip: 'Any rejected or unsubmitted AfC draft submission or a blank draft, that has not been edited in over 6 months (excluding bot edits).',
-	// 	hideWhenMultiple: true
+	// 	hideWhenMultiple: true,
+	// 	hideWhenRedirect: true
 	// }
 ];
 
@@ -936,18 +947,6 @@ Twinkle.speedy.generalList = [
 		],
 		hideWhenMultiple: true
 	},
-	// {
-	// 	label: 'G6: XfD',
-	// 	value: 'xfd',
-	// 	tooltip: 'An admin has closed a deletion discussion (at AfD, FfD, RfD, TfD, CfD, or MfD) as "delete", but they didn\'t actually delete the page.',
-	// 	subgroup: {
-	// 		name: 'xfd_fullvotepage',
-	// 		type: 'input',
-	// 		label: 'Page where the deletion discussion was held: ',
-	// 		size: 40
-	// 	},
-	// 	hideWhenMultiple: true
-	// },
 	{ // NOTE: en.wikipedia changes this to G14. id.wikipedia still uses U6!
 		label: 'U6: Halaman disambiguasi yang tak perlu',
 		value: 'disambig',
@@ -955,6 +954,19 @@ Twinkle.speedy.generalList = [
 		hideWhenMultiple: true,
 		hideWhenRedirect: true
 	},
+	// {
+	// 	label: 'G6: XfD',
+	// 	value: 'xfd',
+	// 	tooltip: 'A deletion discussion (at AfD, FfD, RfD, TfD, CfD, or MfD) was closed as "delete", but the page wasn\'t actually deleted.',
+	// 	subgroup: {
+	// 		name: 'xfd_fullvotepage',
+	// 		type: 'input',
+	// 		label: 'Page where the deletion discussion was held: ',
+	// 		tooltip: 'Must start with "Wikipedia:"',
+	// 		size: 40
+	// 	},
+	// 	hideWhenMultiple: true
+	// },
 	{
 		label: 'U6: Pemindahan salin-tempel',
 		value: 'copypaste',
@@ -1033,21 +1045,21 @@ Twinkle.speedy.generalList = [
 				name: 'copyvio_url',
 				type: 'input',
 				label: 'URL (jika ada): ',
-				tooltip: 'Jika merupakan sumber daring, berikan di sini, dan tulis protokol "http://" atau "https://". Jika URL dalam "spam blacklist", Anda dapat hapus protokolnya.',
+				tooltip: 'Jika merupakan sumber daring, berikan di sini, dan tulis protokol "http://" atau "https://".',
 				size: 60
 			},
 			{
 				name: 'copyvio_url2',
 				type: 'input',
 				label: 'URL tambahan: ',
-				tooltip: 'Opsional.',
+				tooltip: 'Opsional. Harus dimulai dengan "http://" or "https://"',
 				size: 60
 			},
 			{
 				name: 'copyvio_url3',
 				type: 'input',
 				label: 'URL tambahan: ',
-				tooltip: 'Opsional.',
+				tooltip: 'Opsional. Harus dimulai dengan "http://" or "https://"',
 				size: 60
 			}
 		]
@@ -1275,7 +1287,7 @@ Twinkle.speedy.callbacks = {
 			if (params.deleteTalkPage &&
 					params.normalized !== 'f8' &&
 					document.getElementById( 'ca-talk' ).className !== 'new') {
-				var talkpage = new Morebits.wiki.page( Morebits.wikipedia.namespaces[ mw.config.get('wgNamespaceNumber') + 1 ] + ':' + mw.config.get('wgTitle'), "Menghapus halaman pembicaraan" );
+				var talkpage = new Morebits.wiki.page( mw.config.get('wgFormattedNamespaces')[ mw.config.get('wgNamespaceNumber') + 1 ] + ':' + mw.config.get('wgTitle'), "Menghapus halaman pembicaraan" );
 				talkpage.setEditSummary('[[WP:KPC#U8|U8]]: Halaman pembicaraan dari halaman yang telah dihapus: "' + Morebits.pageNameNorm + '"' + Twinkle.getPref('deletionSummaryAd'));
 				talkpage.deletePage();
 				// this is ugly, but because of the architecture of wiki.api, it is needed
@@ -1612,7 +1624,23 @@ Twinkle.speedy.callbacks = {
 			}
 
 			var formatParamLog = function(normalize, csdparam, input) {
-				return ' [' + normalize + ' ' + csdparam + ': ' + input + ']';
+				if ((normalize === 'G4' && csdparam === 'xfd') || (normalize === 'G6' && csdparam === 'page') || (normalize === 'G6' && csdparam === 'fullvotepage') || (normalize === 'G6' && csdparam === 'sourcepage')
+					|| (normalize === 'A2' && csdparam === 'source') || (normalize === 'A10' && csdparam === 'article') || (normalize === 'F5' && csdparam === 'replacement')) {
+					input = '[[:' + input + ']]';
+				} else if (normalize === 'G5' && csdparam === 'user') {
+					input = '[[:User:' + input + ']]';
+				} else if (normalize === 'G12' && csdparam.lastIndexOf('url', 0) === 0 && input.lastIndexOf('http', 0) === 0) {
+					input = '[' + input + ' ' + input + ']';
+				} else if (normalize === 'F1' && csdparam === 'filename') {
+					input = '[[:File:' + input + ']]';
+				} else if (normalize === 'T3' && csdparam === 'template') {
+					input = '[[:Template:' + input + ']]';
+				} else if (normalize === 'F8' && csdparam === 'filename') {
+					input = '[[commons:' + input + ']]';
+				} else if (normalize === 'P1' && csdparam === 'criterion') {
+					input = '[[WP:CSD#' + input + ']]';
+				}
+				return ' {' + normalize + ' ' + csdparam + ': ' + input + '}';
 			};
 
 			var extraInfo = '';
@@ -1664,7 +1692,7 @@ Twinkle.speedy.callbacks = {
 						params.templateParams.forEach(function(item, index) {
 							var keys = Object.keys(item);
 							if (keys[0] !== undefined && keys[0].length > 0) {
-								//Second loop required since G12 can have multiple urls
+								//Second loop required since some items (G12, F9) may have multiple keys
 								keys.forEach(function(key, keyIndex) {
 									if (keys[keyIndex] === 'blanked' || keys[keyIndex] === 'ts') {
 										return true; // Not worth logging
@@ -1883,8 +1911,12 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 						parameters = null;
 						return false;
 					}
-					currentParams.url = f9url;
-					currentParams.rationale = f9rationale;
+					if (form["csd.imgcopyvio_url"].value) {
+						currentParams.url = f9url;
+					}
+					if (form["csd.imgcopyvio_rationale"].value) {
+						currentParams.rationale = f9rationale;
+					}
 				}
 				break;
 
@@ -1941,7 +1973,7 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 				if (form["csd.p1_criterion"]) {
 					var criterion = form["csd.p1_criterion"].value;
 					if (!criterion || !criterion.trim()) {
-						alert( 'KPC P1: Mohon tuliskan kriteria KPC yang sesuai; atau alasan lainnya.' );
+						alert( 'KPC P1: Mohon tuliskan kriteria KPC yang sesuai.' );
 						parameters = null;
 						return false;
 					}
