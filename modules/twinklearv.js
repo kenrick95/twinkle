@@ -154,11 +154,11 @@ Twinkle.arv.callback.changeCategory = function (e) {
 						value: 'final'
 					},
 					{
-						label: 'Vandalism after recent (within 1 day) release of block',
+						label: 'Vandalisme setelah masa berlaku pemblokiran berakhir (dalam rentang waktu 1 hari)',
 						value: 'postblock'
 					},
 					{
-						label: 'Evidently a vandalism-only account',
+						label: 'Akun yang terbukti sebagai akun vandalisme semata',
 						value: 'vandalonly',
 						disabled: mw.util.isIPAddress( root.uid.value )
 					},
@@ -167,7 +167,7 @@ Twinkle.arv.callback.changeCategory = function (e) {
 						value: 'spambot'
 					},
 					{
-						label: 'Account is a promotion-only account',
+						label: 'Akun hanya digunakan untuk beriklan',
 						value: 'promoonly'
 					}
 				]
