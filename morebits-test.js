@@ -1,4 +1,4 @@
-/* global Twinkle, Morebits */
+/* global Morebits */
 
 // Script depends on jQuery dialog widget
 mw.loader.using( 'jquery.ui.dialog', function() {

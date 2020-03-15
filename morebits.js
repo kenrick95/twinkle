@@ -29,7 +29,7 @@
  */
 
 
-( function ( window, document, $, undefined ) { // Wrap entire file with anonymous function
+( function ( window, document, $ ) { // Wrap entire file with anonymous function
 
 var Morebits = {};
 window.Morebits = Morebits;  // allow global access
@@ -1204,7 +1204,7 @@ Morebits.unbinder.prototype = {
 		var content = this.content;
 		content.self = this;
 		for( var current in this.history ) {
-			if( this.history.hasOwnProperty( current ) ) {
+			if( this.history[current] !== undefined ) {
 				content = content.replace( current, this.history[current] );
 			}
 		}

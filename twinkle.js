@@ -20,7 +20,7 @@
 
 /* global Morebits */
 
-( function ( window, document, $, undefined ) { // Wrap with anonymous function
+( function ( window, document, $ ) { // Wrap with anonymous function
 
 var Twinkle = {};
 window.Twinkle = Twinkle;  // allow global access
