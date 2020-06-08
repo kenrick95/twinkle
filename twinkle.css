@@ -2,9 +2,19 @@
  * Explicitly set width of TW menu so that we can use a hidden peer gadget
  * to add space where the TW menu would go before it loads.
  */
-.skin-vector .vector-menu-dropdown #p-twinkle {
+ .skin-vector .vector-menu-dropdown#p-twinkle {
 	width: 3.24em;
 }
+
+.skin-vector .vector-menu-dropdown#p-twinkle h3 {
+	font-size: 0.8125em;
+	font-weight: normal;
+	padding-top: 1.25em;
+}
+.skin-vector .vector-menu-dropdown#p-twinkle .vector-menu-content-list {
+	margin: 0;
+}
+
 
 /* The additional box on user skin.js and twinklepreferences.js pages */
 #twinkle-config-headerbox {
