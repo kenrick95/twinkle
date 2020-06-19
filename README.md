@@ -1,6 +1,10 @@
 # Twinkle
 
+![Lint](https://github.com/kenrick95/twinkle/workflows/Lint/badge.svg)
+
 Note: This is a fork of [AzaToth's Twinkle](https://github.com/azatoth/twinkle/) for use in Indonesian Wikipedia. Messages are being translated to Indonesian language and some logics are adapted to Indonesian Wikipedia's use case.
+
+-----
 
 Twinkle is a JavaScript application that gives Wikipedians a quick way of performing common maintenance tasks, such as nominating pages for deletion and cleaning up vandalism.
 
