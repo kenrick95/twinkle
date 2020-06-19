@@ -1,7 +1,7 @@
-//<nowiki>
+// <nowiki>
 
 
-(function($){
+(function($) {
 
 
 /*
@@ -9,455 +9,439 @@
  *** friendlytalkback.js: Talkback module
  ****************************************
  * Mode of invocation:     Tab ("TB")
- * Active on:              Existing user talk pages
+ * Active on:              Any page with relevant user name (userspace, contribs, etc.)
  * Config directives in:   FriendlyConfig
  */
 
 Twinkle.talkback = function() {
 
-	if ( !mw.config.get('wgRelevantUserName') ) {
+	if (!mw.config.get('wgRelevantUserName')) {
 		return;
 	}
 
-	Twinkle.addPortletLink( Twinkle.talkback.callback, "TB", "balasan pembicaraan ramah", "Balasan pembicaraan mudah" );
+	Twinkle.addPortletLink(Twinkle.talkback.callback, 'TB', 'friendly-talkback', 'Easy talkback');
 };
 
-Twinkle.talkback.callback = function( ) {
-	if( mw.config.get('wgRelevantUserName') === mw.config.get("wgUserName") && !confirm("Apakah keadaan sebegitu buruknya sehingga Anda bercakap-cakap dengan diri sendiri?") ){
+Twinkle.talkback.callback = function() {
+	if (mw.config.get('wgRelevantUserName') === mw.config.get('wgUserName') && !confirm('Apakah keadaan sebegitu buruknya sehingga Anda bercakap-cakap dengan diri sendiri?')) {
 		return;
 	}
 
-	var Window = new Morebits.simpleWindow( 600, 350 );
-	Window.setTitle("Talkback");
-	Window.setScriptName("Twinkle");
-	Window.addFooterLink( "Tentang {{talkback}}", "Template:Talkback" );
-	Window.addFooterLink( "Bantuan Twinkle", "WP:TW/DOC#talkback" );
+	var Window = new Morebits.simpleWindow(600, 350);
+	Window.setTitle('Talkback');
+	Window.setScriptName('Twinkle');
+	Window.addFooterLink('Tentang {{talkback}}', 'Template:Talkback');
+	Window.addFooterLink('Bantuan Twinkle', 'WP:TW/DOC#talkback');
 
-	var form = new Morebits.quickForm( callback_evaluate );
+	var form = new Morebits.quickForm(Twinkle.talkback.evaluate);
 
-	form.append({ type: "radio", name: "tbtarget",
-				list: [
-					{
-						label: "Balasan percakapan: halaman pembicaraan saya",
-						value: "mytalk",
-						checked: "true"
-					},
-					{
-						label: "Balasan percakapan: halaman pembicaraan pengguna lain",
-						value: "usertalk"
-					},
-					{
-						label: "Balasan percakapan: halaman lain",
-						value: "other"
-					},
-					{
-						label: "\"Mohon lihat\"",
-						value: "see"
-					},
-					{
-						label: "Notifikasi pengumuman",
-						value: "notice"
-					},
-					{
-						label: "\"Anda mendapat pesan!\"",
-						value: "mail"
-					}
-				],
-				event: callback_change_target
-			});
+	form.append({ type: 'radio', name: 'tbtarget',
+		list: [
+			{
+				label: 'Balasan percakapan: halaman pembicaraan saya',
+				value: 'mytalk',
+				checked: 'true'
+			},
+			{
+				label: 'Balasan percakapan: halaman pembicaraan pengguna lain',
+				value: 'usertalk'
+			},
+			{
+				label: 'Balasan percakapan: halaman lain',
+				value: 'other'
+			},
+			{
+				label: '"Mohon lihat"',
+				value: 'see'
+			},
+			{
+				label: 'Notifikasi pengumuman',
+				value: 'notice'
+			},
+			{
+				label: '"Anda mendapat pesan"',
+				value: 'mail'
+			}
+		],
+		event: Twinkle.talkback.changeTarget
+	});
 
 	form.append({
-			type: "field",
-			label: "Work area",
-			name: "work_area"
-		});
+		type: 'field',
+		label: 'Work area',
+		name: 'work_area'
+	});
 
-	form.append({ type: "submit" });
+	var previewlink = document.createElement('a');
+	$(previewlink).click(function() {
+		Twinkle.talkback.preview(result);  // |result| is defined below
+	});
+	previewlink.style.cursor = 'pointer';
+	previewlink.textContent = 'Preview';
+	form.append({ type: 'div', id: 'talkbackpreview', label: [ previewlink ] });
+	form.append({ type: 'div', id: 'friendlytalkback-previewbox', style: 'display: none' });
+
+	form.append({ type: 'submit' });
 
 	var result = form.render();
-	Window.setContent( result );
+	Window.setContent(result);
 	Window.display();
+	result.previewer = new Morebits.wiki.preview($(result).find('div#friendlytalkback-previewbox').last()[0]);
 
 	// We must init the
-	var evt = document.createEvent("Event");
-	evt.initEvent( "change", true, true );
-	result.tbtarget[0].dispatchEvent( evt );
+	var evt = document.createEvent('Event');
+	evt.initEvent('change', true, true);
+	result.tbtarget[0].dispatchEvent(evt);
 
 	// Check whether the user has opted out from talkback
 	var query = {
 		action: 'query',
 		prop: 'extlinks',
-		titles: mw.config.get('wgPageName'),
+		titles: 'User talk:' + mw.config.get('wgRelevantUserName'),
 		elquery: 'userjs.invalid/noTalkback',
 		ellimit: '1'
 	};
-	var wpapi = new Morebits.wiki.api("Fetching talkback opt-out status", query, Twinkle.talkback.callback.optoutStatus);
+	var wpapi = new Morebits.wiki.api('Fetching talkback opt-out status', query, Twinkle.talkback.callback.optoutStatus);
 	wpapi.post();
 };
 
-Twinkle.talkback.optout = null;
+Twinkle.talkback.optout = '';
 
 Twinkle.talkback.callback.optoutStatus = function(apiobj) {
-	var xml = apiobj.getXML();
-	var $el = $(xml).find('el');
-
+	var $el = $(apiobj.getXML()).find('el');
 	if ($el.length) {
-		Twinkle.talkback.optout = mw.config.get('wgRelevantUserName') + " memilih untuk tak menerima balasan percakapan";
+		Twinkle.talkback.optout = mw.config.get('wgRelevantUserName') + ' memilih untuk tak menerima balasan percakapan';
 		var url = $el.text();
-		if (url.indexOf("reason=") > -1) {
-			Twinkle.talkback.optout += ": " + decodeURIComponent(url.substring(url.indexOf("reason=") + 7)) + ".";
-		} else {
-			Twinkle.talkback.optout += ".";
-		}
-	} else {
-		Twinkle.talkback.optout = false;
+		var reason = mw.util.getParamValue('reason', url);
+		Twinkle.talkback.optout += reason ? ': ' + reason : '.';
 	}
-
-	var $status = $("#twinkle-talkback-optout-message");
-	if ($status.length) {
-		$status.append(Twinkle.talkback.optout);
-	}
+	$('#twinkle-talkback-optout-message').text(Twinkle.talkback.optout);
 };
 
-var prev_page = "";
-var prev_section = "";
-var prev_message = "";
+var prev_page = '';
+var prev_section = '';
+var prev_message = '';
 
-var callback_change_target = function( e ) {
+Twinkle.talkback.changeTarget = function(e) {
 	var value = e.target.values;
 	var root = e.target.form;
-	var old_area = Morebits.quickForm.getElements(root, "work_area")[0];
+	var old_area = Morebits.quickForm.getElements(root, 'work_area')[0];
 
-	if(root.section) {
+	if (root.section) {
 		prev_section = root.section.value;
 	}
-	if(root.message) {
+	if (root.message) {
 		prev_message = root.message.value;
 	}
-	if(root.page) {
+	if (root.page) {
 		prev_page = root.page.value;
 	}
 
 	var work_area = new Morebits.quickForm.element({
-			type: "field",
-			label: "Informasi balasan percakapan",
-			name: "work_area"
-		});
+		type: 'field',
+		label: 'Informasi balasan percakapan',
+		name: 'work_area'
+	});
 
-	switch( value ) {
-		case "mytalk":
+	root.previewer.closePreview();
+
+	switch (value) {
+		case 'mytalk':
 			/* falls through */
 		default:
 			work_area.append({
-				type: "div",
-				label: "",
-				style: "color: red",
-				id: "twinkle-talkback-optout-message"
+				type: 'div',
+				label: '',
+				style: 'color: red',
+				id: 'twinkle-talkback-optout-message'
 			});
 			work_area.append({
-					type:"input",
-					name:"section",
-					label:"Bagian tertaut (opsional)",
-					tooltip:"The section heading on your talk page where you left a message. Leave empty for no section to be linked.",
-					value: prev_section
-				});
+				type: 'input',
+				name: 'section',
+				label: 'Bagian tertaut (opsional)',
+				tooltip: 'The section heading on your talk page where you left a message. Leave empty for no section to be linked.',
+				value: prev_section
+			});
 			break;
-		case "usertalk":
+
+		case 'usertalk':
 			work_area.append({
-				type: "div",
-				label: "",
-				style: "color: red",
-				id: "twinkle-talkback-optout-message"
+				type: 'div',
+				label: '',
+				style: 'color: red',
+				id: 'twinkle-talkback-optout-message'
 			});
 			work_area.append({
-					type:"input",
-					name:"page",
-					label:"User",
-					tooltip:"The username of the user on whose talk page you left a message.",
-					value: prev_page
-				});
+				type: 'input',
+				name: 'page',
+				label: 'User (required)',
+				tooltip: 'The username of the user on whose talk page you left a message. Required.',
+				value: prev_page,
+				required: true
+			});
 
 			work_area.append({
-					type:"input",
-					name:"section",
-					label:"Linked section (optional)",
-					tooltip:"The section heading on the page where you left a message. Leave empty for no section to be linked.",
-					value: prev_section
-				});
+				type: 'input',
+				name: 'section',
+				label: 'Linked section (optional)',
+				tooltip: 'The section heading on the page where you left a message. Leave empty for no section to be linked.',
+				value: prev_section
+			});
 			break;
-		case "notice":
+
+		case 'notice':
 			var noticeboard = work_area.append({
-					type: "select",
-					name: "noticeboard",
-					label: "Noticeboard:",
-					event: function(e) {
-						if (e.target.value === "afchd") {
-							Morebits.quickForm.overrideElementLabel(e.target.form.section, "Title of draft (excluding the prefix): ");
-							Morebits.quickForm.setElementTooltipVisibility(e.target.form.section, false);
-						} else {
-							Morebits.quickForm.resetElementLabel(e.target.form.section);
-							Morebits.quickForm.setElementTooltipVisibility(e.target.form.section, true);
-						}
+				type: 'select',
+				name: 'noticeboard',
+				label: 'Noticeboard:',
+				event: function(e) {
+					if (e.target.value === 'afchd') {
+						Morebits.quickForm.overrideElementLabel(e.target.form.section, 'Title of draft (excluding the prefix): ');
+						Morebits.quickForm.setElementTooltipVisibility(e.target.form.section, false);
+					} else {
+						Morebits.quickForm.resetElementLabel(e.target.form.section);
+						Morebits.quickForm.setElementTooltipVisibility(e.target.form.section, true);
 					}
-				});
-			noticeboard.append({
-					type: "option",
-					label: "WP:AN (Administrators' noticeboard)",
-					value: "an"
-				});
-			noticeboard.append({
-					type: "option",
-					label: "WP:AN3 (Administrators' noticeboard/Edit warring)",
-					value: "an3"
-				});
-			noticeboard.append({
-					type: "option",
-					label: "WP:ANI (Administrators' noticeboard/Incidents)",
-					selected: true,
-					value: "ani"
-				});
-			// let's keep AN and its cousins at the top
-			noticeboard.append({
-					type: "option",
-					label: "WP:AFCHD (Articles for creation/Help desk)",
-					value: "afchd"
-				});
-			noticeboard.append({
-					type: "option",
-					label: "WP:COIN (Conflict of interest noticeboard)",
-					value: "coin"
-				});
-			noticeboard.append({
-					type: "option",
-					label: "WP:DRN (Dispute resolution noticeboard)",
-					value: "drn"
-				});
-			noticeboard.append({
-					type: "option",
-					label: "WP:HD (Help desk)",
-					value: "hd"
-				});
-			noticeboard.append({
-					type: "option",
-					label: "WP:OTRS/N (OTRS noticeboard)",
-					value: "otrs"
-				});
-			noticeboard.append({
-					type: "option",
-					label: "WP:THQ (Teahouse question forum)",
-					value: "th"
-				});
-			work_area.append({
-					type:"input",
-					name:"section",
-					label:"Linked thread",
-					tooltip:"The heading of the relevant thread on the noticeboard page.",
-					value: prev_section
-				});
-			break;
-		case "other":
-			work_area.append({
-				type: "div",
-				label: "",
-				style: "color: red",
-				id: "twinkle-talkback-optout-message"
+				}
 			});
-			work_area.append({
-					type:"input",
-					name:"page",
-					label:"Full page name",
-					tooltip:"The full page name where you left the message. For example: 'Wikipedia talk:Twinkle'.",
-					value: prev_page
+
+			$.each(Twinkle.talkback.noticeboards, function(value, data) {
+				noticeboard.append({
+					type: 'option',
+					label: data.label,
+					value: value,
+					selected: !!data.defaultSelected
 				});
+			});
 
 			work_area.append({
-					type:"input",
-					name:"section",
-					label:"Linked section (optional)",
-					tooltip:"The section heading on the page where you left a message. Leave empty for no section to be linked.",
-					value: prev_section
-				});
+				type: 'input',
+				name: 'section',
+				label: 'Linked thread',
+				tooltip: 'The heading of the relevant thread on the noticeboard page.',
+				value: prev_section
+			});
 			break;
-		case "mail":
+
+		case 'other':
 			work_area.append({
-					type:"input",
-					name:"section",
-					label:"Subject of email (optional)",
-					tooltip:"The subject line of the email you sent."
-				});
+				type: 'div',
+				label: '',
+				style: 'color: red',
+				id: 'twinkle-talkback-optout-message'
+			});
+			work_area.append({
+				type: 'input',
+				name: 'page',
+				label: 'Full page name (required)',
+				tooltip: "The full page name where you left the message. For example: 'Wikipedia talk:Twinkle'. Required.",
+				value: prev_page,
+				required: true
+			});
+
+			work_area.append({
+				type: 'input',
+				name: 'section',
+				label: 'Linked section (optional)',
+				tooltip: 'The section heading on the page where you left a message. Leave empty for no section to be linked.',
+				value: prev_section
+			});
 			break;
-		case "see":
+
+		case 'mail':
 			work_area.append({
-					type:"input",
-					name:"page",
-					label:"Full page name",
-					tooltip:"The full page name of where the discussion is being held. For example: 'Wikipedia talk:Twinkle'.",
-					value: prev_page
-				});
+				type: 'input',
+				name: 'section',
+				label: 'Subject of email (optional)',
+				tooltip: 'The subject line of the email you sent.'
+			});
+			break;
+
+		case 'see':
 			work_area.append({
-					type:"input",
-					name:"section",
-					label:"Linked section (optional)",
-					tooltip:"The section heading where the discussion is being held. For example: 'Merge proposal'.",
-					value: prev_section
-				});
+				type: 'input',
+				name: 'page',
+				label: 'Full page name (required)',
+				tooltip: "The full page name of where the discussion is being held. For example: 'Wikipedia talk:Twinkle'. Required.",
+				value: prev_page,
+				required: true
+			});
+			work_area.append({
+				type: 'input',
+				name: 'section',
+				label: 'Linked section (optional)',
+				tooltip: "The section heading where the discussion is being held. For example: 'Merge proposal'.",
+				value: prev_section
+			});
 			break;
 	}
 
-	if (value !== "notice") {
-		work_area.append({ type:"textarea", label:"Additional message (optional):", name:"message", tooltip:"An additional message that you would like to leave below the talkback template. Your signature will be added to the end of the message if you leave one." });
+	if (value !== 'notice') {
+		work_area.append({ type: 'textarea', label: 'Additional message (optional):', name: 'message', tooltip: 'An additional message that you would like to leave below the talkback template. Your signature will be added to the end of the message if you leave one.' });
 	}
 
 	work_area = work_area.render();
-	root.replaceChild( work_area, old_area );
+	root.replaceChild(work_area, old_area);
 	if (root.message) {
 		root.message.value = prev_message;
 	}
 
-	if (Twinkle.talkback.optout) {
-		$("#twinkle-talkback-optout-message").append(Twinkle.talkback.optout);
+	$('#twinkle-talkback-optout-message').text(Twinkle.talkback.optout);
+};
+
+Twinkle.talkback.noticeboards = {
+	'an': {
+		label: "WP:AN (Administrators' noticeboard)",
+		text: '== ' + Twinkle.getPref('adminNoticeHeading') + ' ==\n' +
+		"{{subst:ANI-notice|thread=$SECTION|noticeboard=Wikipedia:Administrators' noticeboard}} ~~~~",
+		editSummary: 'Notice of discussion at [[Wikipedia:Administrators\' noticeboard]]'
+	},
+	'an3': {
+		label: "WP:AN3 (Administrators' noticeboard/Edit warring)",
+		text: '{{subst:An3-notice|$SECTION}} ~~~~',
+		editSummary: "Notice of discussion at [[Wikipedia:Administrators' noticeboard/Edit warring]]"
+	},
+	'ani': {
+		label: "WP:ANI (Administrators' noticeboard/Incidents)",
+		text: '== ' + Twinkle.getPref('adminNoticeHeading') + ' ==\n' +
+		"{{subst:ANI-notice|thread=$SECTION|noticeboard=Wikipedia:Administrators' noticeboard/Incidents}} ~~~~",
+		editSummary: 'Notice of discussion at [[Wikipedia:Administrators\' noticeboard/Incidents]]',
+		defaultSelected: true
+	},
+	// let's keep AN and its cousins at the top
+	'afchd': {
+		label: 'WP:AFCHD (Articles for creation/Help desk)',
+		text: '{{subst:AFCHD/u|$SECTION}} ~~~~',
+		editSummary: 'You have replies at the [[Wikipedia:AFCHD|Articles for Creation Help Desk]]'
+	},
+	'coin': {
+		label: 'WP:COIN (Conflict of interest noticeboard)',
+		text: '{{subst:Coin-notice|thread=$SECTION}} ~~~~',
+		editSummary: 'Notice of discussion at [[Wikipedia:Conflict of interest noticeboard]]'
+	},
+	'drn': {
+		label: 'WP:DRN (Dispute resolution noticeboard)',
+		text: '{{subst:DRN-notice|thread=$SECTION}} ~~~~',
+		editSummary: 'Notice of discussion at [[Wikipedia:Dispute resolution noticeboard]]'
+	},
+	'effp': {
+		label: 'WP:EFFP/R (Edit filter false positive report)',
+		text: '{{EFFPReply|1=$SECTION|2=~~~~}}',
+		editSummary: 'You have replies to your [[Wikipedia:Edit filter/False positives/Reports|edit filter false positive report]]'
+	},
+	'hd': {
+		label: 'WP:HD (Help desk)',
+		text: '== Your question at the Help desk ==\n' + '{{helpdeskreply|1=$SECTION|ts=~~~~~}}',
+		editSummary: 'You have replies at the [[Wikipedia:Help desk|Wikipedia help desk]]'
+	},
+	'th': {
+		label: 'WP:THQ (Teahouse question forum)',
+		text: "== Teahouse talkback: you've got messages! ==\n{{WP:Teahouse/Teahouse talkback|WP:Teahouse/Questions|$SECTION|ts=~~~~}}",
+		editSummary: 'You have replies at the [[Wikipedia:Teahouse/Questions|Teahouse question board]]'
+	},
+	'otrs': {
+		label: 'WP:OTRS/N (OTRS noticeboard)',
+		text: '{{OTRSreply|1=$SECTION|2=~~~~}}',
+		editSummary: 'You have replies at the [[Wikipedia:OTRS noticeboard|OTRS noticeboard]]'
 	}
 };
 
-var callback_evaluate = function( e ) {
+Twinkle.talkback.evaluate = function(e) {
+	var form = e.target;
+	var tbtarget = form.getChecked('tbtarget')[0];
+	var page, message;
+	var section = form.section.value;
 
-	var tbtarget = e.target.getChecked( "tbtarget" )[0];
-	var page = null;
-	var section = e.target.section.value;
-	var fullUserTalkPageName = mw.config.get("wgFormattedNamespaces")[ mw.config.get("wgNamespaceIds").user_talk ] + ":" + mw.config.get('wgRelevantUserName');
+	var editSummary;
+	if (tbtarget === 'notice') {
+		page = form.noticeboard.value;
+		editSummary = Twinkle.talkback.noticeboards[page].editSummary;
+	} else {
 
-	if( tbtarget === "usertalk" || tbtarget === "other" || tbtarget === "see" ) {
-		page = e.target.page.value;
-
-		if( tbtarget === "usertalk" ) {
-			if( !page ) {
-				alert("You must specify the username of the user whose talk page you left a message on.");
-				return;
-			}
-		} else {
-			if( !page ) {
-				alert("You must specify the full page name when your message is not on a user talk page.");
-				return;
-			}
+		// usertalk, other, see
+		page = form.page ? form.page.value : mw.config.get('wgUserName');
+		if (form.message) {
+			message = form.message.value.trim();
 		}
-	} else if (tbtarget === "notice") {
-		page = e.target.noticeboard.value;
-	}
 
-	var message;
-	if (e.target.message) {
-		message = e.target.message.value;
+		if (tbtarget === 'mail') {
+			editSummary = "Notification: You've got mail";
+		} else if (tbtarget === 'see') {
+			editSummary = 'Please check the discussion at [[:' + page + (section ? '#' + section : '') + ']]';
+		} else {  // tbtarget one of mytalk, usertalk, other
+			editSummary = 'Talkback ([[:';
+			if (tbtarget !== 'other' && !/^\s*user talk:/i.test(page)) {
+				editSummary += 'User talk:';
+			}
+			editSummary += page + (section ? '#' + section : '') + ']])';
+		}
 	}
+	var text = '\n\n' + Twinkle.talkback.getNoticeWikitext(tbtarget, page, section, message);
 
-	Morebits.simpleWindow.setButtonsEnabled( false );
-	Morebits.status.init( e.target );
+	Morebits.simpleWindow.setButtonsEnabled(false);
+	Morebits.status.init(form);
+
+	var fullUserTalkPageName = mw.config.get('wgFormattedNamespaces')[mw.config.get('wgNamespaceIds').user_talk] + ':' + mw.config.get('wgRelevantUserName');
 
 	Morebits.wiki.actionCompleted.redirect = fullUserTalkPageName;
-	Morebits.wiki.actionCompleted.notice = "Talkback complete; reloading talk page in a few seconds";
+	Morebits.wiki.actionCompleted.notice = 'Talkback complete; reloading talk page in a few seconds';
 
-	var talkpage = new Morebits.wiki.page(fullUserTalkPageName, "Adding talkback");
-	var tbPageName = (tbtarget === "mytalk") ? mw.config.get("wgUserName") : page;
+	var talkpage = new Morebits.wiki.page(fullUserTalkPageName, 'Adding talkback');
 
-	var text;
-	if ( tbtarget === "notice" ) {
-		switch (page) {
-			case "afchd":
-				text = "\n\n{{subst:AFCHD/u|" + section + "}} ~~~~";
-				talkpage.setEditSummary( "You have replies at the [[Wikipedia:AFCHD|Articles for Creation Help Desk]]" + Twinkle.getPref("summaryAd") );
-				break;
-			case "an":
-				text = "\n\n== " + Twinkle.getFriendlyPref("adminNoticeHeading") + " ==\n";
-				text += "{{subst:ANI-notice|thread=" + section + "|noticeboard=Wikipedia:Administrators' noticeboard}} ~~~~";
-				talkpage.setEditSummary( "Notice of discussion at [[Wikipedia:Administrators' noticeboard]]" + Twinkle.getPref("summaryAd") );
-				break;
-			case "an3":
-				text = "\n\n{{subst:An3-notice|" + section + "}} ~~~~";
-				talkpage.setEditSummary( "Notice of discussion at [[Wikipedia:Administrators' noticeboard/Edit warring]]" + Twinkle.getPref("summaryAd") );
-				break;
-			case "ani":
-				text = "\n\n== " + Twinkle.getFriendlyPref("adminNoticeHeading") + " ==\n";
-				text += "{{subst:ANI-notice|thread=" + section + "|noticeboard=Wikipedia:Administrators' noticeboard/Incidents}} ~~~~";
-				talkpage.setEditSummary( "Notice of discussion at [[Wikipedia:Administrators' noticeboard/Incidents]]" + Twinkle.getPref("summaryAd") );
-				break;
-			case "coin":
-				text = "\n\n{{subst:Coin-notice|thread=" + section + "}} ~~~~";
-				talkpage.setEditSummary( "Notice of discussion at [[Wikipedia:Conflict of interest noticeboard]]" + Twinkle.getPref("summaryAd") );
-				break;
-			case "drn":
-				text = "\n\n{{subst:DRN-notice|thread=" + section + "}} ~~~~";
-				talkpage.setEditSummary( "Notice of discussion at [[Wikipedia:Dispute resolution noticeboard]]" + Twinkle.getPref("summaryAd") );
-				break;
-			case "hd":
-				text = "\n\n== Your question at the Help desk ==\n";
-				text += "{{helpdeskreply|1=" + section + "|ts=~~~~~}}";
-				talkpage.setEditSummary( "You have replies at the [[Wikipedia:Help desk|Wikipedia help desk]]" + Twinkle.getPref("summaryAd") );
-				break;
-			case "otrs":
-				text = "\n\n{{OTRSreply|1=" + section + "|2=~~~~}}";
-				talkpage.setEditSummary( "You have replies at the [[Wikipedia:OTRS noticeboard|OTRS noticeboard]]" + Twinkle.getPref("summaryAd") );
-				break;
-			case "th":
-				text = "\n\n== Teahouse talkback: you've got messages! ==\n{{WP:Teahouse/Teahouse talkback|WP:Teahouse/Questions|" + section + "|ts=~~~~}}";
-				talkpage.setEditSummary( "You have replies at the [[Wikipedia:Teahouse/Questions|Teahouse question board]]" + Twinkle.getPref("summaryAd") );
-				break;
-			default:
-				throw "Twinkle.talkback, function callback_evaluate: default case reached";
+	talkpage.setAppendText(text);
+	talkpage.setEditSummary(editSummary + Twinkle.getPref('summaryAd'));
+	talkpage.setCreateOption('recreate');
+	talkpage.setMinorEdit(Twinkle.getPref('markTalkbackAsMinor'));
+	talkpage.setFollowRedirect(true);
+	talkpage.append();
+};
+
+Twinkle.talkback.preview = function(form) {
+	var tbtarget = form.getChecked('tbtarget')[0];
+	var section = form.section.value;
+	var page, message;
+
+	if (tbtarget === 'notice') {
+		page = form.noticeboard.value;
+	} else {
+		// usertalk, other, see
+		page = form.page ? form.page.value : mw.config.get('wgUserName');
+		if (form.message) {
+			message = form.message.value.trim();
 		}
-
-	} else if ( tbtarget === "mail" ) {
-		text = "\n\n==" + Twinkle.getFriendlyPref("mailHeading") + "==\n{{you've got mail|subject=";
-		text += section + "|ts=~~~~~}}";
-
-		if( message ) {
-			text += "\n" + message.trim() + "  ~~~~";
-		} else if( Twinkle.getFriendlyPref("insertTalkbackSignature") ) {
-			text += "\n~~~~";
-		}
-
-		talkpage.setEditSummary("Notification: You've got mail" + Twinkle.getPref("summaryAd"));
-
-	} else if ( tbtarget === "see" ) {
-		text = "\n\n{{subst:Please see|location=" + tbPageName;
-		if (section) {
-			text += "#" + section;
-		}
-		text += "|more=" + message.trim() + "}}";
-		talkpage.setEditSummary("Please check the discussion at [[:" + tbPageName +
-			(section ? ("#" + section) : "") + "]]" + Twinkle.getPref("summaryAd"));
-
-	} else {  // tbtarget one of mytalk, usertalk, other
-		// clean talkback heading: strip section header markers that were erroneously suggested in the documentation
-		text = "\n\n==" + Twinkle.getFriendlyPref("talkbackHeading").replace( /^\s*=+\s*(.*?)\s*=+$\s*/, "$1" ) + "==\n{{talkback|";
-		text += tbPageName;
-
-		if( section ) {
-			text += "|" + section;
-		}
-
-		text += "|ts=~~~~~}}";
-
-		if( message ) {
-			text += "\n" + message.trim() + " ~~~~";
-		} else if( Twinkle.getFriendlyPref("insertTalkbackSignature") ) {
-			text += "\n~~~~";
-		}
-
-		var editSummary = "Talkback ([[:";
-		if (tbtarget !== "other" && !/^\s*user talk:/i.test(tbPageName)) {
-			editSummary += "User talk:";
-		}
-		editSummary += tbPageName + (section ? ("#" + section) : "") + "]])";
-		talkpage.setEditSummary(editSummary + Twinkle.getPref("summaryAd"));
 	}
 
-	talkpage.setAppendText( text );
-	talkpage.setCreateOption("recreate");
-	talkpage.setMinorEdit(Twinkle.getFriendlyPref("markTalkbackAsMinor"));
-	talkpage.setFollowRedirect( true );
-	talkpage.append();
+	var noticetext = Twinkle.talkback.getNoticeWikitext(tbtarget, page, section, message);
+	form.previewer.beginRender(noticetext, 'User_talk:' + mw.config.get('wgRelevantUserName')); // Force wikitext/correct username
+};
+
+Twinkle.talkback.getNoticeWikitext = function(tbtarget, page, section, message) {
+	var text;
+	if (tbtarget === 'notice') {
+		text = Morebits.string.safeReplace(Twinkle.talkback.noticeboards[page].text, '$SECTION', section);
+	} else if (tbtarget === 'see') {
+		text = '{{subst:Please see|location=' + page + (section ? '#' + section : '') + '|more=' + message.trim() + '}}';
+	} else {
+		text = '==';
+		if (tbtarget === 'mail') {
+			text += Twinkle.getPref('mailHeading') + '==\n' + "{{You've got mail|subject=" + section;
+		} else {  // tbtarget one of mytalk, usertalk, other
+			// clean talkback heading: strip section header markers that were erroneously suggested in the documentation
+			text += Twinkle.getPref('talkbackHeading').replace(/^\s*=+\s*(.*?)\s*=+$\s*/, '$1') +
+				'==\n' + '{{talkback|' + page + (section ? '|' + section : '');
+		}
+		text += '|ts=~~~~~}}';
+
+		if (message) {
+			text += '\n' + message + '  ~~~~';
+		} else if (Twinkle.getPref('insertTalkbackSignature')) {
+			text += '\n~~~~';
+		}
+	}
+	return text;
 };
 
 })(jQuery);
 
 
-//</nowiki>
+// </nowiki>

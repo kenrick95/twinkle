@@ -1,7 +1,7 @@
-//<nowiki>
+// <nowiki>
 
 
-(function($){
+(function($) {
 
 
 /*
@@ -10,7 +10,6 @@
  ****************************************
  * Mode of invocation:     Tab ("CSD")
  * Active on:              Non-special, existing pages
- * Config directives in:   TwinkleConfig
  *
  * NOTE FOR DEVELOPERS:
  *   If adding a new criterion, add it to the appropriate places at the top of
@@ -27,16 +26,18 @@ Twinkle.speedy = function twinklespeedy() {
 		return;
 	}
 
-	Twinkle.addPortletLink( Twinkle.speedy.callback, "KPC", "tw-csd", Morebits.userIsInGroup('sysop') ? "Hapus halaman berdasarkan WP:KPC" : "Meminta penghapusan cepat menurut WP:KPC" );
+	Twinkle.addPortletLink(Twinkle.speedy.callback, 'KPC', 'tw-csd', Morebits.userIsSysop ? 'Hapus halaman berdasarkan WP:KPC' : 'Meminta penghapusan cepat menurut WP:KPC');
 };
 
 // This function is run when the CSD tab/header link is clicked
 Twinkle.speedy.callback = function twinklespeedyCallback() {
-	Twinkle.speedy.initDialog(Morebits.userIsInGroup( 'sysop' ) ? Twinkle.speedy.callback.evaluateSysop : Twinkle.speedy.callback.evaluateUser, true);
+	Twinkle.speedy.initDialog(Morebits.userIsSysop ? Twinkle.speedy.callback.evaluateSysop : Twinkle.speedy.callback.evaluateUser, true);
 };
 
 // Used by unlink feature
 Twinkle.speedy.dialog = null;
+// Used throughout
+Twinkle.speedy.hasCSD = !!$('#delete-reason').length;
 
 // The speedy criteria list can be in one of several modes
 Twinkle.speedy.mode = {
@@ -72,196 +73,204 @@ Twinkle.speedy.mode = {
 			mode === Twinkle.speedy.mode.sysopMultipleSubmit ||
 			mode === Twinkle.speedy.mode.userMultipleRadioClick ||
 			mode === Twinkle.speedy.mode.sysopMultipleRadioClick;
-	},
+	}
 };
 
 // Prepares the speedy deletion dialog and displays it
 Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 	var dialog;
-	var isSysop = Morebits.userIsInGroup( 'sysop' );
-	Twinkle.speedy.dialog = new Morebits.simpleWindow( Twinkle.getPref('speedyWindowWidth'), Twinkle.getPref('speedyWindowHeight') );
+	Twinkle.speedy.dialog = new Morebits.simpleWindow(Twinkle.getPref('speedyWindowWidth'), Twinkle.getPref('speedyWindowHeight'));
 	dialog = Twinkle.speedy.dialog;
-	dialog.setTitle( "Pilih kriteria penghapusan cepat" );
-	dialog.setScriptName( "Twinkle" );
-	dialog.addFooterLink( "Kriteria Penghapusan Cepat", "WP:KPC" );
-	dialog.addFooterLink( "Bantuan Twinkle", "WP:TW/DOC#speedy" );
+	dialog.setTitle('Pilih kriteria penghapusan cepat');
+	dialog.setScriptName('Twinkle');
+	dialog.addFooterLink('Kriteria Penghapusan Cepat', 'WP:KPC');
+	dialog.addFooterLink('Bantuan Twinkle', 'WP:TW/DOC#speedy');
 
-	var form = new Morebits.quickForm( callbackfunc, (Twinkle.getPref('speedySelectionStyle') === 'radioClick' ? 'change' : null) );
-	if( isSysop ) {
-		form.append( {
-				type: 'checkbox',
-				list: [
-					{
-						label: 'Hanya tandai halaman, jangan hapus',
-						value: 'tag_only',
-						name: 'tag_only',
-						tooltip: 'Jika Anda hanya ingin menadai halaman alih-alih menghapusnya sekarang',
-						checked : Twinkle.getPref('deleteSysopDefaultToTag'),
-						event: function( event ) {
-							var cForm = event.target.form;
-							var cChecked = event.target.checked;
-							// enable/disable talk page checkbox
-							if (cForm.talkpage) {
-								cForm.talkpage.disabled = cChecked;
-								cForm.talkpage.checked = !cChecked && Twinkle.getPref('deleteTalkPageOnDelete');
-							}
-							// enable/disable redirects checkbox
-							cForm.redirects.disabled = cChecked;
-							cForm.redirects.checked = !cChecked;
-							// enable/disable delete multiple
-							cForm.delmultiple.disabled = cChecked;
-							cForm.delmultiple.checked = false;
-							// enable/disable open talk page checkbox
-							cForm.openusertalk.disabled = cChecked;
-							cForm.openusertalk.checked = false;
-
-							// enable/disable notify checkbox
-							cForm.notify.disabled = !cChecked;
-							cForm.notify.checked = cChecked;
-							// enable/disable multiple
-							cForm.multiple.disabled = !cChecked;
-							cForm.multiple.checked = false;
-
-							Twinkle.speedy.callback.modeChanged(cForm);
-
-							event.stopPropagation();
+	var form = new Morebits.quickForm(callbackfunc, Twinkle.getPref('speedySelectionStyle') === 'radioClick' ? 'change' : null);
+	if (Morebits.userIsSysop) {
+		form.append({
+			type: 'checkbox',
+			list: [
+				{
+					label: 'Hanya tandai halaman, jangan hapus',
+					value: 'tag_only',
+					name: 'tag_only',
+					tooltip: 'Jika Anda hanya ingin menadai halaman alih-alih menghapusnya sekarang',
+					checked: !(Twinkle.speedy.hasCSD || Twinkle.getPref('deleteSysopDefaultToDelete')),
+					event: function(event) {
+						var cForm = event.target.form;
+						var cChecked = event.target.checked;
+						// enable talk page checkbox
+						if (cForm.talkpage) {
+							cForm.talkpage.checked = !cChecked && Twinkle.getPref('deleteTalkPageOnDelete');
 						}
-					}
-				]
-			} );
+						// enable redirects checkbox
+						cForm.redirects.checked = !cChecked;
+						// enable delete multiple
+						cForm.delmultiple.checked = false;
+						// enable notify checkbox
+						cForm.notify.checked = cChecked;
+						// enable deletion notification checkbox
+						cForm.warnusertalk.checked = !cChecked && !Twinkle.speedy.hasCSD;
+						// enable multiple
+						cForm.multiple.checked = false;
+						// enable requesting creation protection
+						cForm.salting.checked = false;
 
-		var deleteOptions = form.append( {
-				type: 'div',
-				name: 'delete_options'
-			} );
-		deleteOptions.append( {
-				type: 'header',
-				label: 'Opsi penghapusan terkait'
-			} );
+						Twinkle.speedy.callback.modeChanged(cForm);
+
+						event.stopPropagation();
+					}
+				}
+			]
+		});
+
+		var deleteOptions = form.append({
+			type: 'div',
+			name: 'delete_options'
+		});
+		deleteOptions.append({
+			type: 'header',
+			label: 'Opsi penghapusan terkait'
+		});
 		if (mw.config.get('wgNamespaceNumber') % 2 === 0 && (mw.config.get('wgNamespaceNumber') !== 2 || (/\//).test(mw.config.get('wgTitle')))) {  // hide option for user pages, to avoid accidentally deleting user talk page
-			deleteOptions.append( {
+			deleteOptions.append({
 				type: 'checkbox',
 				list: [
 					{
 						label: 'Hapus juga halaman pembicaraan',
 						value: 'talkpage',
 						name: 'talkpage',
-						tooltip: "Pilihan ini juga menghapus halaman pembicaraan halaman ini. Jika Anda memilih KPC B8 (telah dipindahkan ke Commons), opsi ini tidak ditindaklanjuti dan halaman pembicaraan *tidak* dihapus.",
+						tooltip: 'Pilihan ini juga menghapus halaman pembicaraan halaman ini. Jika Anda memilih KPC B8 (telah dipindahkan ke Commons), opsi ini tidak ditindaklanjuti dan halaman pembicaraan *tidak* dihapus.',
 						checked: Twinkle.getPref('deleteTalkPageOnDelete'),
-						disabled: Twinkle.getPref('deleteSysopDefaultToTag'),
-						event: function( event ) {
+						event: function(event) {
 							event.stopPropagation();
 						}
 					}
 				]
-			} );
+			});
 		}
-		deleteOptions.append( {
-				type: 'checkbox',
-				list: [
-					{
-						label: 'Hapus juga semua pengalihan',
-						value: 'redirects',
-						name: 'redirects',
-						tooltip: "Opsi ini juga menghapus semua pengalihan yang beralih ke halaman ini. Abaikan jika penghapusan bersifat prosedural (misalnya pindah halaman).",
-						checked: Twinkle.getPref('deleteRedirectsOnDelete'),
-						disabled: Twinkle.getPref('deleteSysopDefaultToTag'),
-						event: function( event ) {
-							event.stopPropagation();
-						}
+		deleteOptions.append({
+			type: 'checkbox',
+			list: [
+				{
+					label: 'Hapus juga semua pengalihan',
+					value: 'redirects',
+					name: 'redirects',
+					tooltip: 'Opsi ini juga menghapus semua pengalihan yang beralih ke halaman ini. Abaikan jika penghapusan bersifat prosedural (misalnya pindah halaman).',
+					checked: Twinkle.getPref('deleteRedirectsOnDelete'),
+					event: function(event) {
+						event.stopPropagation();
 					}
-				]
-			} );
-		deleteOptions.append( {
+				}
+			]
+		});
+		deleteOptions.append({
 			type: 'checkbox',
 			list: [
 				{
 					label: 'Hapus dengan alasan beberapa kriteria',
 					value: 'delmultiple',
 					name: 'delmultiple',
-					tooltip: "Ketika terpilih, Anda dapat memilih beberapa kriteria yang dapat dipakai ke halaman. Misalnya, U11 dan A7.",
-					event: function( event ) {
-						Twinkle.speedy.callback.modeChanged( event.target.form );
+					tooltip: 'Ketika terpilih, Anda dapat memilih beberapa kriteria yang dapat dipakai ke halaman. Misalnya, U11 dan A7.',
+					event: function(event) {
+						Twinkle.speedy.callback.modeChanged(event.target.form);
 						event.stopPropagation();
 					}
 				}
 			]
-		} );
-		deleteOptions.append( {
-				type: 'checkbox',
-				list: [
-					{
-						label: 'Buka halaman pembicaraan pengguna saat mengirimkan',
-						value: 'openusertalk',
-						name: 'openusertalk',
-						tooltip: 'Secara baku akan membuka preferensi buka-halaman-pembicaraan ketika menghapus halaman dengan alasan ini. Jangan ubah jika Anda memilihnya untuk menghapus dalam beberapa kriteria.',
-						checked : false
-					}
-				]
-			} );
-	}
-
-	var tagOptions = form.append( {
-			type: 'div',
-			name: 'tag_options'
-		} );
-
-	if( isSysop ) {
-		tagOptions.append( {
-				type: 'header',
-				label: 'Opsi terkait dengan tag'
-			} );
-	}
-
-	tagOptions.append( {
+		});
+		deleteOptions.append({
 			type: 'checkbox',
 			list: [
 				{
-					label: 'Hubungi pembuat halaman jika memungkinkan',
-					value: 'notify',
-					name: 'notify',
-					tooltip: "Templat notifikasi akan diberikan pada halaman pembicaraan pembuat halaman, JIKA Anda mengaktifkan notifikasi di preferensi Twinkle " +
-						"untuk kriteria yang Anda pilih DAN kotak ini diberi ceklis. Pembuat halaman akan disambut juga.",
-					checked: !isSysop || Twinkle.getPref('deleteSysopDefaultToTag'),
-					disabled: isSysop && !Twinkle.getPref('deleteSysopDefaultToTag'),
-					event: function( event ) {
+					label: 'Notify page creator of page deletion',
+					value: 'warnusertalk',
+					name: 'warnusertalk',
+					tooltip: 'A notification template will be placed on the talk page of the creator, IF you have a notification enabled in your Twinkle preferences ' +
+						'for the criterion you choose AND this box is checked. The creator may be welcomed as well.',
+					checked: !Twinkle.speedy.hasCSD,
+					event: function(event) {
 						event.stopPropagation();
 					}
 				}
 			]
-		} );
-	tagOptions.append( {
-			type: 'checkbox',
-			list: [
-				{
-					label: 'Tandai dengan beberapa tag',
-					value: 'multiple',
-					name: 'multiple',
-					tooltip: "Ketika dipilih, Anda dapat memilih beberapa kriteria untuk diterapkan. Contohnya, G11 dan A7 adalah gabungan umum pada artikel.",
-					disabled: isSysop && !Twinkle.getPref('deleteSysopDefaultToTag'),
-					event: function( event ) {
-						Twinkle.speedy.callback.modeChanged( event.target.form );
-						event.stopPropagation();
-					}
+		});
+	}
+
+	var tagOptions = form.append({
+		type: 'div',
+		name: 'tag_options'
+	});
+
+	if (Morebits.userIsSysop) {
+		tagOptions.append({
+			type: 'header',
+			label: 'Opsi terkait dengan tag'
+		});
+	}
+
+	tagOptions.append({
+		type: 'checkbox',
+		list: [
+			{
+				label: 'Hubungi pembuat halaman jika memungkinkan',
+				value: 'notify',
+				name: 'notify',
+				tooltip: 'Templat notifikasi akan diberikan pada halaman pembicaraan pembuat halaman, JIKA Anda mengaktifkan notifikasi di preferensi Twinkle ' +
+					'untuk kriteria yang Anda pilih DAN kotak ini diberi ceklis. Pembuat halaman akan disambut juga.',
+				checked: !Morebits.userIsSysop || !(Twinkle.speedy.hasCSD || Twinkle.getPref('deleteSysopDefaultToDelete')),
+				event: function(event) {
+					event.stopPropagation();
 				}
-			]
-		} );
+			}
+		]
+	});
+	tagOptions.append({
+		type: 'checkbox',
+		list: [
+			{
+				label: 'Tag for creation protection (salting) as well',
+				value: 'salting',
+				name: 'salting',
+				tooltip: 'When selected, the speedy deletion tag will be accompanied by a {{salt}} tag requesting that the deleting administrator apply creation protection. Only select if this page has been repeatedly recreated.',
+				event: function(event) {
+					event.stopPropagation();
+				}
+			}
+		]
+	});
+	tagOptions.append({
+		type: 'checkbox',
+		list: [
+			{
+				label: 'Tag with multiple criteria',
+				value: 'multiple',
+				name: 'multiple',
+				tooltip: 'Ketika dipilih, Anda dapat memilih beberapa kriteria untuk diterapkan. Contohnya, G11 dan A7 adalah gabungan umum pada artikel.',
+				event: function(event) {
+					Twinkle.speedy.callback.modeChanged(event.target.form);
+					event.stopPropagation();
+				}
+			}
+		]
+	});
 
-	form.append( {
-			type: 'div',
-			name: 'work_area',
-			label: 'Gagal menginisialisasi modul KPC. Ulangi kembali atau beritahukan pengembang Twinkle mengenai masalah ini.'
-		} );
+	form.append({
+		type: 'div',
+		name: 'work_area',
+		label: 'Gagal menginisialisasi modul KPC. Ulangi kembali atau beritahukan pengembang Twinkle mengenai masalah ini.'
+	});
 
-	if( Twinkle.getPref( 'speedySelectionStyle' ) !== 'radioClick' ) {
-		form.append( { type: 'submit' } );
+	if (Twinkle.getPref('speedySelectionStyle') !== 'radioClick') {
+		form.append({ type: 'submit', className: 'tw-speedy-submit' }); // Renamed in modeChanged
 	}
 
 	var result = form.render();
-	dialog.setContent( result );
+	dialog.setContent(result);
 	dialog.display();
 
-	Twinkle.speedy.callback.modeChanged( result );
+	Twinkle.speedy.callback.modeChanged(result);
 };
 
 Twinkle.speedy.callback.getMode = function twinklespeedyCallbackGetMode(form) {
@@ -294,124 +303,126 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 	var isSysopMode = Twinkle.speedy.mode.isSysop(mode);
 
 	if (isSysopMode) {
-		$("[name=delete_options]").show();
-		$("[name=tag_options]").hide();
+		$('[name=delete_options]').show();
+		$('[name=tag_options]').hide();
+		$('button.tw-speedy-submit').text('Delete page');
 	} else {
-		$("[name=delete_options]").hide();
-		$("[name=tag_options]").show();
+		$('[name=delete_options]').hide();
+		$('[name=tag_options]').show();
+		$('button.tw-speedy-submit').text('Tag page');
 	}
 
-	var work_area = new Morebits.quickForm.element( {
-			type: 'div',
-			name: 'work_area'
-		} );
+	var work_area = new Morebits.quickForm.element({
+		type: 'div',
+		name: 'work_area'
+	});
 
 	if (mode === Twinkle.speedy.mode.userMultipleRadioClick || mode === Twinkle.speedy.mode.sysopMultipleRadioClick) {
 		var evaluateType = isSysopMode ? 'evaluateSysop' : 'evaluateUser';
 
-		work_area.append( {
-				type: 'div',
-				label: 'Setelah selesai, klik:'
-			} );
-		work_area.append( {
-				type: 'button',
-				name: 'submit-multiple',
-				label: 'Submit Query',
-				event: function( event ) {
-					Twinkle.speedy.callback[evaluateType]( event );
-					event.stopPropagation();
-				}
-			} );
+		work_area.append({
+			type: 'div',
+			label: 'Setelah selesai, klik:'
+		});
+		work_area.append({
+			type: 'button',
+			name: 'submit-multiple',
+			label: isSysopMode ? 'Hapus halaman' : 'Tandai halaman',
+			event: function(event) {
+				Twinkle.speedy.callback[evaluateType](event);
+				event.stopPropagation();
+			}
+		});
 	}
 
-	var radioOrCheckbox = (Twinkle.speedy.mode.isMultiple(mode) ? 'checkbox' : 'radio');
+	var radioOrCheckbox = Twinkle.speedy.mode.isMultiple(mode) ? 'checkbox' : 'radio';
 
 	if (isSysopMode && !Twinkle.speedy.mode.isMultiple(mode)) {
-		work_area.append( { type: 'header', label: 'Alasan lain' } );
-		work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.customRationale, mode) } );
+		work_area.append({ type: 'header', label: 'Alasan lain' });
+		work_area.append({ type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.customRationale, mode) });
 	}
 
 	if (namespace % 2 === 1 && namespace !== 3) {
 		// show db-talk on talk pages, but not user talk pages
-		work_area.append( { type: 'header', label: 'Halaman pembicaraan' } );
-		work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.talkList, mode) } );
+		work_area.append({ type: 'header', label: 'Halaman pembicaraan' });
+		work_area.append({ type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.talkList, mode) });
 	}
 
 	if (!mw.config.get('wgIsRedirect')) {
 		switch (namespace) {
 			case 0:  // article
 			case 1:  // talk
-				work_area.append( { type: 'header', label: 'Artikel' } );
-				work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.articleList, mode) } );
+				work_area.append({ type: 'header', label: 'Artikel' });
+				work_area.append({ type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.articleList, mode) });
 				break;
 
 			case 2:  // user
 			case 3:  // user talk
-				work_area.append( { type: 'header', label: 'Halaman pengguna' } );
-				work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.userList, mode) } );
+				work_area.append({ type: 'header', label: 'Halaman pengguna' });
+				work_area.append({ type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.userList, mode) });
 				break;
 
 			case 6:  // file
 			case 7:  // file talk
-				work_area.append( { type: 'header', label: 'Berkas' } );
-				work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.fileList, mode) } );
+				work_area.append({ type: 'header', label: 'Berkas' });
+				work_area.append({ type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.fileList, mode) });
 				if (!isSysopMode) {
-					work_area.append( { type: 'div', label: 'Menandai untuk KPC B4 (tanpa lisensi), B5 (penggunaan wajar tak terpakai), F6 (tanpa alasan penggunaan untuk penggunaan wajar), dan F11 (tanpa izin) dapat menggunakan tab "DI".' } );
+					work_area.append({ type: 'div', label: 'Menandai untuk KPC B4 (tanpa lisensi), B5 (penggunaan wajar tak terpakai), F6 (tanpa alasan penggunaan untuk penggunaan wajar), dan F11 (tanpa izin) dapat menggunakan tab "DI".' });
 				}
 				break;
 
 			case 10:  // template
 			case 11:  // template talk
-				work_area.append( { type: 'header', label: 'Templat' } );
-				work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.templateList, mode) } );
+				work_area.append({ type: 'header', label: 'Templat' });
+				work_area.append({ type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.templateList, mode) });
 				break;
 
 			case 14:  // category
 			case 15:  // category talk
-				work_area.append( { type: 'header', label: 'Kategori' } );
-				work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.categoryList, mode) } );
+				work_area.append({ type: 'header', label: 'Kategori' });
+				work_area.append({ type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.categoryList, mode) });
 				break;
 
 			case 100:  // portal
 			case 101:  // portal talk
-				work_area.append( { type: 'header', label: 'Portal' } );
-				work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.portalList, mode) } );
+				work_area.append({ type: 'header', label: 'Portal' });
+				work_area.append({ type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.portalList, mode) });
 				break;
 
 			default:
 				break;
 		}
 	} else {
-		if (namespace == 2 || namespace == 3) {
-			work_area.append( { type: 'header', label: 'User pages' } );
-			work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.userList, mode) } );
+		if (namespace === 2 || namespace === 3) {
+			work_area.append({ type: 'header', label: 'User pages' });
+			work_area.append({ type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.userList, mode) });
 		}
-		work_area.append( { type: 'header', label: 'Redirects' } );
-		work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.redirectList, mode) } );
+		work_area.append({ type: 'header', label: 'Redirects' });
+		work_area.append({ type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(Twinkle.speedy.redirectList, mode) });
 	}
 
 	var generalCriteria = Twinkle.speedy.generalList;
 
 	// custom rationale lives under general criteria when tagging
-	if(!isSysopMode) {
+	if (!isSysopMode) {
 		generalCriteria = Twinkle.speedy.customRationale.concat(generalCriteria);
 	}
-	work_area.append( { type: 'header', label: 'Kriteria umum' } );
-	work_area.append( { type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(generalCriteria, mode) });
+	work_area.append({ type: 'header', label: 'Kriteria umum' });
+	work_area.append({ type: radioOrCheckbox, name: 'csd', list: Twinkle.speedy.generateCsdList(generalCriteria, mode) });
 
-	var old_area = Morebits.quickForm.getElements(form, "work_area")[0];
+	var old_area = Morebits.quickForm.getElements(form, 'work_area')[0];
 	form.replaceChild(work_area.render(), old_area);
 
 	// if sysop, check if CSD is already on the page and fill in custom rationale
-	if (isSysopMode && $("#delete-reason").length) {
-		var customOption = $("input[name=csd][value=reason]")[0];
+	if (isSysopMode && Twinkle.speedy.hasCSD) {
+		var customOption = $('input[name=csd][value=reason]')[0];
 		if (customOption) {
 			if (Twinkle.getPref('speedySelectionStyle') !== 'radioClick') {
 				// force listeners to re-init
 				customOption.click();
 				customOption.parentNode.appendChild(customOption.subgroup);
 			}
-			customOption.subgroup.querySelector('input').value = decodeURIComponent($("#delete-reason").text()).replace(/\+/g, ' ');
+			customOption.subgroup.querySelector('input').value = decodeURIComponent($('#delete-reason').text()).replace(/\+/g, ' ');
 		}
 	}
 };
@@ -487,7 +498,7 @@ Twinkle.speedy.generateCsdList = function twinklespeedyGenerateCsdList(list, mod
 				criterion.subgroup = criterion.subgroup.concat({
 					type: 'button',
 					name: 'submit',
-					label: 'Kirim permintaan',
+					label: isSysopMode ? 'Hapus halaman' : 'Tandai halaman',
 					event: submitSubgroupHandler
 				});
 			} else {
@@ -496,7 +507,7 @@ Twinkle.speedy.generateCsdList = function twinklespeedyGenerateCsdList(list, mod
 					{
 						type: 'button',
 						name: 'submit',  // ends up being called "csd.submit" so this is OK
-						label: 'Kirim permintaan',
+						label: isSysopMode ? 'Hapus halaman' : 'Tandai halaman',
 						event: submitSubgroupHandler
 					}
 				];
@@ -505,28 +516,13 @@ Twinkle.speedy.generateCsdList = function twinklespeedyGenerateCsdList(list, mod
 			criterion.event = openSubgroupHandler;
 		}
 
-		if ( isSysopMode ) {
-			var originalEvent = criterion.event;
-			criterion.event = function(e) {
-				if (multiple) return originalEvent(e);
-
-				var normalizedCriterion = Twinkle.speedy.normalizeHash[e.target.value];
-				$('[name=openusertalk]').prop('checked',
-						Twinkle.getPref('openUserTalkPageOnSpeedyDelete').indexOf(normalizedCriterion) !== -1
-					);
-				if ( originalEvent ) {
-					return originalEvent(e);
-				}
-			};
-		}
-
 		return criterion;
 	});
 };
 
 Twinkle.speedy.customRationale = [
 	{
-		label: 'Alasan lain' + (Morebits.userIsInGroup('sysop') ? ' (alasan penghapusan lainnya)' : ' menggunakan kriteria templat {{db}}'),
+		label: 'Alasan lain' + (Morebits.userIsSysop ? ' (alasan penghapusan lainnya)' : ' menggunakan kriteria templat {{db}}'),
 		value: 'reason',
 		tooltip: '{{db}} kependekan dari "dihapus karena". Sekurang-kurangnya satu kriteria harus diberikan, dan sebutkan alasannya.',
 		subgroup: {
@@ -551,7 +547,7 @@ Twinkle.speedy.fileList = [
 	{
 		label: 'B1: Redundan atau duplikat',
 		value: 'redundantimage',
-		tooltip: 'Berkas atau media tak terpakai yang merupakan sebuah salinan, dengan format yang sama dan resolusi/kualitas yang sama/lebih rendah, dari sebuah berkas atau media lain di Wikipedia. Yang tidak termasuk di dalamnya adalah duplikat berkas atau media di Wikimedia Commons, karena alasan-alasan lisensi;',
+		tooltip: 'Berkas atau media tak terpakai yang merupakan sebuah salinan, dengan format yang sama dan resolusi/kualitas yang sama/lebih rendah, dari sebuah berkas atau media lain di Wikipedia. Yang tidak termasuk di dalamnya adalah duplikat berkas atau media di Wikimedia Commons, karena alasan-alasan lisensi;'
 	},
 	{
 		label: 'B2: Rusak atau kosong',
@@ -598,7 +594,7 @@ Twinkle.speedy.fileList = [
 			size: 60
 		}
 	},
-	/*{
+	/* {
 		label: 'F7: Fair-use media from a commercial image agency which is not the subject of sourced commentary',
 		value: 'badfairuse',  // same as above
 		tooltip: 'Non-free images or media from a commercial source (e.g., Associated Press, Getty), where the file itself is not the subject of sourced commentary, are considered an invalid claim of fair use and fail the strict requirements of WP:NFCC.',
@@ -609,7 +605,7 @@ Twinkle.speedy.fileList = [
 			size: 60
 		},
 		hideWhenMultiple: true
-	},*/
+	}, */
 	{
 		label: 'B8: Berkas yang sama persis tersedia di Wikimedia Commons',
 		value: 'commons',
@@ -696,51 +692,51 @@ Twinkle.speedy.articleList = [
 	{
 		label: 'A7: Tidak mengindikasikan kepentingan (tokoh, organisasi, isi situs)',
 		value: 'a7',
-		tooltip: 'Artikel tentang tokoh, organisasi (termasuk di dalamnya band, klub, perusahaan, dll., kecuali sekolah), atau isi situs yang tidak menunjukkan alasan mengapa subyek itu dianggap penting. Jika yang kontroversial, maka Anda dapat mengusulkan penghapusan dengan templat {{hapus}} atau membawanya ke halaman Wikipedia:Usulan penghapusan',
-		//hideWhenSingle: true
+		tooltip: 'Artikel tentang tokoh, organisasi (termasuk di dalamnya band, klub, perusahaan, dll., kecuali sekolah), atau isi situs yang tidak menunjukkan alasan mengapa subyek itu dianggap penting. Jika yang kontroversial, maka Anda dapat mengusulkan penghapusan dengan templat {{hapus}} atau membawanya ke halaman Wikipedia:Usulan penghapusan'
+		// hideWhenSingle: true
 	},
-	/*{
-		label: 'A7: Unremarkable person',
+	/* {
+		label: 'A7: No indication of importance (person)',
 		value: 'person',
 		tooltip: 'An article about a real person that does not assert the importance or significance of its subject. If controversial, or if there has been a previous AfD that resulted in the article being kept, the article should be nominated for AfD instead',
 		hideWhenMultiple: true
 	},
 	{
-		label: 'A7: Unremarkable musician(s) or band',
+		label: 'A7: No indication of importance (musician(s) or band)',
 		value: 'band',
 		tooltip: 'Article about a band, singer, musician, or musical ensemble that does not assert the importance or significance of the subject',
 		hideWhenMultiple: true
 	},
 	{
-		label: 'A7: Unremarkable club',
+		label: 'A7: No indication of importance (club, society or group)',
 		value: 'club',
-		tooltip: 'Article about a club that does not assert the importance or significance of the subject',
+		tooltip: 'Article about a club, society or group that does not assert the importance or significance of the subject',
 		hideWhenMultiple: true
 	},
 	{
-		label: 'A7: Unremarkable company or organization',
+		label: 'A7: No indication of importance (company or organization)',
 		value: 'corp',
 		tooltip: 'Article about a company or organization that does not assert the importance or significance of the subject',
 		hideWhenMultiple: true
 	},
 	{
-		label: 'A7: Unremarkable website or web content',
+		label: 'A7: No indication of importance (website or web content)',
 		value: 'web',
 		tooltip: 'Article about a web site, blog, online forum, webcomic, podcast, or similar web content that does not assert the importance or significance of its subject',
 		hideWhenMultiple: true
 	},
 	{
-		label: 'A7: Unremarkable individual animal',
+		label: 'A7: No indication of importance (individual animal)',
 		value: 'animal',
 		tooltip: 'Article about an individual animal (e.g. pet) that does not assert the importance or significance of its subject',
 		hideWhenMultiple: true
 	},
 	{
-		label: 'A7: Unremarkable organized event',
+		label: 'A7: No indication of importance (organized event)',
 		value: 'event',
 		tooltip: 'Article about an organized event (tour, function, meeting, party, etc.) that does not assert the importance or significance of its subject',
 		hideWhenMultiple: true
-	},*/
+	}, */
 	{
 		label: 'A9: Artikel yang tidak mengindikasikan kepentingan (rekaman musik)',
 		value: 'a9',
@@ -755,12 +751,12 @@ Twinkle.speedy.articleList = [
 			type: 'input',
 			label: 'Artikel serupa: '
 		}
-	},
-	/*{
+	}
+	/* {
 		label: 'A11: Obviously made up by creator, and no claim of significance',
 		value: 'madeup',
 		tooltip: 'An article which plainly indicates that the subject was invented/coined/discovered by the article\'s creator or someone they know personally, and does not credibly indicate why its subject is important or significant'
-	}*/
+	} */
 ];
 
 Twinkle.speedy.categoryList = [
@@ -792,13 +788,13 @@ Twinkle.speedy.userList = [
 		label: 'H1: Permintaan pengguna',
 		value: 'userreq',
 		tooltip: 'Yang termasuk di dalamnya: halaman dan subhalaman pengguna (tetapi tidak halaman pembicaraan pengguna) yang diminta untuk dihapus oleh penggunanya. Dalam kasus-kasus yang langka ada kemungkinan halaman tersebut perlu dipertahankan untuk kepentingan administratif.',
-		subgroup: ((mw.config.get('wgNamespaceNumber') === 3 && mw.config.get('wgTitle').indexOf('/') === -1) ? {
+		subgroup: mw.config.get('wgNamespaceNumber') === 3 && mw.config.get('wgTitle').indexOf('/') === -1 ? {
 			name: 'userreq_rationale',
 			type: 'input',
 			label: 'Alasan penghapusan (wajib): ',
 			tooltip: 'Halaman pembicaraan pengguna dihapus hanya dalam keadaan langka tertentu.',
 			size: 60
-		} : null),
+		} : null,
 		hideSubgroupWhenMultiple: true
 	},
 	{
@@ -824,14 +820,16 @@ Twinkle.speedy.userList = [
 		tooltip: 'Halaman pengguna untuk promosi, dengan nama pengguna untuk tujuan promosi. Perhatikan pula bahwa dengan adanya halaman mengenai perusahaan pada halaman pengguna tidak termasuk dalam kriteria ini. Jika halaman pengguna adalah spam, dan nama penggunanya tidak, tandai dengan U11 saja.',
 		hideWhenMultiple: true,
 		hideWhenRedirect: true
-	},
-	// {
-	// 	label: 'G13: AfC draft submission or a blank draft, stale by over 6 months',
-	// 	value: 'afc',
-	// 	tooltip: 'Any rejected or unsubmitted AfC draft submission or a blank draft, that has not been edited in over 6 months (excluding bot edits).',
-	// 	hideWhenMultiple: true,
-	// 	hideWhenRedirect: true
-	// }
+	}
+	/*
+	{
+		label: 'G13: AfC draft submission or a blank draft, stale by over 6 months',
+		value: 'afc',
+		tooltip: 'Any rejected or unsubmitted AfC draft submission or a blank draft, that has not been edited in over 6 months (excluding bot edits).',
+		hideWhenMultiple: true,
+		hideWhenRedirect: true
+	}
+	*/
 ];
 
 Twinkle.speedy.templateList = [
@@ -844,7 +842,8 @@ Twinkle.speedy.templateList = [
 			type: 'input',
 			label: 'Penjelasan lanjut: ',
 			size: 60
-		}
+		},
+		hideSubgroupWhenSysop: true
 	},
 	{
 		label: 'T4: Templat yang tidak digunakan selayaknya dan/atau duplikat templat lain',
@@ -869,8 +868,7 @@ Twinkle.speedy.portalList = [
 			name: 'p1_criterion',
 			type: 'input',
 			label: 'Pilih kriteria yang berlaku: '
-		},
-		hideWhenMultiple: true
+		}
 	},
 	{
 		label: 'P2: Portal yang kurang terisi',
@@ -884,13 +882,13 @@ Twinkle.speedy.generalList = [
 		label: 'U1: Tulisan ngawur. Yang termasuk di dalamnya: Halaman-halaman yang isinya hanyalah ujaran tak keruan, tanpa makna dan isi.',
 		value: 'nonsense',
 		tooltip: 'Yang tidak termasuk di dalamnya: penulisan yang buruk, terjemahan buruk, vandalisme, materi fiktif, materi berbahasa selain bahasa Indonesia, pemberitaan palsu; namun demikian, beberapa di antara yang disebutkan dapat dihapus dengan dasar vandalisme.',
-		hideInNamespaces: [ 2 ]		// Not applicable in userspace
+		hideInNamespaces: [ 2 ] // Not applicable in userspace
 	},
 	{
 		label: 'U2: Uji coba',
 		value: 'test',
 		tooltip: 'Halaman yang dibuat untuk mencoba kode-kode wiki. Yang tidak termasuk di dalamnya: penyuntingan di halaman-halaman bernama "bak pasir" dan ruangnama pengguna.',
-		hideInNamespaces: [ 2 ]		// Not applicable in userspace
+		hideInNamespaces: [ 2 ] // Not applicable in userspace
 	},
 	{
 		label: 'U3: Vandalisme murni/terang-terangan.',
@@ -913,8 +911,7 @@ Twinkle.speedy.generalList = [
 			label: 'Halaman yang memuat diskusi penghapusan: ',
 			tooltip: 'Harus dimulai dengan awalan "Wikipedia:"',
 			size: 60
-		},
-		hideSubgroupWhenMultiple: true
+		}
 	},
 	{
 		label: 'U5: Pengguna yang diblokir atau yang dilarang.',
@@ -925,8 +922,7 @@ Twinkle.speedy.generalList = [
 			type: 'input',
 			label: 'Nama pengguna (jika ada): ',
 			tooltip: 'Jangan dimulai dengan "Pengguna:"'
-		},
-		hideSubgroupWhenMultiple: true
+		}
 	},
 	{
 		label: 'G6: Move',
@@ -954,19 +950,21 @@ Twinkle.speedy.generalList = [
 		hideWhenMultiple: true,
 		hideWhenRedirect: true
 	},
-	// {
-	// 	label: 'G6: XfD',
-	// 	value: 'xfd',
-	// 	tooltip: 'A deletion discussion (at AfD, FfD, RfD, TfD, CfD, or MfD) was closed as "delete", but the page wasn\'t actually deleted.',
-	// 	subgroup: {
-	// 		name: 'xfd_fullvotepage',
-	// 		type: 'input',
-	// 		label: 'Page where the deletion discussion was held: ',
-	// 		tooltip: 'Must start with "Wikipedia:"',
-	// 		size: 40
-	// 	},
-	// 	hideWhenMultiple: true
-	// },
+	/*
+	{
+		label: 'G6: XfD',
+		value: 'xfd',
+		tooltip: 'A deletion discussion (at AfD, FfD, RfD, TfD, CfD, or MfD) was closed as "delete", but the page wasn\'t actually deleted.',
+		subgroup: {
+			name: 'xfd_fullvotepage',
+			type: 'input',
+			label: 'Page where the deletion discussion was held: ',
+			tooltip: 'Must start with "Wikipedia:"',
+			size: 40
+		},
+		hideWhenMultiple: true
+	},
+	*/
 	{
 		label: 'U6: Pemindahan salin-tempel',
 		value: 'copypaste',
@@ -1011,7 +1009,8 @@ Twinkle.speedy.generalList = [
 			type: 'input',
 			label: 'Penjelasan opsional: ',
 			size: 60
-		}
+		},
+		hideSubgroupWhenSysop: true
 	},
 	{
 		label: 'U8: Subhalaman tanpa halaman asal',
@@ -1064,19 +1063,18 @@ Twinkle.speedy.generalList = [
 			}
 		]
 	},
-	// {
-	// 	label: 'G13: Page in draft namespace or userspace AfC submission, stale by over 6 months',
-	// 	value: 'afc',
-	// 	tooltip: 'Any rejected or unsubmitted AfC submission in userspace or any page in draft namespace, that has not been edited for more than 6 months. Blank drafts in either namespace are also included.',
-	// 	hideWhenRedirect: true,
-	// 	showInNamespaces: [2, 118]  // user, draft namespaces only
-	// },
-	// {
-	// 	label: 'G14: Unnecessary disambiguation page',
-	// 	value: 'disambig',
-	// 	tooltip: 'This only applies for orphaned disambiguation pages which either: (1) disambiguate only one existing Wikipedia page and whose title ends in "(disambiguation)" (i.e., there is a primary topic); or (2) disambiguate no (zero) existing Wikipedia pages, regardless of its title.',
-	// 	hideWhenRedirect: true
-	// }
+	{
+		label: 'G13: Page in draft namespace or userspace AfC submission, stale by over 6 months',
+		value: 'afc',
+		tooltip: 'Any rejected or unsubmitted AfC submission in userspace or any non-redirect page in draft namespace, that has not been edited for more than 6 months. Blank drafts in either namespace are also included.',
+		hideWhenRedirect: true,
+		showInNamespaces: [2, 118]  // user, draft namespaces only
+	},
+	{
+		label: 'G14: Unnecessary disambiguation page',
+		value: 'disambig',
+		tooltip: 'This only applies for orphaned disambiguation pages which either: (1) disambiguate only one existing Wikipedia page and whose title ends in "(disambiguation)" (i.e., there is a primary topic); or (2) disambiguate no (zero) existing Wikipedia pages, regardless of its title.  It also applies to orphan "Foo (disambiguation)" redirects that target pages that are not disambiguation or similar disambiguation-like pages (such as set index articles or lists)'
+	}
 ];
 
 Twinkle.speedy.redirectList = [
@@ -1087,16 +1085,16 @@ Twinkle.speedy.redirectList = [
 		showInNamespaces: [ 0 ]
 	},
 	{
-		label: 'R4: Pengalihan yang baru dibuat karena kesalahan ketik atau kesalahan penamaan yang tidak disengaja',
+		label: 'R3: Pengalihan yang baru dibuat karena kesalahan ketik atau kesalahan penamaan yang tidak disengaja',
 		value: 'redirtypo',
 		tooltip: 'Meskipun demikian, pengalihan dari kesalahan umum pengejaan atau penamaan biasanya berguna, seperti halnya pengalihan dari istilah dalam bahasa lain.'
 	},
-	// {
-	// 	label: 'R4: File namespace redirect with name that matches a Commons page',
-	// 	value: 'redircom',
-	// 	tooltip: 'The redirect should have no incoming links (unless the links are cleary intended for the file or redirect at Commons).',
-	// 	showInNamespaces: [ 6 ]
-	// },
+	{
+		label: 'R4: File namespace redirect with a name that matches a Commons page',
+		value: 'redircom',
+		tooltip: 'The redirect should have no incoming links (unless the links are cleary intended for the file or redirect at Commons).',
+		showInNamespaces: [ 6 ]
+	},
 	{
 		label: 'U6: Pengalihan ke halaman disambiguasi yang salah',
 		value: 'movedab',
@@ -1104,11 +1102,11 @@ Twinkle.speedy.redirectList = [
 		hideWhenMultiple: true
 	},
 	{
-		label: 'U8: Pengalihan ke target tidak sah, seperti target yang tidak ada, pengalihan ganda, dan judul yang buruk',
+		label: 'U8: Pengalihan ke target tidak sah',
 		value: 'redirnone',
 		tooltip: 'Ini tidak berlaku untuk halaman berguna ke sebuah proyek, dan khususnya: diskusi penghapusan yang tidak dicatat di tempat lain, halaman pengguna dan pembicaraannya, arsip halaman pembicaraan, pengalihan yang dapat diperbaiki, dan halaman berkas dan pembicaraannya yang ada di Commons.',
 		hideWhenMultiple: true
-	},
+	}
 ];
 
 Twinkle.speedy.normalizeHash = {
@@ -1158,32 +1156,29 @@ Twinkle.speedy.normalizeHash = {
 	'a9': 'a9',
 	'a10': 'a10',
 	'madeup': 'a11',
-	'rediruser': 'r3',
-	'redirtypo': 'r4',
-	// 'redircom' : 'r4',
+	'rediruser': 'r2',
+	'redirtypo': 'r3',
+	'redircom': 'r4',
 	'redundantimage': 'b1',
 	'noimage': 'b2',
 	'fpcfail': 'b2',
 	'noncom': 'b3',
 	'unksource': 'b4',
 	'unfree': 'b5',
-	'b5': 'b5',
+	'f5': 'b5',
 	'norat': 'b6',
 	'badfairuse': 'b7',
-	'nowcommons': 'b8',
 	'commons': 'b8',
 	'imgcopyvio': 'b9',
 	'badfiletype': 'b10',
 	'nopermission': 'b11',
 	'catempty': 'k1',
-	'k1': 'k1',
-	'k2': 'k2',
 	'userreq': 'h1',
 	'nouser': 'h2',
 	'gallery': 'h3',
 	'notwebhost': 'h5',
-	'policy': 't3',
-	'duplicatetemplate': 't4',
+	'policy': 't2',
+	'duplicatetemplate': 't3',
 	'p1': 'p1',
 	'emptyportal': 'p2',
 	'p2': 'p2'
@@ -1193,28 +1188,31 @@ Twinkle.speedy.callbacks = {
 	getTemplateCodeAndParams: function(params) {
 		var code, parameters, i;
 		if (params.normalizeds.length > 1) {
-			code = "{{db-multiple";
+			code = '{{db-multiple';
 			params.utparams = {};
 			$.each(params.normalizeds, function(index, norm) {
-				code += "|" + norm.toUpperCase();
+				code += '|' + norm.toUpperCase();
 				parameters = params.templateParams[index] || [];
 				for (var i in parameters) {
 					if (typeof parameters[i] === 'string' && !parseInt(i, 10)) {  // skip numeric parameters - {{db-multiple}} doesn't understand them
-						code += "|" + i + "=" + parameters[i];
+						code += '|' + i + '=' + parameters[i];
 					}
 				}
 				$.extend(params.utparams, Twinkle.speedy.getUserTalkParameters(norm, parameters));
 			});
-			code += "}}";
+			code += '}}';
 		} else {
 			parameters = params.templateParams[0] || [];
-			code = "{{hapus|" + params.values[0];
+			code = '{{hapus|' + params.values[0];
 			for (i in parameters) {
 				if (typeof parameters[i] === 'string') {
-					code += "|" + i + "=" + parameters[i];
+					code += '|' + i + '=' + parameters[i];
 				}
 			}
-			code += "}}";
+			if (params.usertalk) {
+				code += '|help=off';
+			}
+			code += '}}';
 			params.utparams = Twinkle.speedy.getUserTalkParameters(params.normalizeds[0], parameters);
 		}
 
@@ -1223,106 +1221,200 @@ Twinkle.speedy.callbacks = {
 
 	parseWikitext: function(wikitext, callback) {
 		var query = {
-			action: "parse",
-			prop: "text",
-			pst: "true",
+			action: 'parse',
+			prop: 'text',
+			pst: 'true',
 			text: wikitext,
-			contentmodel: "wikitext",
-			title: mw.config.get("wgPageName")
+			contentmodel: 'wikitext',
+			title: mw.config.get('wgPageName')
 		};
 
-		var statusIndicator = new Morebits.status( 'Membuat ringkasan penghapusan' );
-		var api = new Morebits.wiki.api( 'Memilah-milah templat hapus', query, function(apiObj) {
-				var reason = decodeURIComponent($(apiObj.getXML().querySelector('text').childNodes[0].nodeValue).find('#delete-reason').text()).replace(/\+/g, ' ');
-				if (!reason) {
-					statusIndicator.warn( 'Tidak dapat membuat ringkasan dari templat penghapusan' );
-				} else {
-					statusIndicator.info( 'selesai' );
-				}
-				callback(reason);
-			}, statusIndicator);
+		var statusIndicator = new Morebits.status('Membuat ringkasan penghapusan');
+		var api = new Morebits.wiki.api('Memilah-milah templat hapus', query, function(apiObj) {
+			var reason = decodeURIComponent($(apiObj.getXML().querySelector('text').childNodes[0].nodeValue).find('#delete-reason').text()).replace(/\+/g, ' ');
+			if (!reason) {
+				statusIndicator.warn('Tidak dapat membuat ringkasan dari templat penghapusan');
+			} else {
+				statusIndicator.info('selesai');
+			}
+			callback(reason);
+		}, statusIndicator);
 		api.post();
 	},
 
-	sysop: {
-		main: function( params ) {
-			var reason;
+	noteToCreator: function(pageobj) {
+		var params = pageobj.getCallbackParameters();
+		var initialContrib = pageobj.getCreator();
 
+		// disallow notifying yourself
+		if (initialContrib === mw.config.get('wgUserName')) {
+			Morebits.status.warn('Anda (' + initialContrib + ') membuat halaman ini; lewati pemberitahuan');
+			initialContrib = null;
+
+		// don't notify users when their user talk page is nominated/deleted
+		} else if (initialContrib === mw.config.get('wgTitle') && mw.config.get('wgNamespaceNumber') === 3) {
+			Morebits.status.warn('Memberitahu penyunting awal: pengguna ini membuat halaman pembicaraannya sendiri; lewati pemberitahuan');
+			initialContrib = null;
+
+		// quick hack to prevent excessive unwanted notifications, per request. Should actually be configurable on recipient page...
+		} else if ((initialContrib === 'Cyberbot I' || initialContrib === 'SoxBot' || initialContrib === 'Kenrick95Bot') && params.normalizeds[0] === 'f2') {
+			Morebits.status.warn('Memberitahu kontributor awal: halaman dibuat oleh bot; lewati pemberitahuan');
+			initialContrib = null;
+
+		// Check for already existing tags
+		} else if (Twinkle.speedy.hasCSD && params.warnUser && !confirm('The page is has a deletion-related tag, and thus the creator has likely been notified.  Do you want to notify them for this deletion as well?')) {
+			Morebits.status.info('Notifying initial contributor', 'canceled by user; skipping notification.');
+			initialContrib = null;
+		}
+
+		if (initialContrib) {
+			var usertalkpage = new Morebits.wiki.page('User talk:' + initialContrib, 'Memberitahu penyunting awal (' + initialContrib + ')'),
+				notifytext, i, editsummary;
+
+			// special cases: "db" and "db-multiple"
+			if (params.normalizeds.length > 1) {
+				notifytext = '\n{{subst:db-' + (params.warnUser ? 'deleted' : 'notice') + '-multiple|1=' + Morebits.pageNameNorm;
+				var count = 2;
+				$.each(params.normalizeds, function(index, norm) {
+					notifytext += '|' + count++ + '=' + norm.toUpperCase();
+				});
+			} else if (params.normalizeds[0] === 'db') {
+				notifytext = '\n{{subst:db-reason-' + (params.warnUser ? 'deleted' : 'notice') + '|1=' + Morebits.pageNameNorm;
+			} else {
+				notifytext = '\n{{subst:db-csd-' + (params.warnUser ? 'deleted' : 'notice') + '-custom|1=';
+				if (params.values[0] === 'copypaste') {
+					notifytext += params.templateParams[0].sourcepage;
+				} else {
+					notifytext += Morebits.pageNameNorm;
+				}
+				notifytext += '|2=' + params.values[0];
+			}
+
+			for (i in params.utparams) {
+				if (typeof params.utparams[i] === 'string') {
+					notifytext += '|' + i + '=' + params.utparams[i];
+				}
+			}
+			notifytext += (params.welcomeuser ? '' : '|nowelcome=yes') + '}} ~~~~';
+
+			editsummary = 'Pemberitahuan: ' + (params.warnUser ? '' : ' nominasi ') + 'penghapusan cepat';
+			if (params.normalizeds.indexOf('g10') === -1) {  // no article name in summary for G10 taggings
+				editsummary += ' untuk [[:' + Morebits.pageNameNorm + ']].';
+			} else {
+				editsummary += ' dari halaman serangan.';
+			}
+
+			usertalkpage.setAppendText(notifytext);
+			usertalkpage.setEditSummary(editsummary + Twinkle.getPref('summaryAd'));
+			usertalkpage.setCreateOption('recreate');
+			usertalkpage.setFollowRedirect(true);
+			usertalkpage.append(function onNotifySuccess() {
+				// add this nomination to the user's userspace log, if the user has enabled it
+				if (params.lognomination) {
+					Twinkle.speedy.callbacks.user.addToLog(params, initialContrib);
+				}
+			}, function onNotifyError() {
+				// if user could not be notified, log nomination without mentioning that notification was sent
+				if (params.lognomination) {
+					Twinkle.speedy.callbacks.user.addToLog(params, null);
+				}
+			});
+		} else if (params.lognomination) {
+			// log nomination even if the user notification wasn't sent
+			Twinkle.speedy.callbacks.user.addToLog(params, null);
+		}
+	},
+
+	sysop: {
+		main: function(params) {
+			var reason;
 			if (!params.normalizeds.length && params.normalizeds[0] === 'db') {
-				reason = prompt("Masukkan alasan penghapusan yang akan digunakan untuk catatan penghapusan:", "");
-				Twinkle.speedy.callbacks.sysop.deletePage( reason, params );
+				reason = prompt('"Masukkan alasan penghapusan yang akan digunakan untuk catatan penghapusan:', '');
+				Twinkle.speedy.callbacks.sysop.deletePage(reason, params);
 			} else {
 				var code = Twinkle.speedy.callbacks.getTemplateCodeAndParams(params)[0];
 				Twinkle.speedy.callbacks.parseWikitext(code, function(reason) {
 					if (params.promptForSummary) {
-						reason = prompt("Masukkan alasan penghapusan yang digunakan, atau klik OK untuk menerima yang dibuat secara otomatis.", reason);
+						reason = prompt('Masukkan alasan penghapusan yang digunakan, atau klik OK untuk menerima yang dibuat secara otomatis.', reason);
 					}
-					Twinkle.speedy.callbacks.sysop.deletePage( reason, params );
+					Twinkle.speedy.callbacks.sysop.deletePage(reason, params);
 				});
 			}
 		},
-		deletePage: function( reason, params ) {
-			var thispage = new Morebits.wiki.page( mw.config.get('wgPageName'), "Menghapus halaman" );
+		deletePage: function(reason, params) {
+			var thispage = new Morebits.wiki.page(mw.config.get('wgPageName'), 'Menghapus halaman');
 
 			if (reason === null) {
-				return Morebits.status.error("Meminta alasan", "Dibatalkan");
-			} else if (!reason || !reason.replace(/^\s*/, "").replace(/\s*$/, "")) {
-				return Morebits.status.error("Meminta alasan", "Anda tidak memberikan apa pun. Saya tidak tahu... apa yang terjadi dengan pengurus dan antek apatisnya... Saya menyerah...");
+				return Morebits.status.error('Meminta alasan', 'Dibatalkan');
+			} else if (!reason || !reason.replace(/^\s*/, '').replace(/\s*$/, '')) {
+				return Morebits.status.error('Meminta alasan', 'Anda tidak memberikan apa pun. Saya tidak tahu... apa yang terjadi dengan pengurus dan antek apatisnya... Saya menyerah...');
 			}
-			thispage.setEditSummary( reason + Twinkle.getPref('deletionSummaryAd') );
-			thispage.deletePage(function() {
-				thispage.getStatusElement().info("selesai");
-				Twinkle.speedy.callbacks.sysop.deleteTalk( params );
-			});
+
+			var deleteMain = function(callback) {
+				thispage.setEditSummary(reason + Twinkle.getPref('deletionSummaryAd'));
+				thispage.deletePage(function() {
+					thispage.getStatusElement().info('done');
+					typeof callback === 'function' && callback();
+					Twinkle.speedy.callbacks.sysop.deleteTalk(params);
+				});
+			};
 
 			// look up initial contributor. If prompting user for deletion reason, just display a link.
 			// Otherwise open the talk page directly
-			if( params.openUserTalk ) {
-				thispage.setCallbackParameters( params );
-				thispage.lookupCreator( Twinkle.speedy.callbacks.sysop.openUserTalkPage );
+			if (params.warnUser) {
+				thispage.setCallbackParameters(params);
+				thispage.lookupCreation(function(pageobj) {
+					deleteMain(function() {
+						Twinkle.speedy.callbacks.noteToCreator(pageobj);
+					});
+				});
+			} else {
+				deleteMain();
 			}
 		},
-		deleteTalk: function( params ) {
+		deleteTalk: function(params) {
 			// delete talk page
 			if (params.deleteTalkPage &&
 					params.normalized !== 'f8' &&
-					document.getElementById( 'ca-talk' ).className !== 'new') {
-				var talkpage = new Morebits.wiki.page( mw.config.get('wgFormattedNamespaces')[ mw.config.get('wgNamespaceNumber') + 1 ] + ':' + mw.config.get('wgTitle'), "Menghapus halaman pembicaraan" );
-				talkpage.setEditSummary('[[WP:KPC#U8|U8]]: Halaman pembicaraan dari halaman yang telah dihapus: "' + Morebits.pageNameNorm + '"' + Twinkle.getPref('deletionSummaryAd'));
+					document.getElementById('ca-talk').className !== 'new') {
+				var talkpage = new Morebits.wiki.page(mw.config.get('wgFormattedNamespaces')[mw.config.get('wgNamespaceNumber') + 1] + ':' + mw.config.get('wgTitle'), 'Menghapus halaman pembicaraan');
+				talkpage.setEditSummary('[[WP:KPC#U8|U8]]: Halaman pembicaraan dari halaman yang telah dihapus "' + Morebits.pageNameNorm + '"' + Twinkle.getPref('deletionSummaryAd'));
 				talkpage.deletePage();
 				// this is ugly, but because of the architecture of wiki.api, it is needed
 				// (otherwise success/failure messages for the previous action would be suppressed)
-				window.setTimeout(function() { Twinkle.speedy.callbacks.sysop.deleteRedirects( params ); }, 1800);
+				window.setTimeout(function() {
+					Twinkle.speedy.callbacks.sysop.deleteRedirects(params);
+				}, 1800);
 			} else {
-				Twinkle.speedy.callbacks.sysop.deleteRedirects( params );
+				Twinkle.speedy.callbacks.sysop.deleteRedirects(params);
 			}
 		},
-		deleteRedirects: function( params ) {
+		deleteRedirects: function(params) {
 			// delete redirects
 			if (params.deleteRedirects) {
 				var query = {
 					'action': 'query',
 					'titles': mw.config.get('wgPageName'),
 					'prop': 'redirects',
-					'rdlimit': 5000  // 500 is max for normal users, 5000 for bots and sysops
+					'rdlimit': 'max' // 500 is max for normal users, 5000 for bots and sysops
 				};
-				var wikipedia_api = new Morebits.wiki.api( 'mencari daftar pengalihan...', query, Twinkle.speedy.callbacks.sysop.deleteRedirectsMain,
-					new Morebits.status( 'Menghapus halaman pengalihan' ) );
+				var wikipedia_api = new Morebits.wiki.api('mencari daftar pengalihan...', query, Twinkle.speedy.callbacks.sysop.deleteRedirectsMain,
+					new Morebits.status('Menghapus halaman pengalihan'));
 				wikipedia_api.params = params;
 				wikipedia_api.post();
 			}
 
 			// promote Unlink tool
 			var $link, $bigtext;
-			if( mw.config.get('wgNamespaceNumber') === 6 && params.normalized !== 'f8' ) {
+			if (mw.config.get('wgNamespaceNumber') === 6 && params.normalized !== 'f8') {
 				$link = $('<a/>', {
 					'href': '#',
 					'text': 'Klik di sini untuk mengakses alat Unlink',
-					'css': { 'fontSize': '100%', 'fontWeight': 'bold' },
-					'click': function(){
+					'css': { 'fontSize': '130%', 'fontWeight': 'bold' },
+					'click': function() {
 						Morebits.wiki.actionCompleted.redirect = null;
 						Twinkle.speedy.dialog.close();
-						Twinkle.unlink.callback("Menghapus pranala balik ke halaman yang dihapus " + Morebits.pageNameNorm);
+						Twinkle.unlink.callback('Menghapus pranala balik ke halaman yang dihapus ' + Morebits.pageNameNorm);
 					}
 				});
 				$bigtext = $('<span/>', {
@@ -1334,11 +1426,11 @@ Twinkle.speedy.callbacks = {
 				$link = $('<a/>', {
 					'href': '#',
 					'text': 'Klik di sini untuk mengakses alat Unlink',
-					'css': { 'fontSize': '100%', 'fontWeight': 'bold' },
-					'click': function(){
+					'css': { 'fontSize': '130%', 'fontWeight': 'bold' },
+					'click': function() {
 						Morebits.wiki.actionCompleted.redirect = null;
 						Twinkle.speedy.dialog.close();
-						Twinkle.unlink.callback("Menghapus pranala balik ke halaman yang dihapus " + Morebits.pageNameNorm);
+						Twinkle.unlink.callback('Menghapus pranala balik ke halaman yang dihapus ' + Morebits.pageNameNorm);
 					}
 				});
 				$bigtext = $('<span/>', {
@@ -1348,75 +1440,26 @@ Twinkle.speedy.callbacks = {
 				Morebits.status.info($bigtext[0], $link[0]);
 			}
 		},
-		openUserTalkPage: function( pageobj ) {
-			pageobj.getStatusElement().unlink();  // don't need it anymore
-			var user = pageobj.getCreator();
-			var params = pageobj.getCallbackParameters();
-
-			var query = {
-				'title': 'User talk:' + user,
-				'action': 'edit',
-				'preview': 'yes',
-				'vanarticle': Morebits.pageNameNorm
-			};
-
-			if (params.normalized === 'db' || Twinkle.getPref("promptForSpeedyDeletionSummary").indexOf(params.normalized) !== -1) {
-				// provide a link to the user talk page
-				var $link, $bigtext;
-				$link = $('<a/>', {
-					'href': mw.util.wikiScript('index') + '?' + Morebits.queryString.create( query ),
-					'text': 'Klik di sini untuk membuka Pembicaraan Pengguna: ' + user,
-					'target': '_blank',
-					'css': { 'fontSize': '100%', 'fontWeight': 'bold' }
-				});
-				$bigtext = $('<span/>', {
-					'text': 'Beritahu pembuat halaman',
-					'css': { 'fontSize': '100%', 'fontWeight': 'bold' }
-				});
-				Morebits.status.info($bigtext[0], $link[0]);
-			} else {
-				// open the initial contributor's talk page
-				var statusIndicator = new Morebits.status('Membuka kotak penyuntingan halaman pembicaraan pengguna untuk ' + user, 'sedang membuka...');
-
-				switch( Twinkle.getPref('userTalkPageMode') ) {
-				case 'tab':
-					window.open( mw.util.wikiScript('index') + '?' + Morebits.queryString.create( query ), '_blank' );
-					break;
-				case 'blank':
-					window.open( mw.util.wikiScript('index') + '?' + Morebits.queryString.create( query ), '_blank', 'location=no,toolbar=no,status=no,directories=no,scrollbars=yes,width=1200,height=800' );
-					break;
-				case 'window':
-					/* falls through */
-				default:
-					window.open( mw.util.wikiScript('index') + '?' + Morebits.queryString.create( query ),
-						( window.name === 'twinklewarnwindow' ? '_blank' : 'twinklewarnwindow' ),
-						'location=no,toolbar=no,status=no,directories=no,scrollbars=yes,width=1200,height=800' );
-					break;
-				}
-
-				statusIndicator.info( 'selesai' );
-			}
-		},
-		deleteRedirectsMain: function( apiobj ) {
+		deleteRedirectsMain: function(apiobj) {
 			var xmlDoc = apiobj.getXML();
 			var $snapshot = $(xmlDoc).find('redirects rd');
 			var total = $snapshot.length;
 			var statusIndicator = apiobj.statelem;
 
-			if( !total ) {
-				statusIndicator.status("tidak ada pengalihan yang ditemukan");
+			if (!total) {
+				statusIndicator.status('tidak ada pengalihan yang ditemukan');
 				return;
 			}
 
-			statusIndicator.status("0%");
+			statusIndicator.status('0%');
 
 			var current = 0;
-			var onsuccess = function( apiobjInner ) {
-				var now = parseInt( 100 * (++current)/total, 10 ) + '%';
-				statusIndicator.update( now );
+			var onsuccess = function(apiobjInner) {
+				var now = parseInt(100 * ++current / total, 10) + '%';
+				statusIndicator.update(now);
 				apiobjInner.statelem.unlink();
-				if( current >= total ) {
-					statusIndicator.info( now + ' (selesai)' );
+				if (current >= total) {
+					statusIndicator.info(now + ' (selesai)');
 					Morebits.wiki.removeCheckpoint();
 				}
 			};
@@ -1438,24 +1481,24 @@ Twinkle.speedy.callbacks = {
 
 			// defaults to /doc for lua modules, which may not exist
 			if (!pageobj.exists() && mw.config.get('wgPageContentModel') !== 'Scribunto') {
-				statelem.error( "Sepertinya halaman ini tidak ada; mungkin telah dihapus" );
+				statelem.error('Sepertinya halaman ini tidak ada; mungkin telah dihapus');
 				return;
 			}
 
 			var text = pageobj.getPageText();
 			var params = pageobj.getCallbackParameters();
 
-			statelem.status( 'Memeriksa tag di halaman...' );
+			statelem.status('Memeriksa tag di halaman...');
 
 			// check for existing deletion tags
-			var tag = /(?:\{\{\s*(db|delete|hapus|hapus:|penghapusan|db-.*?|speedy deletion-.*?)(?:\s*\||\s*\}\}))/.exec( text );
+			var tag = /(?:\{\{\s*(db|delete|hapus|hapus:|penghapusan|db-.*?|speedy deletion-.*?)(?:\s*\||\s*\}\}))/.exec(text);
 			// This won't make use of the db-multiple template but it probably should
-			if( tag && !confirm( "Templat yang berhubungan dengan penghapusan {{" + tag[1] + "}} ditemukan di halaman. Apakah Anda masih ingin menambahkan templat KPC?" ) ) {
+			if (tag && !confirm('Templat yang berhubungan dengan penghapusan {{' + tag[1] + '}} ditemukan di halaman. Apakah Anda masih ingin menambahkan templat KPC?')) {
 				return;
 			}
 
-			var xfd = /\{\{((?:article for deletion|proposed deletion|prod blp|template for discussion)\/dated|[cfm]fd\b)/i.exec( text ) || /#invoke:(RfD)/.exec(text);
-			if( xfd && !confirm( "Templat yang berhubungan dengan penghapusan {{" + xfd[1] + "}} telah ada di halaman ini. Apakah Anda masih ingin menambahkan templat KPC?" ) ) {
+			var xfd = /\{\{((?:article for deletion|proposed deletion|prod blp|template for discussion)\/dated|[cfm]fd\b)/i.exec(text) || /#invoke:(RfD)/.exec(text);
+			if (xfd && !confirm('Templat yang berhubungan dengan penghapusan {{' + xfd[1] + '}} telah ada di halaman ini. Apakah Anda masih ingin menambahkan templat KPC?')) {
 				return;
 			}
 
@@ -1465,23 +1508,30 @@ Twinkle.speedy.callbacks = {
 				code = buildData[0];
 			params.utparams = buildData[1];
 
-			var thispage = new Morebits.wiki.page(mw.config.get('wgPageName'));
-			// patrol the page, if reached from Special:NewPages
-			if( Twinkle.getPref('markSpeedyPagesAsPatrolled') ) {
-				thispage.patrol();
+			// curate/patrol the page
+			if (Twinkle.getPref('markSpeedyPagesAsPatrolled')) {
+				pageobj.triage();
 			}
 
 			// Wrap SD template in noinclude tags if we are in template space.
 			// Won't work with userboxes in userspace, or any other transcluded page outside template space
 			if (mw.config.get('wgNamespaceNumber') === 10) {  // Template:
-				code = "<noinclude>" + code + "</noinclude>";
+				code = '<noinclude>' + code + '</noinclude>';
 			}
 
 			// Remove tags that become superfluous with this action
-			text = text.replace(/\{\{\s*([Uu]serspace draft)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/g, "");
+			text = text.replace(/\{\{\s*([Uu]serspace draft)\s*(\|(?:\{\{[^{}]*\}\}|[^{}])*)?\}\}\s*/g, '');
 			if (mw.config.get('wgNamespaceNumber') === 6) {
 				// remove "move to Commons" tag - deletion-tagged files cannot be moved to Commons
-				text = text.replace(/\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi, "");
+				text = text.replace(/\{\{(mtc|(copy |move )?to ?commons|move to wikimedia commons|copy to wikimedia commons)[^}]*\}\}/gi, '');
+			}
+
+			if (params.requestsalt) {
+				if (params.normalizeds.indexOf('g10') === -1) {
+					code = code + '\n{{salt}}';
+				} else {
+					code = '{{salt}}\n' + code;
+				}
 			}
 
 			// Generate edit summary for edit
@@ -1493,97 +1543,45 @@ Twinkle.speedy.callbacks = {
 				});
 				editsummary = editsummary.substr(0, editsummary.length - 2); // remove trailing comma
 				editsummary += ').';
-			} else if (params.normalizeds[0] === "db") {
-				editsummary = 'Meminta [[WP:KPC|penghapusan cepat]] dengan alasan "' + params.templateParams[0]["1"] + '".';
+			} else if (params.normalizeds[0] === 'db') {
+				editsummary = 'Meminta [[WP:KPC|penghapusan cepat]] dengan alasan "' + params.templateParams[0]['1'] + '".';
 			} else {
-				editsummary = "Meminta penghapusan cepat ([[WP:KPC#" + params.normalizeds[0].toUpperCase() + "|KPC " + params.normalizeds[0].toUpperCase() + "]]).";
+				editsummary = 'Meminta penghapusan cepat ([[WP:KPC#' + params.normalizeds[0].toUpperCase() + '|KPC ' + params.normalizeds[0].toUpperCase() + ']]).';
 			}
 
-			pageobj.setPageText(code + ((params.normalizeds.indexOf('g10') !== -1) ? '' : ("\n" + text) )); // cause attack pages to be blanked
+			// Set the correct value for |ts= parameter in {{db-g13}}
+			if (params.normalizeds.indexOf('u13') !== -1) {
+				code = code.replace('$TIMESTAMP', pageobj.getLastEditTime());
+			}
+
+			pageobj.setPageText(code + (params.normalizeds.indexOf('g10') !== -1 ? '' : '\n' + text)); // cause attack pages to be blanked
 			pageobj.setEditSummary(editsummary + Twinkle.getPref('summaryAd'));
 			pageobj.setWatchlist(params.watch);
-			pageobj.setCreateOption('recreate'); // Module /doc might not exist
+			if (params.scribunto) {
+				pageobj.setCreateOption('recreate'); // Module /doc might not exist
+				if (params.watch) {
+					// Watch module in addition to /doc subpage
+					var watch_query = {
+						action: 'watch',
+						titles: mw.config.get('wgPageName'),
+						token: mw.user.tokens.get('watchToken')
+					};
+					new Morebits.wiki.api('Adding Module to watchlist', watch_query).post();
+				}
+			}
 			pageobj.save(Twinkle.speedy.callbacks.user.tagComplete);
 		},
 
 		tagComplete: function(pageobj) {
 			var params = pageobj.getCallbackParameters();
 
-			// Notification to first contributor
+			// Notification to first contributor, will also log nomination to the user's userspace log
 			if (params.usertalk) {
-				var callback = function(pageobj) {
-					var initialContrib = pageobj.getCreator();
-
-					// disallow warning yourself
-					if (initialContrib === mw.config.get('wgUserName')) {
-						Morebits.status.warn("Anda (" + initialContrib + ") membuat halaman ini; lewati pemberitahuan");
-						initialContrib = null;
-
-					// don't notify users when their user talk page is nominated
-					} else if (initialContrib === mw.config.get('wgTitle') && mw.config.get('wgNamespaceNumber') === 3) {
-						Morebits.status.warn("Memberitahu penyunting awal: pengguna ini membuat halaman pembicaraannya sendiri; lewati pemberitahuan");
-						initialContrib = null;
-
-					// quick hack to prevent excessive unwanted notifications, per request. Should actually be configurable on recipient page...
-					} else if ((initialContrib === "Cyberbot I" || initialContrib === "SoxBot" || initialContrib === "Kenrick95Bot") && params.normalizeds[0] === "f2") {
-						Morebits.status.warn("Memberitahu kontributor awal: halaman dibuat oleh bot; lewati pemberitahuan");
-						initialContrib = null;
-
-					} else {
-						var usertalkpage = new Morebits.wiki.page('User talk:' + initialContrib, "Memberitahu penyunting awal (" + initialContrib + ")"),
-							notifytext, i;
-
-						// specialcase "db" and "db-multiple"
-						if (params.normalizeds.length > 1) {
-							notifytext = "\n{{subst:db-notice-multiple|1=" + Morebits.pageNameNorm;
-							var count = 2;
-							$.each(params.normalizeds, function(index, norm) {
-								notifytext += "|" + (count++) + "=" + norm.toUpperCase();
-							});
-						} else if (params.normalizeds[0] === "db") {
-							notifytext = "\n{{subst:db-reason-notice|1=" + Morebits.pageNameNorm;
-						} else {
-							notifytext = "\n{{subst:db-csd-notice-custom|1=" + Morebits.pageNameNorm + "|2=" + params.values[0];
-						}
-
-						for (i in params.utparams) {
-							if (typeof params.utparams[i] === 'string') {
-								notifytext += "|" + i + "=" + params.utparams[i];
-							}
-						}
-						notifytext += (params.welcomeuser ? "" : "|nowelcome=yes") + "}} ~~~~";
-
-						var editsummary = "Pemberitahuan: nominasi penghapusan cepat";
-						if (params.normalizeds.indexOf("g10") === -1) {  // no article name in summary for G10 taggings
-							editsummary += " untuk [[:" + Morebits.pageNameNorm + "]].";
-						} else {
-							editsummary += " dari halaman serangan.";
-						}
-
-						usertalkpage.setAppendText(notifytext);
-						usertalkpage.setEditSummary(editsummary + Twinkle.getPref('summaryAd'));
-						usertalkpage.setCreateOption('recreate');
-						usertalkpage.setFollowRedirect(true);
-						usertalkpage.append(function onNotifySuccess() {
-							// add this nomination to the user's userspace log, if the user has enabled it
-							if (params.lognomination) {
-								Twinkle.speedy.callbacks.user.addToLog(params, initialContrib);
-							}
-						}, function onNotifyError() {
-							// if user could not be notified, log nomination without mentioning that notification was sent
-							if (params.lognomination) {
-								Twinkle.speedy.callbacks.user.addToLog(params, null);
-							}
-						});
-					}
-
-
-				};
 				var thispage = new Morebits.wiki.page(Morebits.pageNameNorm);
-				thispage.lookupCreator(callback);
-			}
+				thispage.setCallbackParameters(params);
+				thispage.lookupCreation(Twinkle.speedy.callbacks.noteToCreator);
 			// or, if not notifying, add this nomination to the user's userspace log without the initial contributor's name
-			else if (params.lognomination) {
+			} else if (params.lognomination) {
 				Twinkle.speedy.callbacks.user.addToLog(params, null);
 			}
 		},
@@ -1593,46 +1591,27 @@ Twinkle.speedy.callbacks = {
 		//   for CSD: params.values, params.normalizeds  (note: normalizeds is an array)
 		//   for DI: params.fromDI = true, params.templatename, params.normalized  (note: normalized is a string)
 		addToLog: function(params, initialContrib) {
-			var wikipedia_page = new Morebits.wiki.page("User:" + mw.config.get('wgUserName') + "/" + Twinkle.getPref('speedyLogPageName'), "Menambahkan entri ke log ruangnama pengguna");
-			params.logInitialContrib = initialContrib;
-			wikipedia_page.setCallbackParameters(params);
-			wikipedia_page.load(Twinkle.speedy.callbacks.user.saveLog);
-		},
-
-		saveLog: function(pageobj) {
-			var text = pageobj.getPageText();
-			var params = pageobj.getCallbackParameters();
-
-			var appendText = "";
-
-			// add blurb if log page doesn't exist
-			if (!pageobj.exists()) {
-				appendText +=
-					"Ini adalah log semua nominasi [[WP:KPC|penghapusan cepat]] yang dibuat oleh pengguna ini dengan menggunakan modul KPC [[WP:TW|Twinkle]].\n\n" +
-                    "Jika Anda tidak ingin menyimpan log ini, Anda dapat mematikannya di  [[Wikipedia:Twinkle/Preferences|panel preferensi]], dan " +
-                    "menominasikan halaman ini untuk dihapus di bawah [[WP:KPC#H1|KPC U1]].\n";
-				if (Morebits.userIsInGroup("sysop")) {
-					appendText += "\n\nLog ini tidak mencatat penghapusan cepat yang dibuat menggunakan Twinkle.";
-				}
-			}
-
-			// create monthly header
-			var date = new Date();
-			var headerRe = new RegExp("^==+\\s*" + date.getUTCMonthName() + "\\s+" + date.getUTCFullYear() + "\\s*==+", "m");
-			if (!headerRe.exec(text)) {
-				appendText += "\n\n=== " + date.getUTCMonthName() + " " + date.getUTCFullYear() + " ===";
-			}
+			var usl = new Morebits.userspaceLogger(Twinkle.getPref('speedyLogPageName'));
+			usl.initialText =
+				'Ini adalah log semua nominasi [[WP:KPC|penghapusan cepat]] yang dibuat oleh pengguna ini dengan menggunakan modul KPC [[WP:TW|Twinkle]].\n\n' +
+				'Jika Anda tidak ingin menyimpan log ini, Anda dapat mematikannya di  [[Wikipedia:Twinkle/Preferences|panel preferensi]], dan ' +
+				'menominasikan halaman ini untuk dihapus di bawah [[WP:KPC#H1|KPC U1]].' +
+				(Morebits.userIsSysop ? '\n\nLog ini tidak mencatat penghapusan cepat yang dibuat menggunakan Twinkle.' : '');
 
 			var formatParamLog = function(normalize, csdparam, input) {
-				if ((normalize === 'G4' && csdparam === 'xfd') || (normalize === 'G6' && csdparam === 'page') || (normalize === 'G6' && csdparam === 'fullvotepage') || (normalize === 'G6' && csdparam === 'sourcepage')
-					|| (normalize === 'A2' && csdparam === 'source') || (normalize === 'A10' && csdparam === 'article') || (normalize === 'F5' && csdparam === 'replacement')) {
+				if ((normalize === 'G4' && csdparam === 'xfd') ||
+					(normalize === 'G6' && csdparam === 'page') ||
+					(normalize === 'G6' && csdparam === 'fullvotepage') ||
+					(normalize === 'G6' && csdparam === 'sourcepage') ||
+					(normalize === 'A2' && csdparam === 'source') ||
+					(normalize === 'A10' && csdparam === 'article') ||
+					(normalize === 'F1' && csdparam === 'filename') ||
+					(normalize === 'F5' && csdparam === 'replacement')) {
 					input = '[[:' + input + ']]';
 				} else if (normalize === 'G5' && csdparam === 'user') {
 					input = '[[:User:' + input + ']]';
 				} else if (normalize === 'G12' && csdparam.lastIndexOf('url', 0) === 0 && input.lastIndexOf('http', 0) === 0) {
 					input = '[' + input + ' ' + input + ']';
-				} else if (normalize === 'F1' && csdparam === 'filename') {
-					input = '[[:File:' + input + ']]';
 				} else if (normalize === 'T3' && csdparam === 'template') {
 					input = '[[:Template:' + input + ']]';
 				} else if (normalize === 'F8' && csdparam === 'filename') {
@@ -1646,13 +1625,13 @@ Twinkle.speedy.callbacks = {
 			var extraInfo = '';
 
 			// If a logged file is deleted but exists on commons, the wikilink will be blue, so provide a link to the log
-			var fileLogLink = mw.config.get('wgNamespaceNumber') === 6 ? ' ([{{fullurl:Special:Log|page=' + mw.util.wikiUrlencode (mw.config.get('wgPageName')) + '}} log])' : '';
+			var fileLogLink = mw.config.get('wgNamespaceNumber') === 6 ? ' ([{{fullurl:Special:Log|page=' + mw.util.wikiUrlencode(mw.config.get('wgPageName')) + '}} log])' : '';
 
-			var editsummary = "Mencatat pengusulan penghapusan cepat";
-			appendText += "\n# [[:" + Morebits.pageNameNorm;
+			var editsummary = 'Mencatat pengusulan penghapusan cepat';
+			var appendText = '# [[:' + Morebits.pageNameNorm;
 
 			if (params.fromDI) {
-				appendText += "]]" + fileLogLink + ": DI [[WP:KPC#" + params.normalized.toUpperCase() + "|KPC " + params.normalized.toUpperCase() + "]]";// ({{tl|di-" + params.templatename + "}})";
+				appendText += ']]' + fileLogLink + ': DI [[WP:KPC#' + params.normalized.toUpperCase() + '|KPC ' + params.normalized.toUpperCase() + ']]';// ({{tl|di-' + params.templatename + '}})';
 				// The params data structure when coming from DI is quite different,
 				// so this hardcodes the only interesting items worth logging
 				['reason', 'replacement', 'source'].forEach(function(item) {
@@ -1661,44 +1640,43 @@ Twinkle.speedy.callbacks = {
 						return false;
 					}
 				});
-				editsummary += " of [[:" + Morebits.pageNameNorm + "]].";
+				editsummary += ' of [[:' + Morebits.pageNameNorm + ']].';
 			} else {
-				if (params.normalizeds.indexOf("g10") === -1) {  // no article name in log for G10 taggings
-					appendText += "]]" + fileLogLink + ": ";
-					editsummary += " of [[:" + Morebits.pageNameNorm + "]].";
+				if (params.normalizeds.indexOf('g10') === -1) {  // no article name in log for G10 taggings
+					appendText += ']]' + fileLogLink + ': ';
+					editsummary += ' of [[:' + Morebits.pageNameNorm + ']].';
 				} else {
-					appendText += "|This]] attack page" + fileLogLink + ": ";
-					editsummary += " of an attack page.";
+					appendText += '|This]] attack page' + fileLogLink + ': ';
+					editsummary += ' of an attack page.';
 				}
 				if (params.normalizeds.length > 1) {
-					appendText += "berbagai kriteria (";
+					appendText += 'berbagai kriteria (';
 					$.each(params.normalizeds, function(index, norm) {
-						appendText += "[[WP:KPC#" + norm.toUpperCase() + "|" + norm.toUpperCase() + ']], ';
+						appendText += '[[WP:KPC#' + norm.toUpperCase() + '|' + norm.toUpperCase() + ']], ';
 					});
 					appendText = appendText.substr(0, appendText.length - 2);  // remove trailing comma
 					appendText += ')';
-				} else if (params.normalizeds[0] === "db") {
-					appendText += "{{tl|db-reason}}";
+				} else if (params.normalizeds[0] === 'db') {
+					appendText += '{{tl|db-reason}}';
 				} else {
-					appendText += "[[WP:KPC#" + params.normalizeds[0].toUpperCase() + "|KPC " + params.normalizeds[0].toUpperCase() + "]] ({{tl|db-" + params.values[0] + "}})";
+					appendText += '[[WP:KPC#' + params.normalizeds[0].toUpperCase() + '|KPC ' + params.normalizeds[0].toUpperCase() + ']] ({{tl|db-' + params.values[0] + '}})';
 				}
 
 				// If params is "empty" it will still be full of empty arrays, but ask anyway
 				if (params.templateParams) {
 					// Treat custom rationale individually
 					if (params.normalizeds[0] && params.normalizeds[0] === 'db') {
-						extraInfo += formatParamLog('Custom', 'rationale', params.templateParams[0]["1"]);
+						extraInfo += formatParamLog('Custom', 'rationale', params.templateParams[0]['1']);
 					} else {
 						params.templateParams.forEach(function(item, index) {
 							var keys = Object.keys(item);
 							if (keys[0] !== undefined && keys[0].length > 0) {
-								//Second loop required since some items (G12, F9) may have multiple keys
+								// Second loop required since some items (G12, F9) may have multiple keys
 								keys.forEach(function(key, keyIndex) {
 									if (keys[keyIndex] === 'blanked' || keys[keyIndex] === 'ts') {
 										return true; // Not worth logging
-									} else {
-										extraInfo += formatParamLog(params.normalizeds[index].toUpperCase(), keys[keyIndex], item[key]);
 									}
+									extraInfo += formatParamLog(params.normalizeds[index].toUpperCase(), keys[keyIndex], item[key]);
 								});
 							}
 						});
@@ -1706,18 +1684,19 @@ Twinkle.speedy.callbacks = {
 				}
 			}
 
+			if (params.requestsalt) {
+				appendText += '; requested creation protection ([[WP:SALT|salting]])';
+			}
 			if (extraInfo) {
 				appendText += '; informasi tambahan:' + extraInfo;
 			}
-			if (params.logInitialContrib) {
-				appendText += "; memberitahukan {{user|1=" + params.logInitialContrib + "}}";
+			if (initialContrib) {
+				appendText += '; memberitahukan {{user|1=' + initialContrib + '}}';
 			}
-			appendText += " ~~~~~\n";
+			appendText += ' ~~~~~\n';
 
-			pageobj.setAppendText(appendText);
-			pageobj.setEditSummary(editsummary + Twinkle.getPref('summaryAd'));
-			pageobj.setCreateOption("recreate");
-			pageobj.append();
+			usl.log(appendText, editsummary + Twinkle.getPref('summaryAd'));
+
 		}
 	}
 };
@@ -1730,23 +1709,23 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 		var currentParams = [];
 		switch (value) {
 			case 'reason':
-				if (form["csd.reason_1"]) {
-					var dbrationale = form["csd.reason_1"].value;
+				if (form['csd.reason_1']) {
+					var dbrationale = form['csd.reason_1'].value;
 					if (!dbrationale || !dbrationale.trim()) {
-						alert( 'Alasan lainnya: Mohon tulis alasan!' );
+						alert('Alasan lainnya: Mohon tulis alasan!');
 						parameters = null;
 						return false;
 					}
-					currentParams["1"] = dbrationale;
+					currentParams['1'] = dbrationale;
 				}
 				break;
 
 			case 'userreq':  // U1
-				if (form["csd.userreq_rationale"]) {
-					var u1rationale = form["csd.userreq_rationale"].value;
-					if (mw.config.get('wgNamespaceNumber') === 3 && !((/\//).test(mw.config.get('wgTitle'))) &&
+				if (form['csd.userreq_rationale']) {
+					var u1rationale = form['csd.userreq_rationale'].value;
+					if (mw.config.get('wgNamespaceNumber') === 3 && !(/\//).test(mw.config.get('wgTitle')) &&
 							(!u1rationale || !u1rationale.trim())) {
-						alert( 'KPC H1: Mohon tuliskan alasan ketika mengusulkan penghapusan halaman pembiaraan pengguna.' );
+						alert('KPC H1: Mohon tuliskan alasan ketika mengusulkan penghapusan halaman pembiaraan pengguna.');
 						parameters = null;
 						return false;
 					}
@@ -1755,11 +1734,11 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 				break;
 
 			case 'repost':  // G4
-				if (form["csd.repost_xfd"]) {
-					var deldisc = form["csd.repost_xfd"].value;
+				if (form['csd.repost_xfd']) {
+					var deldisc = form['csd.repost_xfd'].value;
 					if (deldisc) {
-						if (deldisc.substring(0, 9) !== "Wikipedia" && deldisc.substring(0, 3) !== "WP:") {
-							alert( 'KPC U4: Penghapusan halaman diskusi, jika ada, harus dimulai dengan "Wikipedia:".' );
+						if (!/^(?:wp|wikipedia):/i.test(deldisc)) {
+							alert('KPC U4: Penghapusan halaman diskusi, jika ada, harus dimulai dengan "Wikipedia:".');
 							parameters = null;
 							return false;
 						}
@@ -1769,22 +1748,22 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 				break;
 
 			case 'banned':  // G5
-				if (form["csd.banned_user"] && form["csd.banned_user"].value) {
-					currentParams.user = form["csd.banned_user"].value.replace(/^\s*User:/i, "");
+				if (form['csd.banned_user'] && form['csd.banned_user'].value) {
+					currentParams.user = form['csd.banned_user'].value.replace(/^\s*User:/i, '');
 				}
 				break;
 
 			case 'move':  // G6
-				if (form["csd.move_page"] && form["csd.move_reason"]) {
-					var movepage = form["csd.move_page"].value,
-						movereason = form["csd.move_reason"].value;
+				if (form['csd.move_page'] && form['csd.move_reason']) {
+					var movepage = form['csd.move_page'].value,
+						movereason = form['csd.move_reason'].value;
 					if (!movepage || !movepage.trim()) {
-						alert( 'KPC U6 (move): Mohon tuliskan nama halaman yang akan dipindahkan ke sini.' );
+						alert('KPC U6 (move): Mohon tuliskan nama halaman yang akan dipindahkan ke sini.');
 						parameters = null;
 						return false;
 					}
 					if (!movereason || !movereason.trim()) {
-						alert( 'KPC U6 (move): Mohon tuliskan alasan pemindahan.' );
+						alert('KPC U6 (move): Mohon tuliskan alasan pemindahan.');
 						parameters = null;
 						return false;
 					}
@@ -1793,25 +1772,25 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 				}
 				break;
 
-			// case 'xfd':  // G6
-			// 	if (form["csd.xfd_fullvotepage"]) {
-			// 		var xfd = form["csd.xfd_fullvotepage"].value;
-			// 		if (xfd) {
-			// 			if (xfd.substring(0, 9) !== "Wikipedia" && xfd.substring(0, 3) !== "WP:") {
-			// 				alert( 'CSD G6 (XFD):  The deletion discussion page name, if provided, must start with "Wikipedia:".' );
-			// 				parameters = null;
-			// 				return false;
-			// 			}
-			// 			currentParams.fullvotepage = xfd;
-			// 		}
-			// 	}
-			// 	break;
+			case 'xfd':  // G6
+				if (form['csd.xfd_fullvotepage']) {
+					var xfd = form['csd.xfd_fullvotepage'].value;
+					if (xfd) {
+						if (!/^(?:wp|wikipedia):/i.test(xfd)) {
+							alert('CSD G6 (XFD):  The deletion discussion page name, if provided, must start with "Wikipedia:".');
+							parameters = null;
+							return false;
+						}
+						currentParams.fullvotepage = xfd;
+					}
+				}
+				break;
 
 			case 'copypaste':  // G6
-				if (form["csd.copypaste_sourcepage"]) {
-					var copypaste = form["csd.copypaste_sourcepage"].value;
+				if (form['csd.copypaste_sourcepage']) {
+					var copypaste = form['csd.copypaste_sourcepage'].value;
 					if (!copypaste || !copypaste.trim()) {
-						alert( 'KPC U6 (salin-tempel): Mohon tuliskan halaman sumber.' );
+						alert('KPC U6 (salin-tempel): Mohon tuliskan halaman sumber.');
 						parameters = null;
 						return false;
 					}
@@ -1820,20 +1799,20 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 				break;
 
 			case 'g6':  // G6
-				if (form["csd.g6_rationale"] && form["csd.g6_rationale"].value) {
-					currentParams.rationale = form["csd.g6_rationale"].value;
+				if (form['csd.g6_rationale'] && form['csd.g6_rationale'].value) {
+					currentParams.rationale = form['csd.g6_rationale'].value;
 				}
 				break;
 
 			case 'author':  // G7
-				if (form["csd.author_rationale"] && form["csd.author_rationale"].value) {
-					currentParams.rationale = form["csd.author_rationale"].value;
+				if (form['csd.author_rationale'] && form['csd.author_rationale'].value) {
+					currentParams.rationale = form['csd.author_rationale'].value;
 				}
 				break;
 
 			case 'g8':  // G8
-				if (form["csd.g8_rationale"] && form["csd.g8_rationale"].value) {
-					currentParams.rationale = form["csd.g8_rationale"].value;
+				if (form['csd.g8_rationale'] && form['csd.g8_rationale'].value) {
+					currentParams.rationale = form['csd.g8_rationale'].value;
 				}
 				break;
 
@@ -1843,88 +1822,71 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 				break;
 
 			case 'copyvio':  // G12
-				if (form["csd.copyvio_url"] && form["csd.copyvio_url"].value) {
-					currentParams.url = form["csd.copyvio_url"].value;
+				if (form['csd.copyvio_url'] && form['csd.copyvio_url'].value) {
+					currentParams.url = form['csd.copyvio_url'].value;
 				}
-				if (form["csd.copyvio_url2"] && form["csd.copyvio_url2"].value) {
-					currentParams.url2 = form["csd.copyvio_url2"].value;
+				if (form['csd.copyvio_url2'] && form['csd.copyvio_url2'].value) {
+					currentParams.url2 = form['csd.copyvio_url2'].value;
 				}
-				if (form["csd.copyvio_url3"] && form["csd.copyvio_url3"].value) {
-					currentParams.url3 = form["csd.copyvio_url3"].value;
+				if (form['csd.copyvio_url3'] && form['csd.copyvio_url3'].value) {
+					currentParams.url3 = form['csd.copyvio_url3'].value;
 				}
 				break;
 
 			case 'afc':  // G13
-				var query = {
-							action: "query",
-							titles: mw.config.get("wgPageName"),
-							prop: "revisions",
-							rvprop: "timestamp"
-						},
-						api = new Morebits.wiki.api( 'Mengambil waktu revisi terakhir', query, function( apiobj ) {
-							var xmlDoc = apiobj.getXML(),
-									isoDateString = $(xmlDoc).find("rev").attr("timestamp");
-
-							currentParams.ts = isoDateString;
-						});
-
-				// Wait for API call to finish
-				api.post({
-					async: false
-				});
-
+				currentParams.ts = '$TIMESTAMP'; // to be replaced by the last revision timestamp when page is saved
 				break;
 
 			case 'redundantimage':  // F1
-				if (form["csd.redundantimage_filename"]) {
-					var redimage = form["csd.redundantimage_filename"].value;
+				if (form['csd.redundantimage_filename']) {
+					var redimage = form['csd.redundantimage_filename'].value;
 					if (!redimage || !redimage.trim()) {
-						alert( 'KPC B1: Mohon tuliskan nama berkas yang lain.' );
+						alert('KPC B1: Mohon tuliskan nama berkas yang lain.');
 						parameters = null;
 						return false;
 					}
-					currentParams.filename = redimage.replace(/^\s*(Image|File):/i, "");
+					currentParams.filename = /^\s*(Image|File):/i.test(redimage) ? redimage : 'File:' + redimage;
 				}
 				break;
 
 			case 'badfairuse':  // F7
-				if (form["csd.badfairuse_rationale"] && form["csd.badfairuse_rationale"].value) {
-					currentParams.rationale = form["csd.badfairuse_rationale"].value;
+				if (form['csd.badfairuse_rationale'] && form['csd.badfairuse_rationale'].value) {
+					currentParams.rationale = form['csd.badfairuse_rationale'].value;
 				}
 				break;
 
 			case 'commons':  // F8
-				if (form["csd.commons_filename"]) {
-					var filename = form["csd.commons_filename"].value;
-					if (filename && filename !== Morebits.pageNameNorm) {
-						currentParams.filename = (filename.indexOf("Image:") === 0 || filename.indexOf("File:") === 0) ? filename : "File:" + filename;
+				if (form['csd.commons_filename']) {
+					var filename = form['csd.commons_filename'].value;
+					if (filename && filename.trim() && filename !== Morebits.pageNameNorm) {
+						currentParams.filename = /^\s*(Image|File):/i.test(filename) ? filename : 'File:' + filename;
 					}
 				}
 				break;
 
 			case 'imgcopyvio':  // F9
-				if (form["csd.imgcopyvio_url"] && form["csd.imgcopyvio_rationale"]) {
-					var f9url = form["csd.imgcopyvio_url"].value;
-					var f9rationale = form["csd.imgcopyvio_rationale"].value;
+				if (form['csd.imgcopyvio_url'] && form['csd.imgcopyvio_rationale']) {
+					var f9url = form['csd.imgcopyvio_url'].value;
+					var f9rationale = form['csd.imgcopyvio_rationale'].value;
 					if ((!f9url || !f9url.trim()) && (!f9rationale || !f9rationale.trim())) {
-						alert( 'CSD F9: You must enter a url or reason (or both) when nominating a file under F9.' );
+						alert('CSD F9: You must enter a url or reason (or both) when nominating a file under F9.');
 						parameters = null;
 						return false;
 					}
-					if (form["csd.imgcopyvio_url"].value) {
+					if (form['csd.imgcopyvio_url'].value) {
 						currentParams.url = f9url;
 					}
-					if (form["csd.imgcopyvio_rationale"].value) {
+					if (form['csd.imgcopyvio_rationale'].value) {
 						currentParams.rationale = f9rationale;
 					}
 				}
 				break;
 
 			case 'foreign':  // A2
-				if (form["csd.foreign_source"]) {
-					var foreignlink = form["csd.foreign_source"].value;
+				if (form['csd.foreign_source']) {
+					var foreignlink = form['csd.foreign_source'].value;
 					if (!foreignlink || !foreignlink.trim()) {
-						alert( 'KPC A2: Mohon tuliskan pranala antarwiki ke artikel yang memuat artikel ini sebagai salinan.' );
+						alert('KPC A2: Mohon tuliskan pranala antarwiki ke artikel yang memuat artikel ini sebagai salinan.');
 						parameters = null;
 						return false;
 					}
@@ -1933,16 +1895,16 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 				break;
 
 			case 'transwiki':  // A5
-				if (form["csd.transwiki_location"] && form["csd.transwiki_location"].value) {
-					currentParams.location = form["csd.transwiki_location"].value;
+				if (form['csd.transwiki_location'] && form['csd.transwiki_location'].value) {
+					currentParams.location = form['csd.transwiki_location'].value;
 				}
 				break;
 
 			case 'a10':  // A10
-				if (form["csd.a10_article"]) {
-					var duptitle = form["csd.a10_article"].value;
+				if (form['csd.a10_article']) {
+					var duptitle = form['csd.a10_article'].value;
 					if (!duptitle || !duptitle.trim()) {
-						alert( 'KPC A10: Mohon tuliskan nama artikel duplikat.' );
+						alert('KPC A10: Mohon tuliskan nama artikel duplikat.');
 						parameters = null;
 						return false;
 					}
@@ -1951,29 +1913,29 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 				break;
 
 			case 'policy':  // T2
-				if (form["csd.policy_rationale"] && form["csd.policy_rationale"].value) {
-					currentParams.rationale = form["csd.policy_rationale"].value;
+				if (form['csd.policy_rationale'] && form['csd.policy_rationale'].value) {
+					currentParams.rationale = form['csd.policy_rationale'].value;
 				}
 				break;
 
 			case 'duplicatetemplate':  // T3
-				if (form["csd.duplicatetemplate_2"]) {
-					var t3template = form["csd.duplicatetemplate_2"].value;
+				if (form['csd.duplicatetemplate_2']) {
+					var t3template = form['csd.duplicatetemplate_2'].value;
 					if (!t3template || !t3template.trim()) {
-						alert( 'KPC T3: Mohon tuliskan nama templat duplikat.' );
+						alert('KPC T3: Mohon tuliskan nama templat duplikat.');
 						parameters = null;
 						return false;
 					}
-					currentParams.ts = "~~~~~";
-					currentParams.template = t3template.replace(/^\s*Template:/i, "");
+					currentParams.ts = '~~~~~';
+					currentParams.template = t3template.replace(/^\s*Template:/i, '');
 				}
 				break;
 
 			case 'p1':  // P1
-				if (form["csd.p1_criterion"]) {
-					var criterion = form["csd.p1_criterion"].value;
+				if (form['csd.p1_criterion']) {
+					var criterion = form['csd.p1_criterion'].value;
 					if (!criterion || !criterion.trim()) {
-						alert( 'KPC P1: Mohon tuliskan kriteria KPC yang sesuai.' );
+						alert('KPC P1: Mohon tuliskan kriteria KPC yang sesuai.');
 						parameters = null;
 						return false;
 					}
@@ -1989,23 +1951,56 @@ Twinkle.speedy.getParameters = function twinklespeedyGetParameters(form, values)
 	return parameters;
 };
 
-// function for processing talk page notification template parameters
+// Function for processing talk page notification template parameters
+// key1/value1: for {{db-criterion-[notice|deleted]}} (via {{db-csd-[notice|deleted]-custom}})
+// utparams.param: for {{db-[notice|deleted]-multiple}}
 Twinkle.speedy.getUserTalkParameters = function twinklespeedyGetUserTalkParameters(normalized, parameters) {
 	var utparams = [];
-	switch (normalized) {
-		case 'db':
-			utparams["2"] = parameters["1"];
-			break;
-		case 'g12':
-			utparams.key1 = "url";
-			utparams.value1 = utparams.url = parameters.url;
-			break;
-		case 'a10':
-			utparams.key1 = "article";
-			utparams.value1 = utparams.article = parameters.article;
-			break;
-		default:
-			break;
+
+	// Special cases
+	if (normalized === 'db') {
+		utparams['2'] = parameters['1'];
+	} else if (normalized === 'g6') {
+		utparams.key1 = 'to';
+		utparams.value1 = Morebits.pageNameNorm;
+	} else if (normalized === 'g12') {
+		['url', 'url2', 'url3'].forEach(function(item, idx) {
+			if (parameters[item]) {
+				idx++;
+				utparams['key' + idx] = item;
+				utparams['value' + idx] = utparams[item] = parameters[item];
+			}
+		});
+	} else {
+		// Handle the rest
+		var param;
+		switch (normalized) {
+			case 'g4':
+				param = 'xfd';
+				break;
+			case 'a2':
+				param = 'source';
+				break;
+			case 'a5':
+				param = 'location';
+				break;
+			case 'a10':
+				param = 'article';
+				break;
+			case 'f9':
+				param = 'url';
+				break;
+			case 'p1':
+				param = 'criterion';
+				break;
+			default:
+				break;
+		}
+		// No harm in providing a usertalk template with the others' parameters
+		if (param && parameters[param]) {
+			utparams.key1 = param;
+			utparams.value1 = utparams[param] = parameters[param];
+		}
 	}
 	return utparams;
 };
@@ -2014,22 +2009,22 @@ Twinkle.speedy.getUserTalkParameters = function twinklespeedyGetUserTalkParamete
 Twinkle.speedy.resolveCsdValues = function twinklespeedyResolveCsdValues(e) {
 	var values = (e.target.form ? e.target.form : e.target).getChecked('csd');
 	if (values.length === 0) {
-		alert( "Mohon tuliskan kriteria yang sesuai!" );
+		alert('Mohon tuliskan kriteria yang sesuai!');
 		return null;
 	}
 	return values;
 };
 
 Twinkle.speedy.callback.evaluateSysop = function twinklespeedyCallbackEvaluateSysop(e) {
-	var form = (e.target.form ? e.target.form : e.target);
+	var form = e.target.form ? e.target.form : e.target;
 
-	if (e.target.type === "checkbox" || e.target.type === "text" ||
-			e.target.type === "select") {
+	if (e.target.type === 'checkbox' || e.target.type === 'text' ||
+			e.target.type === 'select') {
 		return;
 	}
 
 	var tag_only = form.tag_only;
-	if( tag_only && tag_only.checked ) {
+	if (tag_only && tag_only.checked) {
 		Twinkle.speedy.callback.evaluateUser(e);
 		return;
 	}
@@ -2038,21 +2033,48 @@ Twinkle.speedy.callback.evaluateSysop = function twinklespeedyCallbackEvaluateSy
 	if (!values) {
 		return;
 	}
+	var templateParams = Twinkle.speedy.getParameters(form, values);
+	if (!templateParams) {
+		return;
+	}
 
 	var normalizeds = values.map(function(value) {
-		return Twinkle.speedy.normalizeHash[ value ];
+		return Twinkle.speedy.normalizeHash[value];
 	});
 
-	// analyse each criterion to determine whether to watch the page, prompt for summary, or open user talk page
+	// analyse each criterion to determine whether to watch the page, prompt for summary, or notify the creator
 	var watchPage, promptForSummary;
 	normalizeds.forEach(function(norm) {
-		if (Twinkle.getPref("watchSpeedyPages").indexOf(norm) !== -1) {
+		if (Twinkle.getPref('watchSpeedyPages').indexOf(norm) !== -1) {
 			watchPage = true;
 		}
-		if (Twinkle.getPref("promptForSpeedyDeletionSummary").indexOf(norm) !== -1) {
+		if (Twinkle.getPref('promptForSpeedyDeletionSummary').indexOf(norm) !== -1) {
 			promptForSummary = true;
 		}
 	});
+
+	var warnusertalk = false;
+	if (form.warnusertalk.checked) {
+		$.each(normalizeds, function(index, norm) {
+			if (Twinkle.getPref('warnUserOnSpeedyDelete').indexOf(norm) !== -1) {
+				if (norm === 'g6' && values[index] !== 'copypaste') {
+					return true;
+				}
+				warnusertalk = true;
+				return false;  // break
+			}
+		});
+	}
+
+	var welcomeuser = false;
+	if (warnusertalk) {
+		$.each(normalizeds, function(index, norm) {
+			if (Twinkle.getPref('welcomeUserOnSpeedyDeletionNotification').indexOf(norm) !== -1) {
+				welcomeuser = true;
+				return false;  // break
+			}
+		});
+	}
 
 	var params = {
 		values: values,
@@ -2060,25 +2082,23 @@ Twinkle.speedy.callback.evaluateSysop = function twinklespeedyCallbackEvaluateSy
 		watch: watchPage,
 		deleteTalkPage: form.talkpage && form.talkpage.checked,
 		deleteRedirects: form.redirects.checked,
-		openUserTalk: form.openusertalk.checked,
+		warnUser: warnusertalk,
+		welcomeuser: welcomeuser,
 		promptForSummary: promptForSummary,
-		templateParams: Twinkle.speedy.getParameters( form, values )
+		templateParams: templateParams
 	};
-	if(!params.templateParams) {
-		return;
-	}
 
-	Morebits.simpleWindow.setButtonsEnabled( false );
-	Morebits.status.init( form );
+	Morebits.simpleWindow.setButtonsEnabled(false);
+	Morebits.status.init(form);
 
-	Twinkle.speedy.callbacks.sysop.main( params );
+	Twinkle.speedy.callbacks.sysop.main(params);
 };
 
 Twinkle.speedy.callback.evaluateUser = function twinklespeedyCallbackEvaluateUser(e) {
-	var form = (e.target.form ? e.target.form : e.target);
+	var form = e.target.form ? e.target.form : e.target;
 
-	if (e.target.type === "checkbox" || e.target.type === "text" ||
-			e.target.type === "select") {
+	if (e.target.type === 'checkbox' || e.target.type === 'text' ||
+			e.target.type === 'select') {
 		return;
 	}
 
@@ -2086,10 +2106,15 @@ Twinkle.speedy.callback.evaluateUser = function twinklespeedyCallbackEvaluateUse
 	if (!values) {
 		return;
 	}
-	//var multiple = form.multiple.checked;
+	var templateParams = Twinkle.speedy.getParameters(form, values);
+	if (!templateParams) {
+		return;
+	}
+
+	// var multiple = form.multiple.checked;
 	var normalizeds = [];
 	$.each(values, function(index, value) {
-		var norm = Twinkle.speedy.normalizeHash[ value ];
+		var norm = Twinkle.speedy.normalizeHash[value];
 
 		normalizeds.push(norm);
 	});
@@ -2143,25 +2168,23 @@ Twinkle.speedy.callback.evaluateUser = function twinklespeedyCallbackEvaluateUse
 		usertalk: notifyuser,
 		welcomeuser: welcomeuser,
 		lognomination: csdlog,
-		templateParams: Twinkle.speedy.getParameters( form, values )
+		requestsalt: form.salting.checked,
+		templateParams: templateParams
 	};
-	if (!params.templateParams) {
-		return;
-	}
 
-	Morebits.simpleWindow.setButtonsEnabled( false );
-	Morebits.status.init( form );
+	Morebits.simpleWindow.setButtonsEnabled(false);
+	Morebits.status.init(form);
 
 	Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
-	Morebits.wiki.actionCompleted.notice = "Penandaan selesai";
+	Morebits.wiki.actionCompleted.notice = 'Penandaan selesai';
 
 	// Modules can't be tagged, follow standard at TfD and place on /doc subpage
-	var isScribunto = mw.config.get('wgPageContentModel') === 'Scribunto';
-	var wikipedia_page = isScribunto ? new Morebits.wiki.page(mw.config.get('wgPageName')+'/doc', "Menandai halaman dokumentasi modul") : new Morebits.wiki.page(mw.config.get('wgPageName'), "Menandai halaman");
+	params.scribunto = mw.config.get('wgPageContentModel') === 'Scribunto';
+	var wikipedia_page = params.scribunto ? new Morebits.wiki.page(mw.config.get('wgPageName') + '/doc', 'Menandai halaman dokumentasi modul') : new Morebits.wiki.page(mw.config.get('wgPageName'), 'Menandai halaman');
 	wikipedia_page.setCallbackParameters(params);
 	wikipedia_page.load(Twinkle.speedy.callbacks.user.main);
 };
 })(jQuery);
 
 
-//</nowiki>
+// </nowiki>
