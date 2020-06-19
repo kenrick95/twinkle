@@ -24,9 +24,9 @@ If you'd like to start contributing, awesome!  Check out [CONTRIBUTING.md](CONTR
 
 [select2][] is added under the [MIT license](https://github.com/select2/select2/blob/develop/LICENSE.md).
 
-[Wikipedia:Twinkle]: https://en.wikipedia.org/wiki/Wikipedia:Twinkle
+[Wikipedia:Twinkle]: https://id.wikipedia.org/wiki/Wikipedia:Twinkle
 [AzaToth]: https://en.wikipedia.org/wiki/User:AzaToth
-[Wikipedia talk:Twinkle]: https://en.wikipedia.org/wiki/Wikipedia_talk:Twinkle
-[Twinkle documentation]: https://en.wikipedia.org/wiki/Wikipedia:Twinkle/doc
-[WP:TWPREFS]: https://en.wikipedia.org/wiki/Wikipedia:Twinkle/Preferences
+[Wikipedia talk:Twinkle]: https://id.wikipedia.org/wiki/Wikipedia_talk:Twinkle
+[Twinkle documentation]: https://id.wikipedia.org/wiki/Wikipedia:Twinkle/doc
+[WP:TWPREFS]: https://id.wikipedia.org/wiki/Wikipedia:Twinkle/Preferences
 [select2]: https://github.com/select2/select2
