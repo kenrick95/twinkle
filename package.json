@@ -2,7 +2,10 @@
   "title": "Twinkle",
   "name": "twinkle",
   "private": true,
-  "repository": "azatoth/twinkle",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kenrick95/twinkle"
+  },
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
