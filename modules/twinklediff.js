@@ -16,7 +16,7 @@ Twinkle.diff = function twinklediff() {
 	if (mw.config.get('wgNamespaceNumber') < 0 || !mw.config.get('wgArticleId')) {
 		return;
 	}
-	Twinkle.addPortletLink(mw.util.getUrl(mw.config.get('wgPageName'), {diff: 'cur', oldid: 'prev'}), 'Last', 'tw-lastdiff', 'Tampilkan beda terbaru');
+	Twinkle.addPortletLink(mw.util.getUrl(mw.config.get('wgPageName'), {diff: 'cur', oldid: 'prev'}), 'Terakhir', 'tw-lastdiff', 'Tampilkan beda terbaru');
 
 	// Show additional tabs only on diff pages
 	if (mw.util.getParamValue('diff')) {

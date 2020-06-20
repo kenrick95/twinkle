@@ -244,7 +244,7 @@ Twinkle.speedy.initDialog = function twinklespeedyInitDialog(callbackfunc) {
 		type: 'checkbox',
 		list: [
 			{
-				label: 'Tag with multiple criteria',
+				label: 'Tag dengan beberapa kriteria',
 				value: 'multiple',
 				name: 'multiple',
 				tooltip: 'Ketika dipilih, Anda dapat memilih beberapa kriteria untuk diterapkan. Contohnya, G11 dan A7 adalah gabungan umum pada artikel.',
@@ -305,11 +305,11 @@ Twinkle.speedy.callback.modeChanged = function twinklespeedyCallbackModeChanged(
 	if (isSysopMode) {
 		$('[name=delete_options]').show();
 		$('[name=tag_options]').hide();
-		$('button.tw-speedy-submit').text('Delete page');
+		$('button.tw-speedy-submit').text('Hapus halaman');
 	} else {
 		$('[name=delete_options]').hide();
 		$('[name=tag_options]').show();
-		$('button.tw-speedy-submit').text('Tag page');
+		$('button.tw-speedy-submit').text('Tandai halaman');
 	}
 
 	var work_area = new Morebits.quickForm.element({
@@ -1071,7 +1071,7 @@ Twinkle.speedy.generalList = [
 		showInNamespaces: [2, 118]  // user, draft namespaces only
 	},
 	{
-		label: 'G14: Unnecessary disambiguation page',
+		label: 'G14: Halaman disambiguasi yang tidak perlu',
 		value: 'disambig',
 		tooltip: 'This only applies for orphaned disambiguation pages which either: (1) disambiguate only one existing Wikipedia page and whose title ends in "(disambiguation)" (i.e., there is a primary topic); or (2) disambiguate no (zero) existing Wikipedia pages, regardless of its title.  It also applies to orphan "Foo (disambiguation)" redirects that target pages that are not disambiguation or similar disambiguation-like pages (such as set index articles or lists)'
 	}
