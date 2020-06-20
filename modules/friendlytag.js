@@ -685,7 +685,7 @@ Twinkle.tag.article.tags = {
 	'Cleanup bare URLs': 'artikel menggunakan URL telanjang untuk referensi, yang rentan terhadap pranala mati',
 	'Cleanup-PR': 'artikel dibaca seperti siaran pers',
 	'Cleanup reorganize': 'artikel memerlukan pengubahan struktur agar sesuai dengan pedoman Wikipedia',
-	'Cleanup rewrite': "artikel mungkin perlu ditulis ulang secara menyeluruh agar memenuhi standar kualitas Wikipedia",
+	'Cleanup rewrite': 'artikel mungkin perlu ditulis ulang secara menyeluruh agar memenuhi standar kualitas Wikipedia',
 	'Cleanup tense': 'artikel ditulis dalam bentuk kala yang salah',
 	'Close paraphrasing': 'artikel mengandung parafrasa yang mirip dengan sumber tidak bebas berhak cipta',
 	'COI': 'pembuat artikel memiliki konflik kepentingan',

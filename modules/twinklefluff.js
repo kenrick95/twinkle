@@ -409,7 +409,7 @@ Twinkle.fluff.callbacks = {
 		var xmlDoc = apiobj.responseXML;
 
 		if (typeof $(xmlDoc).find('actions').attr('edit') === 'undefined') {
-			self.statelem.error("Tidak bisa menyunting halaman, kemungkinan dilindungi.");
+			self.statelem.error('Tidak bisa menyunting halaman, kemungkinan dilindungi.');
 			return;
 		}
 
