@@ -1640,11 +1640,11 @@ Twinkle.speedy.callbacks = {
 						return false;
 					}
 				});
-				editsummary += ' of [[:' + Morebits.pageNameNorm + ']].';
+				editsummary += ' dari [[:' + Morebits.pageNameNorm + ']].';
 			} else {
 				if (params.normalizeds.indexOf('g10') === -1) {  // no article name in log for G10 taggings
 					appendText += ']]' + fileLogLink + ': ';
-					editsummary += ' of [[:' + Morebits.pageNameNorm + ']].';
+					editsummary += ' dari [[:' + Morebits.pageNameNorm + ']].';
 				} else {
 					appendText += '|This]] attack page' + fileLogLink + ': ';
 					editsummary += ' of an attack page.';

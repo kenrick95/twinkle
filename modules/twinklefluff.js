@@ -554,7 +554,7 @@ Twinkle.fluff.callbacks = {
 					userHasAlreadyConfirmedAction = true;
 				}
 
-				summary = Twinkle.fluff.formatSummary('Membatalkan ' + params.count + (params.count > 1 ? ' edits' : ' edit') +
+				summary = Twinkle.fluff.formatSummary('Membatalkan ' + params.count + (params.count > 1 ? ' suntingan' : ' suntingan') +
 				' by $USER', params.user, extra_summary);
 				break;
 		}
