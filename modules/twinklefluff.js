@@ -373,16 +373,16 @@ Twinkle.fluff.callbacks = {
 		var revertToUser = $(xmlDoc).find('rev').attr('user');
 
 		if (revertToRevID !== apiobj.params.rev) {
-			apiobj.statelem.error('The retrieved revision does not match the requested revision. Stopping revert.');
+			apiobj.statelem.error('Revisi yang diambil tidak cocok dengan revisi yang diminta. Menghentikan pengembalian.');
 			return;
 		}
 
-		var optional_summary = prompt('Please specify a reason for the revert:                                ', '');  // padded out to widen prompt in Firefox
+		var optional_summary = prompt('Mohon beri alasan pengembalian:                                ', '');  // padded out to widen prompt in Firefox
 		if (optional_summary === null) {
 			apiobj.statelem.error('Dibatalkan oleh pengguna.');
 			return;
 		}
-		var summary = Twinkle.fluff.formatSummary('Reverted to revision ' + revertToRevID + ' by $USER', revertToUser, optional_summary);
+		var summary = Twinkle.fluff.formatSummary('Dikembalikan ke revisi ' + revertToRevID + ' oleh $USER', revertToUser, optional_summary);
 
 		var query = {
 			'action': 'edit',
@@ -400,7 +400,7 @@ Twinkle.fluff.callbacks = {
 		Morebits.wiki.actionCompleted.redirect = mw.config.get('wgPageName');
 		Morebits.wiki.actionCompleted.notice = 'Pengembalian selesai';
 
-		var wikipedia_api = new Morebits.wiki.api('Saving reverted contents', query, Twinkle.fluff.callbacks.complete, apiobj.statelem);
+		var wikipedia_api = new Morebits.wiki.api('Menyimpan konten yang dikembalikan', query, Twinkle.fluff.callbacks.complete, apiobj.statelem);
 		wikipedia_api.params = apiobj.params;
 		wikipedia_api.post();
 
@@ -409,7 +409,7 @@ Twinkle.fluff.callbacks = {
 		var xmlDoc = apiobj.responseXML;
 
 		if (typeof $(xmlDoc).find('actions').attr('edit') === 'undefined') {
-			self.statelem.error("Unable to edit the page, it's probably protected.");
+			self.statelem.error('Tidak bisa menyunting halaman, kemungkinan dilindungi.');
 			return;
 		}
 
@@ -554,7 +554,7 @@ Twinkle.fluff.callbacks = {
 					userHasAlreadyConfirmedAction = true;
 				}
 
-				summary = Twinkle.fluff.formatSummary('Membatalkan ' + params.count + (params.count > 1 ? ' edits' : ' edit') +
+				summary = Twinkle.fluff.formatSummary('Membatalkan ' + params.count + (params.count > 1 ? ' suntingan' : ' suntingan') +
 				' by $USER', params.user, extra_summary);
 				break;
 		}

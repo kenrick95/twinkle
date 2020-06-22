@@ -3009,7 +3009,7 @@ Morebits.wiki.page = function(pageName, currentAction) {
 				}
 			}
 			// set revert edit summary
-			ctx.editSummary = '[[Help:Revert|Reverted]] to revision ' + ctx.revertOldID + ' by ' + ctx.revertUser + ': ' + ctx.editSummary;
+			ctx.editSummary = '[[Help:Revert|Dikembalikan]] ke revisi ' + ctx.revertOldID + ' oleh ' + ctx.revertUser + ': ' + ctx.editSummary;
 		}
 
 		ctx.pageLoaded = true;
@@ -4699,7 +4699,7 @@ Morebits.simpleWindow.prototype = {
 		$(this.content).find('input[type="submit"], button[type="submit"]').each(function(key, value) {
 			value.style.display = 'none';
 			var button = document.createElement('button');
-			button.textContent = value.hasAttribute('value') ? value.getAttribute('value') : value.textContent ? value.textContent : 'Submit Query';
+			button.textContent = value.hasAttribute('value') ? value.getAttribute('value') : value.textContent ? value.textContent : 'Kirim Kueri';
 			button.className = value.className || 'submitButtonProxy';
 			// here is an instance of cheap coding, probably a memory-usage hit in using a closure here
 			button.addEventListener('click', function() {
