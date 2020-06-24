@@ -58,7 +58,7 @@ Twinkle.warn.callback = function twinklewarnCallback() {
 	var dialog;
 	Twinkle.warn.dialog = new Morebits.simpleWindow(600, 440);
 	dialog = Twinkle.warn.dialog;
-	Window.setTitle('Peringatkan/beritahu pengguna');
+	dialog.setTitle('Peringatkan/beritahu pengguna');
 	dialog.setScriptName('Twinkle');
 	dialog.addFooterLink('Memilih tingkat peringatan', 'WP:UWUL#Levels');
 	dialog.addFooterLink('Bantuan Twinkle', 'WP:TW/DOC#warn');
