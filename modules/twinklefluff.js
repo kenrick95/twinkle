@@ -23,7 +23,7 @@ Twinkle.fluff = function twinklefluff() {
 	// This is for handling quick bots that makes edits seconds after the original edit is made.
 	// This only affects vandalism rollback; for good faith rollback, it will stop, indicating a bot
 	// has no faith, and for normal rollback, it will rollback that edit.
-	Twinkle.fluff.whiteList = [
+	Twinkle.fluff.trustedBots = [
 		'AnomieBOT',
 		'SineBot'
 	];
@@ -409,7 +409,7 @@ Twinkle.fluff.callbacks = {
 		var xmlDoc = apiobj.responseXML;
 
 		if (typeof $(xmlDoc).find('actions').attr('edit') === 'undefined') {
-			self.statelem.error('Tidak bisa menyunting halaman, kemungkinan dilindungi.');
+			apiobj.statelem.error("Tidak bisa menyunting halaman, kemungkinan dilindungi.");
 			return;
 		}
 
@@ -449,7 +449,7 @@ Twinkle.fluff.callbacks = {
 						return;
 				}
 			} else if (params.type === 'vand' &&
-					Twinkle.fluff.whiteList.indexOf(top.getAttribute('user')) !== -1 && revs.length > 1 &&
+					Twinkle.fluff.trustedBots.indexOf(top.getAttribute('user')) !== -1 && revs.length > 1 &&
 					revs[1].getAttribute('pageId') === params.revid) {
 				Morebits.status.info('Informasi', [ 'Revisi terakhir dibuat oleh ', Morebits.htmlNode('strong', lastuser), ', bot yang tepercaya, dan revisi sebelumnya dibuat oleh pengguna vandalisme, pengembalian dilanjutkan.' ]);
 				index = 2;
@@ -460,26 +460,26 @@ Twinkle.fluff.callbacks = {
 
 		}
 
-		if (Twinkle.fluff.whiteList.indexOf(params.user) !== -1) {
+		if (Twinkle.fluff.trustedBots.indexOf(params.user) !== -1) {
 			switch (params.type) {
 				case 'vand':
-					Morebits.status.info('Info', [ 'Pengembalian vandalisme dipilih pada ', Morebits.htmlNode('strong', params.user), '. Karena bot ini masuk daftar putih, kami menganggap Anda akan mengembalikan vandalisme yang dibuat oleh pengguna sebelumnya.' ]);
+					Morebits.status.info('Info', [ 'Pengembalian vandalisme dipilih pada ', Morebits.htmlNode('strong', params.user), '. Karena bot ini merupakan bot tepercaya, kami menganggap Anda akan mengembalikan vandalisme yang dibuat oleh pengguna sebelumnya.' ]);
 					index = 2;
 					params.user = revs[1].getAttribute('user');
 					break;
 				case 'agf':
-					Morebits.status.warn('Pemberitahuan', [ 'Pengembalian dengan niat baik dipilih pada ', Morebits.htmlNode('strong', params.user), '. Ini adalah bot yang masuk daftar putih, dan karena bot tidak punya niat, pengembalian ANB tidak dilanjutkan.' ]);
+					Morebits.status.warn('Pemberitahuan', [ 'Pengembalian dengan niat baik dipilih pada ', Morebits.htmlNode('strong', params.user), '. Ini adalah bot tepercaya, dan karena bot tidak punya niat, pengembalian ANB tidak dilanjutkan.' ]);
 					return;
 				case 'norm':
 				/* falls through */
 				default:
-					var cont = confirm('Pengembalian normal sudah dipilih, namun suntingan terakhir dibuat oleh bot yang masuk daftar putih (' + params.user + '). Ingin melanjutkan revisi sebelumnya saja?');
+					var cont = confirm('Pengembalian normal sudah dipilih, namun suntingan terakhir dibuat oleh bot tepercaya (' + params.user + '). Ingin melanjutkan revisi sebelumnya saja?');
 					if (cont) {
-						Morebits.status.info('Info', [ 'Pengembalian normal dipilih pada ', Morebits.htmlNode('strong', params.user), '. Ini adalah bot daftar putih, dan dengan konfirmasi, kami akan mengembalikan revisi sebelumnya saja.' ]);
+						Morebits.status.info('Info', [ 'Pengembalian normal dipilih pada ', Morebits.htmlNode('strong', params.user), '. Ini adalah bot tepercaya, dan dengan konfirmasi, kami akan mengembalikan revisi sebelumnya saja.' ]);
 						index = 2;
 						params.user = revs[1].getAttribute('user');
 					} else {
-						Morebits.status.warn('Pemberitahuan', [ 'Pengembalian normal dipilih pada ', Morebits.htmlNode('strong', params.user), '. Ini adalah bot daftar putih, namun dengan konfirmasi, pengembalian revisi atas akan diproses.' ]);
+						Morebits.status.warn('Pemberitahuan', [ 'Pengembalian normal dipilih pada ', Morebits.htmlNode('strong', params.user), '. Ini adalah bot tepercaya, namun dengan konfirmasi, pengembalian revisi atas akan diproses.' ]);
 					}
 					break;
 			}
