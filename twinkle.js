@@ -90,7 +90,7 @@ Twinkle.defaultConfig = {
 	// these next two should probably be identical by default
 	welcomeUserOnSpeedyDeletionNotification: [ 'db', 'u1', 'u2', 'u3', 'u4', 'u6', 'u10', 'u11', 'u12', 'u13', 'u14', 'a1', 'a2', 'a3', 'a5', 'a7', 'a9', 'a10', 'a11', 'b1', 'b2', 'b3', 'b7', 'b9', 'b10', 'h3', 'h5', 't2', 't3', 'p1', 'p2' ],
 	notifyUserOnSpeedyDeletionNomination: [ 'db', 'u1', 'u2', 'u3', 'u4', 'u6', 'u10', 'u11', 'u12', 'u13', 'u14', 'a1', 'a2', 'a3', 'a5', 'a7', 'a9', 'a10', 'b1', 'b2', 'b3', 'b7', 'b9', 'b10', 'h3', 'h5', 't2', 't3', 'p1', 'p2' ],
-	openUserTalkPageOnSpeedyDelete: [ 'db', 'u1', 'u2', 'u3', 'u4', 'u5', 'u10', 'u11', 'u12', 'a1', 'a3', 'a7', 'a9', 'a10', 'a11', 'b1', 'b2', 'b3', 'b7', 'b9', 'b10', 'h3', 'h5', 't2', 't3', 'p1', 'p2' ],
+	warnUserOnSpeedyDelete: [ 'db', 'u1', 'u2', 'u3', 'u4', 'u6', 'u10', 'u11', 'u12', 'u13', 'u14', 'a1', 'a2', 'a3', 'a5', 'a7', 'a9', 'a10', 'a11', 'b1', 'b2', 'b3', 'b7', 'b9', 'b10', 'h3', 'h5', 't2', 't3', 'p1', 'p2' ],
 	promptForSpeedyDeletionSummary: [],
 	deleteTalkPageOnDelete: true,
 	deleteRedirectsOnDelete: true,
