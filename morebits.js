@@ -1371,17 +1371,17 @@ Morebits.date = function() {
 };
 
 Morebits.date.localeData = {
-	months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-	monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-	days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-	daysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+	months: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+	monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
+	days: ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'],
+	daysShort: ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'],
 	relativeTimes: {
-		thisDay: '[Today at] h:mm A',
-		prevDay: '[Yesterday at] h:mm A',
-		nextDay: '[Tomorrow at] h:mm A',
-		thisWeek: 'dddd [at] h:mm A',
-		pastWeek: '[Last] dddd [at] h:mm A',
-		other: 'YYYY-MM-DD'
+		thisDay: '[Hari ini pada pukul] h:mm A',
+		prevDay: '[Kemarin pada pukul] h:mm A',
+		nextDay: '[Besok pada pukul] h:mm A',
+		thisWeek: 'dddd [pada pukul] h:mm A',
+		pastWeek: 'dddd [lalu pada pukul] h:mm A',
+		other: 'DD-MM-YYYY'
 	}
 };
 
