@@ -49,43 +49,43 @@ Twinkle.image.callback = function twinkleimageCallback() {
 		event: Twinkle.image.callback.choice,
 		list: [
 			{
-				label: 'No source (CSD F4)',
+				label: 'Tanpa sumber (KPC B4)',
 				value: 'no source',
 				checked: true,
-				tooltip: 'Image or media has no source information'
+				tooltip: 'Gambar atau media yang tidak memiliki informasi sumber'
 			},
 			{
-				label: 'No license (CSD F4)',
+				label: 'Tanpa lisensi (KPC B4)',
 				value: 'no license',
-				tooltip: 'Image or media does not have information on its copyright status'
+				tooltip: 'Gambar atau media tidak memiliki informasi hak cipta dan status lisensinya'
 			},
 			{
-				label: 'No source and no license (CSD F4)',
+				label: 'Tanpa sumber dan tanpa lisensi (KPC B4)',
 				value: 'no source no license',
 				tooltip: 'Image or media has neither information on source nor its copyright status'
 			},
 			{
-				label: 'Orphaned fair use (CSD F5)',
+				label: 'Berkas nonbebas yang tak digunakan (KPC B5)',
 				value: 'orphaned fair use',
 				tooltip: 'Image or media is unlicensed for use on Wikipedia and allowed only under a claim of fair use per Wikipedia:Non-free content, but it is not used in any articles'
 			},
 			{
-				label: 'No fair use rationale (CSD F6)',
+				label: 'Tidak memiliki alasan penggunaan nonbebas (KPC B6)',
 				value: 'no fair use rationale',
-				tooltip: 'Image or media is claimed to be used under Wikipedia\'s fair use policy but has no explanation as to why it is permitted under the policy'
+				tooltip: 'Gambar atau media yang diklaim perlu digunakan sejalan dengan kebijakan berkas non-bebas, tetapi tidak memiliki alasan mengapa hal ini dapat diizinkan untuk berkas ini'
 			},
 			{
-				label: 'Disputed fair use rationale (CSD F7)',
+				label: 'Berkas penggunaan wajar yang dipertentangkan (KPC B7)',
 				value: 'disputed fair use rationale',
-				tooltip: 'Image or media has a fair use rationale that is disputed'
+				tooltip: 'Gambar atau media yang memiliki alasan penggunaan wajar yang dipertentangkan'
 			},
 			{
-				label: 'Replaceable fair use (CSD F7)',
+				label: 'Berkas penggunaan wajar yang dapat digantikan (KPC B7)',
 				value: 'replaceable fair use',
 				tooltip: 'Image or media may fail Wikipedia\'s first non-free content criterion ([[WP:NFCC#1]]) in that it illustrates a subject for which a free image might reasonably be found or created that adequately provides the same information'
 			},
 			{
-				label: 'No evidence of permission (CSD F11)',
+				label: 'Tidak ada bukti izin penggunaan (KPC B11)',
 				value: 'no permission',
 				tooltip: 'Image or media does not have proof that the author agreed to licence the file'
 			}
