@@ -18,16 +18,16 @@ Twinkle.batchprotect = function twinklebatchprotect() {
 	if (Morebits.userIsSysop && ((mw.config.get('wgArticleId') > 0 && (mw.config.get('wgNamespaceNumber') === 2 ||
 		mw.config.get('wgNamespaceNumber') === 4)) || mw.config.get('wgNamespaceNumber') === 14 ||
 		mw.config.get('wgCanonicalSpecialPageName') === 'Prefixindex')) {
-		Twinkle.addPortletLink(Twinkle.batchprotect.callback, 'P-batch', 'tw-pbatch', 'Protect pages linked from this page');
+		Twinkle.addPortletLink(Twinkle.batchprotect.callback, 'P-batch', 'tw-pbatch', 'Lindungi halaman yang tertaut pada halaman ini');
 	}
 };
 
 Twinkle.batchprotect.unlinkCache = {};
 Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 	var Window = new Morebits.simpleWindow(600, 400);
-	Window.setTitle('Batch protection');
+	Window.setTitle('Perlindungan massal');
 	Window.setScriptName('Twinkle');
-	Window.addFooterLink('Protection policy', 'WP:PROT');
+	Window.addFooterLink('Kebijakan perlindungan', 'WP:PROT');
 	Window.addFooterLink('Bantuan Twinkle', 'WP:TW/DOC#protect');
 
 	var form = new Morebits.quickForm(Twinkle.batchprotect.callback.evaluate);
@@ -37,9 +37,9 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 		event: Twinkle.protect.formevents.editmodify,
 		list: [
 			{
-				label: 'Modify edit protection',
+				label: 'Ubah perlindungan penyuntingan',
 				value: 'editmodify',
-				tooltip: 'Only for existing pages.',
+				tooltip: 'Hanya untuk halaman yang ada',
 				checked: true
 			}
 		]
@@ -47,20 +47,20 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 	var editlevel = form.append({
 		type: 'select',
 		name: 'editlevel',
-		label: 'Edit protection:',
+		label: 'Ubah perlindungan:',
 		event: Twinkle.protect.formevents.editlevel
 	});
 	editlevel.append({
 		type: 'option',
-		label: 'All',
+		label: 'Semua',
 		value: 'all'
 	});
 	editlevel.append({
 		type: 'option',
-		label: 'Autoconfirmed',
+		label: 'Terkonfirmasi otomatis',
 		value: 'autoconfirmed'
 	});
-	editlevel.append({
+	/* editlevel.append({
 		type: 'option',
 		label: 'Extended confirmed',
 		value: 'extendedconfirmed'
@@ -69,40 +69,40 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 		type: 'option',
 		label: 'Template editor',
 		value: 'templateeditor'
-	});
+	}); */
 	editlevel.append({
 		type: 'option',
-		label: 'Sysop',
+		label: 'Pengurus',
 		value: 'sysop',
 		selected: true
 	});
 	form.append({
 		type: 'select',
 		name: 'editexpiry',
-		label: 'Expires:',
+		label: 'Kedaluwarsa:',
 		event: function(e) {
 			if (e.target.value === 'custom') {
 				Twinkle.protect.doCustomExpiry(e.target);
 			}
 		},
 		list: [
-			{ label: '1 hour', value: '1 hour' },
-			{ label: '2 hours', value: '2 hours' },
-			{ label: '3 hours', value: '3 hours' },
-			{ label: '6 hours', value: '6 hours' },
-			{ label: '12 hours', value: '12 hours' },
-			{ label: '1 day', value: '1 day' },
-			{ label: '2 days', selected: true, value: '2 days' },
-			{ label: '3 days', value: '3 days' },
-			{ label: '4 days', value: '4 days' },
-			{ label: '1 week', value: '1 week' },
-			{ label: '2 weeks', value: '2 weeks' },
-			{ label: '1 month', value: '1 month' },
-			{ label: '2 months', value: '2 months' },
-			{ label: '3 months', value: '3 months' },
-			{ label: '1 year', value: '1 year' },
-			{ label: 'indefinite', value: 'indefinite' },
-			{ label: 'Custom...', value: 'custom' }
+			{ label: '1 jam', value: '1 hour' },
+			{ label: '2 jam', value: '2 hours' },
+			{ label: '3 jam', value: '3 hours' },
+			{ label: '6 jam', value: '6 hours' },
+			{ label: '12 jam', value: '12 hours' },
+			{ label: '1 hari', value: '1 day' },
+			{ label: '2 hari', selected: true, value: '2 days' },
+			{ label: '3 hari', value: '3 days' },
+			{ label: '4 hari', value: '4 days' },
+			{ label: '1 minggu', value: '1 week' },
+			{ label: '2 minggu', value: '2 weeks' },
+			{ label: '1 bulan', value: '1 month' },
+			{ label: '2 bulan', value: '2 months' },
+			{ label: '3 bulan', value: '3 months' },
+			{ label: '1 tahun', value: '1 year' },
+			{ label: 'selamanya', value: 'indefinite' },
+			{ label: 'Atur sendiri...', value: 'custom' }
 		]
 	});
 
@@ -112,9 +112,9 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 		event: Twinkle.protect.formevents.movemodify,
 		list: [
 			{
-				label: 'Modify move protection',
+				label: 'Ubah perlindungan pemindahan',
 				value: 'movemodify',
-				tooltip: 'Only for existing pages.',
+				tooltip: 'Hanya untuk halaman yang ada',
 				checked: true
 			}
 		]
@@ -122,15 +122,15 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 	var movelevel = form.append({
 		type: 'select',
 		name: 'movelevel',
-		label: 'Move protection:',
+		label: 'Perlindungan pemindahan:',
 		event: Twinkle.protect.formevents.movelevel
 	});
 	movelevel.append({
 		type: 'option',
-		label: 'All',
+		label: 'Semua',
 		value: 'all'
 	});
-	movelevel.append({
+	/* movelevel.append({
 		type: 'option',
 		label: 'Extended confirmed',
 		value: 'extendedconfirmed'
@@ -139,40 +139,40 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 		type: 'option',
 		label: 'Template editor',
 		value: 'templateeditor'
-	});
+	}); */
 	movelevel.append({
 		type: 'option',
-		label: 'Sysop',
+		label: 'Pengurus',
 		value: 'sysop',
 		selected: true
 	});
 	form.append({
 		type: 'select',
 		name: 'moveexpiry',
-		label: 'Expires:',
+		label: 'Kedaluwarsa:',
 		event: function(e) {
 			if (e.target.value === 'custom') {
 				Twinkle.protect.doCustomExpiry(e.target);
 			}
 		},
 		list: [
-			{ label: '1 hour', value: '1 hour' },
-			{ label: '2 hours', value: '2 hours' },
-			{ label: '3 hours', value: '3 hours' },
-			{ label: '6 hours', value: '6 hours' },
-			{ label: '12 hours', value: '12 hours' },
-			{ label: '1 day', value: '1 day' },
-			{ label: '2 days', selected: true, value: '2 days' },
-			{ label: '3 days', value: '3 days' },
-			{ label: '4 days', value: '4 days' },
-			{ label: '1 week', value: '1 week' },
-			{ label: '2 weeks', value: '2 weeks' },
-			{ label: '1 month', value: '1 month' },
-			{ label: '2 months', value: '2 months' },
-			{ label: '3 months', value: '3 months' },
-			{ label: '1 year', value: '1 year' },
-			{ label: 'indefinite', value: 'indefinite' },
-			{ label: 'Custom...', value: 'custom' }
+			{ label: '1 jam', value: '1 hour' },
+			{ label: '2 jam', value: '2 hours' },
+			{ label: '3 jam', value: '3 hours' },
+			{ label: '6 jam', value: '6 hours' },
+			{ label: '12 jam', value: '12 hours' },
+			{ label: '1 hari', value: '1 day' },
+			{ label: '2 hari', selected: true, value: '2 days' },
+			{ label: '3 hari', value: '3 days' },
+			{ label: '4 hari', value: '4 days' },
+			{ label: '1 minggu', value: '1 week' },
+			{ label: '2 minggu', value: '2 weeks' },
+			{ label: '1 bulan', value: '1 month' },
+			{ label: '2 bulan', value: '2 months' },
+			{ label: '3 bulan', value: '3 months' },
+			{ label: '1 tahun', value: '1 year' },
+			{ label: 'selamanya', value: 'indefinite' },
+			{ label: 'Atur sendiri...', value: 'custom' }
 		]
 	});
 
@@ -186,9 +186,9 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 		},
 		list: [
 			{
-				label: 'Modify create protection',
+				label: 'Ubah perlindungan pembuatan',
 				value: 'createmodify',
-				tooltip: 'Only for pages that do not exist.',
+				tooltip: 'Hanya untuk halaman yang belum ada',
 				checked: true
 			}
 		]
@@ -196,20 +196,20 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 	var createlevel = form.append({
 		type: 'select',
 		name: 'createlevel',
-		label: 'Create protection:',
+		label: 'Buat perlindungan:',
 		event: Twinkle.protect.formevents.createlevel
 	});
 	createlevel.append({
 		type: 'option',
-		label: 'All',
+		label: 'Semua',
 		value: 'all'
 	});
 	createlevel.append({
 		type: 'option',
-		label: 'Autoconfirmed',
+		label: 'Terkonfirmasi otomatis',
 		value: 'autoconfirmed'
 	});
-	createlevel.append({
+	/* createlevel.append({
 		type: 'option',
 		label: 'Extended confirmed',
 		value: 'extendedconfirmed'
@@ -218,40 +218,40 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 		type: 'option',
 		label: 'Template editor',
 		value: 'templateeditor'
-	});
+	}); */
 	createlevel.append({
 		type: 'option',
-		label: 'Sysop',
+		label: 'Pengurus',
 		value: 'sysop',
 		selected: true
 	});
 	form.append({
 		type: 'select',
 		name: 'createexpiry',
-		label: 'Expires:',
+		label: 'Kedaluwarsa:',
 		event: function(e) {
 			if (e.target.value === 'custom') {
 				Twinkle.protect.doCustomExpiry(e.target);
 			}
 		},
 		list: [
-			{ label: '1 hour', value: '1 hour' },
-			{ label: '2 hours', value: '2 hours' },
-			{ label: '3 hours', value: '3 hours' },
-			{ label: '6 hours', value: '6 hours' },
-			{ label: '12 hours', value: '12 hours' },
-			{ label: '1 day', value: '1 day' },
-			{ label: '2 days', value: '2 days' },
-			{ label: '3 days', value: '3 days' },
-			{ label: '4 days', value: '4 days' },
-			{ label: '1 week', value: '1 week' },
-			{ label: '2 weeks', value: '2 weeks' },
-			{ label: '1 month', value: '1 month' },
-			{ label: '2 months', value: '2 months' },
-			{ label: '3 months', value: '3 months' },
-			{ label: '1 year', value: '1 year' },
-			{ label: 'indefinite', selected: true, value: 'indefinite' },
-			{ label: 'Custom...', value: 'custom' }
+			{ label: '1 jam', value: '1 hour' },
+			{ label: '2 jam', value: '2 hours' },
+			{ label: '3 jam', value: '3 hours' },
+			{ label: '6 jam', value: '6 hours' },
+			{ label: '12 jam', value: '12 hours' },
+			{ label: '1 hari', value: '1 day' },
+			{ label: '2 hari', selected: true, value: '2 days' },
+			{ label: '3 hari', value: '3 days' },
+			{ label: '4 hari', value: '4 days' },
+			{ label: '1 minggu', value: '1 week' },
+			{ label: '2 minggu', value: '2 weeks' },
+			{ label: '1 bulan', value: '1 month' },
+			{ label: '2 bulan', value: '2 months' },
+			{ label: '3 bulan', value: '3 months' },
+			{ label: '1 tahun', value: '1 year' },
+			{ label: 'selamanya', value: 'indefinite' },
+			{ label: 'Atur sendiri...', value: 'custom' }
 		]
 	});
 
@@ -262,9 +262,9 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 	form.append({
 		type: 'input',
 		name: 'reason',
-		label: 'Reason: ',
+		label: 'Alasan: ',
 		size: 60,
-		tooltip: 'For the protection log and page history.'
+		tooltip: 'Untuk log perlindungan dan riwayat halaman'
 	});
 
 	var query = {
@@ -295,9 +295,9 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 	Morebits.status.init(statusdiv);
 	Window.display();
 
-	var statelem = new Morebits.status('Grabbing list of pages');
+	var statelem = new Morebits.status('Mengambil senarai halaman');
 
-	var wikipedia_api = new Morebits.wiki.api('loading...', query, function(apiobj) {
+	var wikipedia_api = new Morebits.wiki.api('memuat...', query, function(apiobj) {
 		var xml = apiobj.responseXML;
 		var $pages = $(xml).find('page');
 		var list = [];
@@ -311,7 +311,7 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 
 			var metadata = [];
 			if (missing) {
-				metadata.push('page does not exist');
+				metadata.push('halaman tidak ada');
 				$editProt = $page.find('pr[type="create"][level="sysop"]');
 			} else {
 				if (isRedir) {
@@ -321,23 +321,23 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 				$editProt = $page.find('pr[type="edit"][level="sysop"]');
 			}
 			if ($editProt.length > 0) {
-				metadata.push('fully' + (missing ? ' create' : '') + ' protected' +
-				($editProt.attr('expiry') === 'infinity' ? ' indefinitely' : ', expires ' + new Morebits.date($editProt.attr('expiry')).calendar('utc') + ' (UTC)'));
+				metadata.push('fully' + (missing ? ' create' : '') + ' dilindungi' +
+				($editProt.attr('expiry') === 'infinity' ? ' selamanya' : ', kedaluwarsa ' + new Morebits.date($editProt.attr('expiry')).calendar('utc') + ' (UTC)'));
 			}
 
 			list.push({ label: title + (metadata.length ? ' (' + metadata.join('; ') + ')' : ''), value: title, checked: true, style: $editProt.length > 0 ? 'color:red' : '' });
 		});
-		form.append({ type: 'header', label: 'Pages to protect' });
+		form.append({ type: 'header', label: 'Halaman yang akan dilindungi' });
 		form.append({
 			type: 'button',
-			label: 'Select All',
+			label: 'Pilih semua',
 			event: function(e) {
 				$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', true);
 			}
 		});
 		form.append({
 			type: 'button',
-			label: 'Deselect All',
+			label: 'Kosongkan centang',
 			event: function(e) {
 				$(Morebits.quickForm.getElements(e.target.form, 'pages')).prop('checked', false);
 			}
@@ -361,14 +361,14 @@ Twinkle.batchprotect.callback = function twinklebatchprotectCallback() {
 Twinkle.batchprotect.currentProtectCounter = 0;
 Twinkle.batchprotect.currentprotector = 0;
 Twinkle.batchprotect.callback.evaluate = function twinklebatchprotectCallbackEvaluate(event) {
-	Morebits.wiki.actionCompleted.notice = 'Batch protection is now complete';
+	Morebits.wiki.actionCompleted.notice = 'Perlindungan massal telah selesai';
 
 	var form = event.target;
 
 	var numProtected = $(Morebits.quickForm.getElements(form, 'pages')).filter(function(index, element) {
 		return element.checked && element.nextElementSibling.style.color === 'red';
 	}).length;
-	if (numProtected > 0 && !confirm('You are about to act on ' + numProtected + ' fully protected page(s). Are you sure?')) {
+	if (numProtected > 0 && !confirm('Anda akan melakukan tindakan pada ' + numProtected + ' halaman yang dilindungi penuh. Yakin?')) {
 		return;
 	}
 
@@ -385,7 +385,7 @@ Twinkle.batchprotect.callback.evaluate = function twinklebatchprotectCallbackEva
 	var createexpiry = form.createexpiry.value;
 
 	if (!reason) {
-		alert("You've got to give a reason, you rouge admin!");
+		alert("Anda harus memberikan alasan. Jangan mengabaikannya!");
 		return;
 	}
 
@@ -393,11 +393,11 @@ Twinkle.batchprotect.callback.evaluate = function twinklebatchprotectCallbackEva
 	Morebits.status.init(form);
 
 	if (!pages) {
-		Morebits.status.error('Error', 'Nothing to protect, aborting');
+		Morebits.status.error('Galat', 'Tidak ada halaman untuk dilindungi. Membatalkan...');
 		return;
 	}
 
-	var batchOperation = new Morebits.batchOperation('Applying protection settings');
+	var batchOperation = new Morebits.batchOperation('Menerapkan pengaturan perlindungan');
 	batchOperation.setOption('chunkSize', Twinkle.getPref('batchProtectChunks'));
 	batchOperation.setOption('preserveIndividualStatusLines', true);
 	batchOperation.setPageList(pages);
@@ -406,7 +406,7 @@ Twinkle.batchprotect.callback.evaluate = function twinklebatchprotectCallbackEva
 			'action': 'query',
 			'titles': pageName
 		};
-		var wikipedia_api = new Morebits.wiki.api('Checking if page ' + pageName + ' exists', query,
+		var wikipedia_api = new Morebits.wiki.api('Memeriksa apakah ' + pageName + ' ada', query,
 			Twinkle.batchprotect.callbacks.main, null, batchOperation.workerFailure);
 		wikipedia_api.params = {
 			page: pageName,
@@ -436,7 +436,7 @@ Twinkle.batchprotect.callbacks = {
 
 		var exists = $(xml).find('page').attr('missing') !== '';
 
-		var page = new Morebits.wiki.page(apiobj.params.page, 'Protecting ' + apiobj.params.page);
+		var page = new Morebits.wiki.page(apiobj.params.page, 'Melindungi ' + apiobj.params.page);
 		var takenAction = false;
 		if (exists && apiobj.params.editmodify) {
 			page.setEditProtection(apiobj.params.editlevel, apiobj.params.editexpiry);
@@ -451,7 +451,7 @@ Twinkle.batchprotect.callbacks = {
 			takenAction = true;
 		}
 		if (!takenAction) {
-			Morebits.status.warn('Protecting ' + apiobj.params.page, 'page ' + (exists ? 'exists' : 'does not exist') + '; nothing to do, skipping');
+			Morebits.status.warn('Melindungi ' + apiobj.params.page, 'halaman ' + (exists ? 'tersedia' : 'tidak ada') + '; sedang gabut, loncati...');
 			apiobj.params.batchOperation.workerFailure(apiobj);
 			return;
 		}
