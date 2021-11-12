@@ -53,19 +53,19 @@ Twinkle.block.callback = function twinkleblockCallback() {
 			{
 				label: 'Blokir pengguna',
 				value: 'block',
-				tooltip: 'Blokir pengguna dengan opsi yang diberikan. If partial block is unchecked, this will be a sitewide block.',
+				tooltip: 'Blokir pengguna dengan opsi yang diberikan. Jika pemblokiran sebagian tidak dipilih, pemblokiran penuh diaktifkan.',
 				checked: true
 			},
 			{
-				label: 'Partial block',
+				label: 'Blokir sebagian',
 				value: 'partial',
-				tooltip: 'Enable partial blocks and partial block templates.',
+				tooltip: 'Aktifkan pemblokiran sebagian dan templat pemblokiran sebagian',
 				checked: Twinkle.getPref('defaultToPartialBlocks')
 			},
 			{
 				label: 'Tempatkan templat blokir ke halaman pembicaraan pengguna',
 				value: 'template',
-				tooltip: 'Jika pengurus yang memblokir lupa memberikan templat blokir, atau telah memblokirnya tanpa memberikan templat, Anda dapat menggunakan ini untuk memberikan templat blokir yang sesuai. Check the partial block box for partial block templates.',
+				tooltip: 'Jika pengurus yang memblokir lupa memberikan templat blokir, atau telah memblokirnya tanpa memberikan templat, Anda dapat menggunakan ini untuk memberikan templat blokir yang sesuai. Pilih kotak pemblokiran sebagian untuk memilih templat pemblokiran sebagian.',
 				checked: true
 			}
 		]
@@ -86,7 +86,7 @@ Twinkle.block.callback = function twinkleblockCallback() {
 		// clean up preset data (defaults, etc.), done exactly once, must be before Twinkle.block.callback.change_action is called
 		Twinkle.block.transformBlockPresets();
 		if (Twinkle.block.currentBlockInfo) {
-			Window.addFooterLink('Unblock this user', 'Special:Unblock/' + mw.config.get('wgRelevantUserName'), true);
+			Window.addFooterLink('Cabut pemblokiran', 'Special:Unblock/' + mw.config.get('wgRelevantUserName'), true);
 		}
 
 		// init the controls after user and block info have been fetched
@@ -199,8 +199,8 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 		field_block_options.append({
 			type: 'input',
 			name: 'expiry',
-			label: 'Waktu kedaluwarsa lain',
-			tooltip: 'Anda bisa menggunakan waktu relatif, seperti "1 menit" atau "19 hari", atau dengan stempel waktu "yyyymmddhhmm", seperti 201601010300 untuk 1 Januari 2016 pukul 3.00 GMT.',
+			label: 'Waktu kedaluwarsa lainnya',
+			tooltip: 'Anda dapat menggunakan waktu relatif, seperti "1 menit" atau "19 hari", atau dengan stempel waktu "yyyymmddhhmm", seperti 201601010300 untuk 1 Januari 2016 pukul 3.00 GMT.',
 			value: Twinkle.block.field_block_options.expiry || Twinkle.block.field_template_options.template_expiry
 		});
 
@@ -209,17 +209,17 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 				type: 'select',
 				multiple: true,
 				name: 'pagerestrictions',
-				label: 'Specific pages to block from editing',
+				label: 'Halaman tertentu yang ingin diblokir',
 				value: '',
-				tooltip: '10 page max.'
+				tooltip: 'Maksimal 10 halaman'
 			});
 			var ns = field_block_options.append({
 				type: 'select',
 				multiple: true,
 				name: 'namespacerestrictions',
-				label: 'Namespace blocks',
+				label: 'Pemblokiran ruangnama',
 				value: '',
-				tooltip: 'Block from editing these namespaces.'
+				tooltip: 'Blokir dari penyuntingan ruangnama ini.'
 			});
 			$.each(menuFormattedNamespaces, function(number, name) {
 				// Ignore -1: Special; -2: Media; and 2300-2303: Gadget (talk) and Gadget definition (talk)
@@ -247,7 +247,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 				label: 'Batasi pengguna untuk menyunting halaman pembicaraan penggunanya ketika sedang diblokir',
 				name: 'disabletalk',
 				value: '1',
-				tooltip: partialBox ? 'If issuing a partial block, this MUST remain unchecked unless you are also preventing them from editing User talk space' : ''
+				tooltip: partialBox ? 'Jika menggunakan pemblokiran sebagian, opsi ini wajib TIDAK DIPILIH, kecuali jika Anda menghendaki pengguna ini tidak dapat menyunting ruangnama Pembicaraan Pengguna' : ''
 			}
 		];
 
@@ -283,16 +283,16 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 			type: 'textarea',
 			label: 'Alasan (untuk dicantumkan di log pemblokiran):',
 			name: 'reason',
-			tooltip: 'Consider adding helpful details to the default message.',
+			tooltip: 'Pertimbangkan untuk memberi keterangan yang jelas.',
 			value: Twinkle.block.field_block_options.reason
 		});
 
 		field_block_options.append({
 			type: 'div',
 			name: 'filerlog_label',
-			label: 'See also:',
+			label: 'Lihat pula:',
 			style: 'display:inline-block;font-style:normal !important',
-			tooltip: 'Insert a "see also" message to indicate whether the filter log or deleted contributions played a role in the decision to block.'
+			tooltip: 'Sisipkan pesan "lihat pula" untuk menunjukkan bahwa log penyaringan dan kontribusi terhapus juga berperan dalam pemblokiran ini'
 		});
 		field_block_options.append({
 			type: 'checkbox',
@@ -301,7 +301,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 			style: 'display:inline-block; margin-right:5px',
 			list: [
 				{
-					label: 'Filter log',
+					label: 'Log penyaringan',
 					checked: false,
 					value: 'filter log'
 				}
@@ -314,7 +314,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 			style: 'display:inline-block',
 			list: [
 				{
-					label: 'Deleted contribs',
+					label: 'Kontribusi yang dihapus',
 					checked: false,
 					value: 'deleted contribs'
 				}
@@ -350,9 +350,9 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 			type: 'input',
 			name: 'area',
 			display: 'none',
-			label: 'Area blocked from',
+			label: 'Wilayah pemblokiran dari',
 			value: '',
-			tooltip: 'Optional explanation of the pages or namespaces the user was blocked from editing.'
+			tooltip: 'Penjelasan lanjutan halaman atau ruangnama yang tidak diizinkan untuk disunting.'
 		});
 
 		if (!blockBox) {
@@ -397,16 +397,16 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 						tooltip: 'Gunakan opsi ini untuk membuat templat pemblokiran berisi bahwa akses ke halaman pembicaraan pengguna sudah dihapus'
 					},
 					{
-						label: 'User blocked from sending email',
+						label: 'Pengguna diblokir untuk mengirim surel',
 						name: 'noemail_template',
 						checked: Twinkle.block.field_template_options.noemail_template,
-						tooltip: 'If the area is not provided, make the block template state that the user\'s email access has been removed'
+						tooltip: 'Jika tidak dinyatakan, buat templat yang menyatakan bahwa akses pengiriman surel telah dicabut dari pengguna ini'
 					},
 					{
-						label: 'User blocked from creating accounts',
+						label: 'Pengguna diblokir untuk membuat akun',
 						name: 'nocreate_template',
 						checked: Twinkle.block.field_template_options.nocreate_template,
-						tooltip: 'If the area is not provided, make the block template state that the user\'s ability to create accounts has been removed'
+						tooltip: 'Jika tidak dinyatakan, buat templat yang menyatakan bahwa akses pembuatan akun telah dicabut dari pengguna ini'
 					}
 				]
 			});
@@ -435,10 +435,10 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 
 		$form.find('[name=pagerestrictions]').select2({
 			width: '100%',
-			placeholder: 'Select pages to block user from',
+			placeholder: 'Pilih halaman untuk diblokir',
 			language: {
 				errorLoading: function() {
-					return 'Incomplete or invalid search term';
+					return 'Kata kunci pencarian tidak lengkap/valid';
 				}
 			},
 			maximumSelectionLength: 10, // Software limitation [[phab:T202776]]
@@ -489,7 +489,7 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 				searching: Morebits.select2.queryInterceptor
 			},
 			templateResult: Morebits.select2.highlightSearchMatches,
-			placeholder: 'Select namespaces to block user from'
+			placeholder: 'Pilih ruangnama untuk diblokir'
 		});
 
 		mw.util.addCSS(
@@ -538,9 +538,9 @@ Twinkle.block.callback.change_action = function twinkleblockCallbackChangeAction
 		}
 		var infoStr = 'Kirim permintaan untuk memblokir ulang dengan opsi yang diberikan';
 		if (Twinkle.block.currentBlockInfo.partial === undefined && partialBox) {
-			infoStr += ', mengubah ke blokir parsial';
+			infoStr += ', mengubah menjadi blokir sebagian';
 		} else if (Twinkle.block.currentBlockInfo.partial === '' && !partialBox) {
-			infoStr += ', mengubah ke blokir penuh';
+			infoStr += ', mengubah menjadi blokir penuh';
 		}
 		Morebits.status.warn(statusStr, infoStr);
 		Twinkle.block.callback.update_form(e, Twinkle.block.currentBlockInfo);
@@ -799,14 +799,14 @@ Twinkle.block.blockPresetsInfo = {
 	'uw-disruptblock': {
 		autoblock: true,
 		nocreate: true,
-		reason: 'Suntingan yang mengganggu',
+		reason: 'Suntingan mengganggu',
 		summary: 'Anda diblokir karena melakukan penyuntingan yang mengganggu/mengacau'
 	},
 	'uw-efblock': {
 		autoblock: true,
 		nocreate: true,
-		reason: 'Memicu filter suntingan secara sengaja',
-		summary: 'Anda diblokir karena memicu filter suntingan dengan sengaja'
+		reason: 'Memicu penyaring suntingan secara sengaja',
+		summary: 'Anda diblokir karena memicu penyaring suntingan dengan sengaja'
 	},
 	'uw-ewblock': {
 		autoblock: true,
@@ -827,7 +827,7 @@ Twinkle.block.blockPresetsInfo = {
 		forAnonOnly: true,
 		nocreate: true,
 		reason: 'Menghindari pemblokiran',
-		summary: 'Alamat IP Anda diblokir karena digunakan untuk menhindari pemblokiran'
+		summary: 'Alamat IP Anda diblokir karena digunakan untuk menghindari pemblokiran'
 	},
 	'uw-lblock': {
 		autoblock: true,
@@ -877,8 +877,8 @@ Twinkle.block.blockPresetsInfo = {
 		autoblock: true,
 		nocreate: true,
 		pageParam: true,
-		reason: 'Using Wikipedia as a [[WP:NOTMYSPACE|blog, web host, social networking site or forum]]',
-		summary: 'You have been blocked from editing for using user and/or article pages as a [[WP:NOTMYSPACE|blog, web host, social networking site or forum]]'
+		reason: 'Menggunakan Wikipedia sebagai media sosial',
+		summary: 'Anda diblokir karena menjadikan Wikipedia sebagai [[WP:BUKAN|media sosial atau forum]]'
 	},
 	'uw-sockblock': {
 		autoblock: true,
@@ -934,8 +934,8 @@ Twinkle.block.blockPresetsInfo = {
 		expiry: '31 hours',
 		nocreate: true,
 		pageParam: true,
-		reason: 'Persistent addition of [[WP:INTREF|unsourced content]]',
-		summary: 'You have been blocked from editing for persistent addition of [[WP:INTREF|unsourced content]]'
+		reason: 'Terus-menerus menambahkan konten tanpa rujukan',
+		summary: 'Anda diblokir karena terus-menerus menambah konten tanpa rujukan'
 	},
 	'uw-uhblock': {
 		autoblock: true,
@@ -966,8 +966,8 @@ Twinkle.block.blockPresetsInfo = {
 		forRegisteredOnly: true,
 		nocreate: true,
 		pageParam: true,
-		reason: '[[WP:PAID|Undisclosed paid editing]] in violation of the WMF [[WP:TOU|Terms of Use]]',
-		summary: 'You have been indefinitely blocked from editing because your account is being used in violation of [[WP:PAID|Wikipedia policy on undisclosed paid advocacy]]'
+		reason: 'Tidak mematuhi Kebijakan Penggunaan tentang menyunting artikel yang dibayar',
+		summary: 'Anda diblokir karena tidak mematuhi Kebijakan Penggunaan tentang menyunting artikel yang dibayar'
 	},
 	'uw-vaublock': {
 		autoblock: true,
@@ -1011,8 +1011,8 @@ Twinkle.block.blockPresetsInfo = {
 		nocreate: true,
 		pageParam: false,
 		reasonParam: true,
-		reason: 'Misusing [[WP:Sock puppetry|multiple accounts]]',
-		summary: 'You have been [[WP:PB|blocked]] from creating accounts for misusing [[WP:SOCK|multiple accounts]]'
+		reason: 'Menyalahgunaan beberapa akun',
+		summary: 'Anda diblokir karena menyalahgunaan beberapa akun'
 	},
 	'uw-acpblockindef': {
 		autoblock: true,
@@ -1021,9 +1021,9 @@ Twinkle.block.blockPresetsInfo = {
 		nocreate: true,
 		pageParam: false,
 		reasonParam: true,
-		reason: 'Misusing [[WP:Sock puppetry|multiple accounts]]',
-		summary: 'You have been indefinitely [[WP:PB|blocked]] from creating accounts for misusing [[WP:SOCK|multiple accounts]]'
-	},
+		reason: 'Menggunakan akun siluman',
+		summary: 'Anda diblokir selamanya karena menggunakan akun siluman'
+	}, /*
 	'uw-aepblock': {
 		autoblock: true,
 		nocreate: false,
@@ -1031,7 +1031,7 @@ Twinkle.block.blockPresetsInfo = {
 		reason: '[[WP:Arbitration enforcement|Arbitration enforcement]]',
 		reasonParam: true,
 		summary: 'You have been [[WP:PB|blocked]] from editing for violating an [[WP:Arbitration|arbitration decision]]'
-	},
+	}, */
 	'uw-epblock': {
 		autoblock: true,
 		expiry: 'infinity',
@@ -1040,8 +1040,8 @@ Twinkle.block.blockPresetsInfo = {
 		noemail: true,
 		pageParam: false,
 		reasonParam: true,
-		reason: 'Email [[WP:Harassment|harassment]]',
-		summary: 'You have been [[WP:PB|blocked]] from emailing other editors for [[WP:Harassment|harassment]]'
+		reason: 'Pelecehan via surel',
+		summary: 'Anda diblokir selamanya karena menggunakan surel untuk melakukan pelecehan terhadap pengguna lain'
 	},
 	'uw-ewpblock': {
 		autoblock: true,
@@ -1049,8 +1049,8 @@ Twinkle.block.blockPresetsInfo = {
 		nocreate: false,
 		pageParam: false,
 		reasonParam: true,
-		reason: '[[WP:Edit warring|Edit warring]]',
-		summary: 'You have been [[WP:PB|blocked]] from editing certain areas of the encyclopedia to prevent further [[WP:DE|disruption]] due to [[WP:EW|edit warring]]'
+		reason: 'Perang suntingan',
+		summary: 'Anda diblokir dari penyuntingan dalam beberapa halaman Wikipedia karena terlibat perang suntingan'
 	},
 	'uw-pblock': {
 		autoblock: true,
@@ -1058,7 +1058,7 @@ Twinkle.block.blockPresetsInfo = {
 		nocreate: false,
 		pageParam: false,
 		reasonParam: true,
-		summary: 'You have been [[WP:PB|partially blocked]] from certain areas of the encyclopedia'
+		summary: 'Anda diblokir dari penyuntingan dalam beberapa halaman Wikipedia'
 	},
 	'uw-pblockindef': {
 		autoblock: true,
@@ -1067,7 +1067,7 @@ Twinkle.block.blockPresetsInfo = {
 		nocreate: false,
 		pageParam: false,
 		reasonParam: true,
-		summary: 'You have been indefinitely [[WP:PB|partially blocked]] from certain areas of the encyclopedia'
+		summary: 'Anda diblokir selamanya dari penyuntingan dalam beberapa halaman Wikipedia'
 	}
 };
 
@@ -1172,20 +1172,20 @@ Twinkle.block.blockGroups = [
 
 Twinkle.block.blockGroupsPartial = [
 	{
-		label: 'Common partial block reasons',
+		label: 'Alasan umum pemblokiran sebagian',
 		list: [
-			{ label: 'Generic partial block (custom reason)', value: 'uw-pblock', selected: true },
-			{ label: 'Generic partial block (custom reason) - indefinite', value: 'uw-pblockindef' },
-			{ label: 'Edit warring', value: 'uw-ewpblock' }
+			{ label: 'Pemblokiran sebagian umum (alasan tertentu)', value: 'uw-pblock', selected: true },
+			{ label: 'Pemblokiran sebagian umum (alasan tertentu) - selamanya', value: 'uw-pblockindef' },
+			{ label: 'Perang suntingan', value: 'uw-ewpblock' }
 		]
 	},
 	{
 		label: 'Extended partial block reasons',
 		list: [
-			{ label: 'Arbitration enforcement', value: 'uw-aepblock' },
-			{ label: 'Email harassment', value: 'uw-epblock' },
-			{ label: 'Misusing multiple accounts', value: 'uw-acpblock' },
-			{ label: 'Misusing multiple accounts - indefinite', value: 'uw-acpblockindef' }
+			/* { label: 'Arbitration enforcement', value: 'uw-aepblock' }, */
+			{ label: 'Pelecehan surel', value: 'uw-epblock' },
+			{ label: 'Menyalahgunaan beberapa akun', value: 'uw-acpblock' },
+			{ label: 'Menyalahgunaan beberapa akun - selamanya', value: 'uw-acpblockindef' }
 		]
 	}
 ];
@@ -1248,7 +1248,7 @@ Twinkle.block.callback.change_expiry = function twinkleblockCallbackChangeExpiry
 Twinkle.block.seeAlsos = [];
 Twinkle.block.callback.toggle_see_alsos = function twinkleblockCallbackToggleSeeAlso() {
 	var reason = this.form.reason.value.replace(
-		new RegExp('( <!--|;) ' + 'see also ' + Twinkle.block.seeAlsos.join(' and ') + '( -->)?'), ''
+		new RegExp('( <!--|;) ' + 'lihat juga ' + Twinkle.block.seeAlsos.join(' dan ') + '( -->)?'), ''
 	);
 
 	Twinkle.block.seeAlsos = Twinkle.block.seeAlsos.filter(function(el) {
@@ -1258,14 +1258,14 @@ Twinkle.block.callback.toggle_see_alsos = function twinkleblockCallbackToggleSee
 	if (this.checked) {
 		Twinkle.block.seeAlsos.push(this.value);
 	}
-	var seeAlsoMessage = Twinkle.block.seeAlsos.join(' and ');
+	var seeAlsoMessage = Twinkle.block.seeAlsos.join(' dan ');
 
 	if (!Twinkle.block.seeAlsos.length) {
 		this.form.reason.value = reason;
 	} else if (reason.indexOf('{{') !== -1) {
-		this.form.reason.value = reason + ' <!-- see also ' + seeAlsoMessage + ' -->';
+		this.form.reason.value = reason + ' <!-- lihat juga ' + seeAlsoMessage + ' -->';
 	} else {
-		this.form.reason.value = reason + '; see also ' + seeAlsoMessage;
+		this.form.reason.value = reason + '; lihat juga ' + seeAlsoMessage;
 	}
 };
 
@@ -1410,21 +1410,21 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 	if (toBlock) {
 		if (blockoptions.partial) {
 			if (blockoptions.disabletalk && blockoptions.namespacerestrictions.indexOf('3') === -1) {
-				return alert('Partial blocks cannot prevent talk page access unless also restricting them from editing User talk space!');
+				return alert('Pemblokiran sebagian tidak membatasi halaman pembicaraan, kecuali Anda menginginkan akses halaman tersebut juga dicabut.');
 			}
 			if (!blockoptions.namespacerestrictions && !blockoptions.pagerestrictions) {
 				if (!blockoptions.noemail && !blockoptions.nocreate) { // Blank entries technically allowed [[phab:T208645]]
-					return alert('No pages or namespaces were selected, nor were email or account creation restrictions applied; please select at least one option to apply a partial block!');
-				} else if (!confirm('You are about to block with no restrictions on page or namespace editing, are you sure you want to proceed?')) {
+					return alert('Tidak ada halaman atau ruangnama dipilih, atau tidak ada opsi pembatasan pengiriman surel dan pembuatan akun dipilih. Pilih paling sedikit satu opsi pada pemblokiran sebagian!');
+				} else if (!confirm('Anda akan memblokir tanpa menerapkan pembatasan penyuntingan pada halaman atau ruangnama. Yakin?')) {
 					return;
 				}
 			}
 		}
 		if (!blockoptions.expiry) {
-			return alert('Berikan waktu kedaluwarsa pemblokiran!');
+			return alert('Berikan waktu kedaluwarsa pemblokiran.');
 		}
 		if (!blockoptions.reason) {
-			return alert('Berikan alasan pemblokiran!');
+			return alert('Berikan alasan pemblokiran.');
 		}
 
 		Morebits.simpleWindow.setButtonsEnabled(false);
@@ -1477,11 +1477,11 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 			var logid = data.query.logevents.length ? logevents.logid : false;
 
 			if (logid !== Twinkle.block.blockLogId || !!block !== !!Twinkle.block.currentBlockInfo) {
-				var message = 'The block status of ' + mw.config.get('wgRelevantUserName') + ' has changed. ';
+				var message = 'Status pemblokiran ' + mw.config.get('wgRelevantUserName') + ' berubah. ';
 				if (block) {
-					message += 'New status: ';
+					message += 'Status baru: ';
 				} else {
-					message += 'Last entry: ';
+					message += 'Entri sebelumnya: ';
 				}
 
 				var logExpiry = '';
@@ -1490,23 +1490,23 @@ Twinkle.block.callback.evaluate = function twinkleblockCallbackEvaluate(e) {
 						logExpiry = 'indefinitely';
 					} else {
 						var expiryDate = new Morebits.date(logevents.params.expiry);
-						logExpiry += (expiryDate.isBefore(new Date()) ? ', expired ' : ' until ') + expiryDate.calendar();
+						logExpiry += (expiryDate.isBefore(new Date()) ? ', kedaluwarsa ' : ' hingga ') + expiryDate.calendar();
 					}
 				} else { // no duration, action=unblock, just show timestamp
 					logExpiry = ' ' + new Morebits.date(logevents.timestamp).calendar();
 				}
 				message += Morebits.string.toUpperCaseFirstChar(logevents.action) + 'ed by ' + logevents.user + logExpiry +
-					' for "' + logevents.comment + '". Do you want to override with your settings?';
+					' for "' + logevents.comment + '". Abaikan pengaturan Anda?';
 
 				if (!confirm(message)) {
-					Morebits.status.info('Executing block', 'Canceled by user');
+					Morebits.status.info('Menjalankan pemblokiran', 'Dibatalkan oleh pengguna');
 					return;
 				}
 				blockoptions.reblock = 1; // Writing over a block will fail otherwise
 			}
 			// execute block
 			blockoptions.token = mw.user.tokens.get('csrfToken');
-			var mbApi = new Morebits.wiki.api('Executing block', blockoptions, function() {
+			var mbApi = new Morebits.wiki.api('Menjalankan pemblokiran', blockoptions, function() {
 				statusElement.info('Selesai');
 				if (toWarn) {
 					Twinkle.block.callback.issue_template(templateoptions);
@@ -1577,10 +1577,10 @@ Twinkle.block.callback.getBlockNoticeWikitext = function(params) {
 			if (params.pagerestrictions.length || params.namespacerestrictions.length) {
 				var makeSentence = function (array) {
 					if (array.length < 3) {
-						return array.join(' and ');
+						return array.join(' dan ');
 					}
 					var last = array.pop();
-					return array.join(', ') + ', and ' + last;
+					return array.join(', ') + ', dan ' + last;
 
 				};
 				text += '|area=' + (params.indefinite ? 'certain ' : 'from certain ');
@@ -1595,7 +1595,7 @@ Twinkle.block.callback.getBlockNoticeWikitext = function(params) {
 					var namespaceNames = params.namespacerestrictions.map(function(id) {
 						return menuFormattedNamespaces[id];
 					});
-					text += '[[Wikipedia:Namespace|namespaces]] (' + makeSentence(namespaceNames) + ')';
+					text += '[[WP:NAMESPACE|Ruangnama]] (' + makeSentence(namespaceNames) + ')';
 				}
 			} else if (params.area) {
 				text += '|area=' + params.area;
@@ -1640,10 +1640,10 @@ Twinkle.block.callback.main = function twinkleblockcallbackMain(pageobj) {
 	params.indefinite = (/indef|infinit|never|\*|max/).test(params.expiry);
 
 	if (Twinkle.getPref('blankTalkpageOnIndefBlock') && params.template !== 'uw-lblock' && params.indefinite) {
-		Morebits.status.info('Info', 'Menghapus isi halaman pembicaraan berdasarkan preferensi dan membuat bagian tingkat 2 untuk tanggal');
+		Morebits.status.info('Info', 'Menghapus isi halaman pembicaraan berdasarkan preferensi dan membuat subbagian tingkat 2 untuk tanggal');
 		text = date.monthHeader() + '\n';
 	} else if (!dateHeaderRegexResult || dateHeaderRegexResult.index !== lastHeaderIndex) {
-		Morebits.status.info('Info', 'Akan membuat bagian tingkat 2 baru untuk tanggal, karena subbagian bulan ini tidak tersedia');
+		Morebits.status.info('Info', 'Akan membuat bagian tingkat 2 baru untuk tanggal karena subbagian bulan ini tidak tersedia');
 		text += date.monthHeader() + '\n';
 	}
 

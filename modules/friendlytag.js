@@ -135,7 +135,7 @@ Twinkle.tag.callback = function friendlytagCallback() {
 				type: 'input',
 				label: 'Alasan',
 				name: 'reason',
-				tooltip: 'Optional reason to be appended in edit summary. Recommended when removing tags.',
+				tooltip: 'Alasan tambahan untuk dimasukkan dalam ringkasan suntingan. Disarankan saat menghapus tag.',
 				size: '60px'
 			});
 
@@ -147,7 +147,7 @@ Twinkle.tag.callback = function friendlytagCallback() {
 			form.append({ type: 'header', label: 'Tag lisensi dan sumber bermasalah' });
 			form.append({ type: 'checkbox', name: 'fileTags', list: Twinkle.tag.file.licenseList });
 
-			form.append({ type: 'header', label: 'Tag terkait dengan Commons' });
+			form.append({ type: 'header', label: 'Tag yang berhubungan dengan Commons' });
 			form.append({ type: 'checkbox', name: 'fileTags', list: Twinkle.tag.file.commonsList });
 
 			form.append({ type: 'header', label: 'Tag perapian' });
@@ -311,7 +311,7 @@ Twinkle.tag.updateSortOrder = function(e) {
 					name: 'cleanup',
 					type: 'input',
 					label: 'Alasan perapian diperlukan: ',
-					tooltip: 'Wajib diisi.',
+					tooltip: 'Wajib diisi',
 					size: 35
 				};
 				break;
@@ -320,7 +320,7 @@ Twinkle.tag.updateSortOrder = function(e) {
 					name: 'closeParaphrasing',
 					type: 'input',
 					label: 'Source: ',
-					tooltip: 'Source that has been closely paraphrased'
+					tooltip: 'Kalimat yang diparafrase sangat mirip dengan sumber aslinya'
 				};
 				break;
 			case 'Copy edit':
@@ -337,7 +337,7 @@ Twinkle.tag.updateSortOrder = function(e) {
 					name: 'copypaste',
 					type: 'input',
 					label: 'URL sumber: ',
-					tooltip: 'Jika diketahui.',
+					tooltip: 'Jika diketahui',
 					size: 50
 				};
 				break;
@@ -345,13 +345,13 @@ Twinkle.tag.updateSortOrder = function(e) {
 				checkbox.subgroup = [ {
 					name: 'expandLanguageLangCode',
 					type: 'input',
-					label: 'Language code: ',
-					tooltip: 'Language code of the language from which article is to be expanded from'
+					label: 'Kode bahasa: ',
+					tooltip: 'Kode bahasa sumber artikel ini dikembangkan'
 				}, {
 					name: 'expandLanguageArticle',
 					type: 'input',
-					label: 'Name of article: ',
-					tooltip: 'Name of article to be expanded from, without the interwiki prefix'
+					label: 'Nama artikel: ',
+					tooltip: 'Judul artikel asal yang dikembangkan, tanpa awalan antarwiki'
 				}
 				];
 				break;
@@ -367,13 +367,13 @@ Twinkle.tag.updateSortOrder = function(e) {
 						name: 'expertNeededReason',
 						type: 'input',
 						label: 'Alasan: ',
-						tooltip: 'Short explanation describing the issue. Either Reason or Talk link is required.'
+						tooltip: 'Penjelasan singkat yang menjelaskan masalahnya'
 					},
 					{
 						name: 'expertNeededTalk',
 						type: 'input',
 						label: 'Diskusi pembicaraan: ',
-						tooltip: 'Name of the section of this article\'s talk page where the issue is being discussed. Do not give a link, just the name of the section. Either Reason or Talk link is required.'
+						tooltip: 'Nama bagian dari halaman pembicaraan artikel ini yang sedang didiskusikan. Cukup berikan nama bagian artikelnya, bukan pranalanya.'
 					}
 				];
 				break;
@@ -389,20 +389,20 @@ Twinkle.tag.updateSortOrder = function(e) {
 					{
 						name: 'histmergeOriginalPage',
 						type: 'input',
-						label: 'Other article: ',
-						tooltip: 'Name of the page that should be merged into this one (required).'
+						label: 'Artikel lain: ',
+						tooltip: 'Nama halaman yang harus digabung ke halaman ini (wajib)'
 					},
 					{
 						name: 'histmergeReason',
 						type: 'input',
-						label: 'Reason: ',
-						tooltip: 'Short explanation describing the reason a history merge is needed. Should probably begin with "because" and end with a period.'
+						label: 'Alasan: ',
+						tooltip: 'Penjelasan singkat dan alasan penggabungan sejarah artikel diperlukan'
 					},
 					{
 						name: 'histmergeSysopDetails',
 						type: 'input',
-						label: 'Extra details: ',
-						tooltip: 'For complex cases, provide extra instructions for the reviewing administrator.'
+						label: 'Perincian tambahan: ',
+						tooltip: 'Untuk kasus kompleks, berikan instruksi tambahan guna ditinjau oleh pengurus'
 					}
 				];
 				break;
@@ -471,24 +471,6 @@ Twinkle.tag.updateSortOrder = function(e) {
 						]
 					});
 				}
-				if (mw.config.get('wgNamespaceNumber') === 0) {
-					checkbox.subgroup.push({
-						name: 'translationPostAtPNT',
-						type: 'checkbox',
-						list: [
-							{
-								label: 'List this article at Wikipedia:Pages needing translation into English (PNT)',
-								checked: true
-							}
-						]
-					});
-					checkbox.subgroup.push({
-						name: 'translationComments',
-						type: 'textarea',
-						label: 'Additional comments to post at PNT',
-						tooltip: 'Optional, and only relevant if "List this article ..." above is checked.'
-					});
-				}
 				break;
 			case 'Notability':
 				checkbox.subgroup = {
@@ -511,7 +493,7 @@ Twinkle.tag.updateSortOrder = function(e) {
 						{ label: '{{notability|Products}}: pedoman kelayakan untuk produk dan layanan', value: 'Products' },
 						{ label: '{{notability|Sports}}: pedoman kelayakan untuk olahraga', value: 'Sports' },
 						{ label: '{{notability|Television}}: pedoman kelayakan untuk acara televisi', value: 'Television' },
-						{ label: '{{notability|Web}}: pedoman kelayakan untuk isi situs', value: 'Web' }
+						{ label: '{{notability|Web}}: pedoman kelayakan untuk isi situs web', value: 'Web' }
 					]
 				};
 				break;
@@ -880,7 +862,7 @@ Twinkle.tag.article.tagCategories = {
 			'Sections',
 			'Very long'
 		],
-		'Perapian terkait isi fiksi': [
+		'Perapian yang berhubungan dengan isi fiksi': [
 			'All plot',
 			'Fiction',
 			'In-universe',
