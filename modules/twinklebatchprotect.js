@@ -385,7 +385,7 @@ Twinkle.batchprotect.callback.evaluate = function twinklebatchprotectCallbackEva
 	var createexpiry = form.createexpiry.value;
 
 	if (!reason) {
-		alert("Anda harus memberikan alasan. Jangan mengabaikannya!");
+		alert('Anda harus memberikan alasan. Jangan mengabaikannya!');
 		return;
 	}
 
