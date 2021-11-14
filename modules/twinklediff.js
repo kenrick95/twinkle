@@ -22,10 +22,10 @@ Twinkle.diff = function twinklediff() {
 	if (mw.util.getParamValue('diff')) {
 		Twinkle.addPortletLink(function() {
 			Twinkle.diff.evaluate(false);
-		}, 'Sejak', 'tw-since', 'Perlihatkan beda antara revisi terakhir dan revisi oleh pengguna sebelumnya');
+		}, 'Sejak', 'tw-since', 'Lihat perbedaan antara revisi terakhir dan revisi oleh pengguna sebelumnya');
 		Twinkle.addPortletLink(function() {
 			Twinkle.diff.evaluate(true);
-		}, 'Sejak saya', 'tw-sincemine', 'Perlihatkan beda antara revisi terakhir dan revisi terakhir saya');
+		}, 'Sejak saya', 'tw-sincemine', 'Lihat perbedaan antara revisi terakhir dan revisi terakhir saya');
 
 		var oldid = /oldid=(.+)/.exec($('#mw-diff-ntitle1').find('strong a').first().attr('href'))[1];
 		Twinkle.addPortletLink(mw.util.getUrl(mw.config.get('wgPageName'), {diff: 'cur', oldid: oldid}), 'Saat ini', 'tw-curdiff', 'Perlihatkan beda ke revisi terbaru');
